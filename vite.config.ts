@@ -9,5 +9,9 @@ export default defineConfig({
   build: {
     // output the react dist files seperately than electron's
     outDir: 'dist-ui'
+  },
+  server: {
+    port: 5173,
+    strictPort: true
   }
 })
