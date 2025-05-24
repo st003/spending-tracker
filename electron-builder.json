@@ -1,0 +1,14 @@
+{
+  "appId": "dev.st003.spending-tracker",
+  "files": [
+    "dist-electron",
+    "dist-ui"
+  ],
+  "mac": {
+    "target": "dmg"
+  },
+  "linux": {
+    "target": "AppImage",
+    "category": "Office"
+  }
+}

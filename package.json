@@ -5,11 +5,13 @@
   "type": "module",
   "main": "dist-electron/main.js",
   "scripts": {
-    "build": "tsc -b && vite build",
+    "build:ui": "tsc -b && vite build",
     "dev:ui": "vite",
     "dev:electron": "electron --gtk-version=3 .",
     "lint": "eslint .",
     "preview": "vite preview",
+    "package:linux": "npm run transpile:electron && npm run build:ui && electron-builder --linux --x64",
+    "package:mac": "npm run transpile:electron && npm run build:ui && electron-builder --mac --arm64",
     "transpile:electron": "tsc --project src/electron/tsconfig.json"
   },
   "dependencies": {
@@ -22,6 +24,7 @@
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react-swc": "^3.9.0",
     "electron": "^36.3.0",
+    "electron-builder": "^26.0.12",
     "eslint": "^9.25.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
