@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "type": "module",
   "main": "dist-electron/main.js",
+  "homepage": "./",
   "scripts": {
     "build:ui": "tsc -b && vite build",
     "dev": "npm-run-all --parallel dev:ui dev:electron",
@@ -17,7 +18,8 @@
   },
   "dependencies": {
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
