@@ -5,8 +5,6 @@ import { BottomNavigation, BottomNavigationAction } from '@mui/material'
 import BarChartIcon from '@mui/icons-material/BarChart';
 import PieChartIcon from '@mui/icons-material/PieChart';
 
-import '../styles/root-layout.css'
-
 export default function RootLayout() {
 
   const navigate = useNavigate()
