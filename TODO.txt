@@ -1,6 +1,18 @@
 Tutorial video:
 https://www.youtube.com/watch?v=fP-371MN0Ck&list=WL&index=2&t=1050s
 
+Pages:
+- Dashboard
+  - Net Income Bar Graph
+  - Last Month Budget
+  - Year-over-year net Income
+- Budget
+  - Pie Chart / Legend
+  - Transaction Table
+
+- DB Selection
+- Data Import / Export
+
 Investigate window close behavior on mac
-Investigate react routing in electron
+Customize main menu
 Create Icon
