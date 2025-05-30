@@ -1,7 +1,10 @@
-import { Grid } from '@mui/material';
-import { BarChart, PieChart } from '@mui/x-charts';
+import Grid from '@mui/material/Grid'
+
+import { BarChart } from '@mui/x-charts/BarChart'
+import { PieChart } from '@mui/x-charts/PieChart'
 
 import '../styles/dashboard.css'
+
 
 export default function Dashboard() {
 

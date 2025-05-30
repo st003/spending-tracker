@@ -1,9 +1,11 @@
 import { Outlet, useNavigate } from 'react-router-dom'
 
-import { BottomNavigation, BottomNavigationAction } from '@mui/material'
+import BottomNavigation from '@mui/material/BottomNavigation'
+import BottomNavigationAction from '@mui/material/BottomNavigationAction'
 
-import BarChartIcon from '@mui/icons-material/BarChart';
-import PieChartIcon from '@mui/icons-material/PieChart';
+import BarChartIcon from '@mui/icons-material/BarChart'
+import PieChartIcon from '@mui/icons-material/PieChart'
+
 
 export default function RootLayout() {
 
