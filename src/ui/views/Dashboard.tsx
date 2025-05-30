@@ -16,29 +16,29 @@ export default function Dashboard() {
       data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
       label: 'Income',
       stack: 'diverging',
-      color: 'green'
+      color: '#a3de83'
     },
     {
       data: [-1, -2, -3, -4, -5, -6, -7, -8, -9, -10, -11, -12],
       label: 'Expense',
       stack: 'diverging',
-      color: 'red'
-    },
+      color: '#ff5d6e'
+    }
   ]
 
-    const seriesYear = [
+  const seriesYear = [
     {
       data: [1, 2, 3, 4, 5],
       label: 'Income',
       stack: 'diverging',
-      color: 'green'
+      color: '#a3de83'
     },
     {
       data: [-1, -2, -3, -4, -5],
       label: 'Expense',
       stack: 'diverging',
-      color: 'red'
-    },
+      color: '#ff5d6e'
+    }
   ]
 
   return (
