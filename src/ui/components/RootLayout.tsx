@@ -17,7 +17,7 @@ export default function RootLayout() {
         <Outlet />
       </main>
       <footer>
-        <BottomNavigation showLabels>
+        <BottomNavigation showLabels sx={{ backgroundColor: '#f6f7f8'}}>
           <BottomNavigationAction
             label='Dashboard'
             icon={<BarChartIcon />}
