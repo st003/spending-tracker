@@ -4,12 +4,13 @@ import CardHeader from '@mui/material/CardHeader'
 
 import { BarPlot } from '@mui/x-charts/BarChart'
 import { ChartContainer } from '@mui/x-charts/ChartContainer'
+import { ChartsGrid } from '@mui/x-charts/ChartsGrid'
+import { ChartsTooltip } from '@mui/x-charts/ChartsTooltip'
 import { ChartsXAxis } from '@mui/x-charts/ChartsXAxis'
 import { ChartsYAxis } from '@mui/x-charts/ChartsYAxis'
-import { LinePlot } from '@mui/x-charts/LineChart'
+import { LinePlot, MarkPlot } from '@mui/x-charts/LineChart'
 
-import { MONTHS } from '../constants'
-import { getLast5Years } from '../utils'
+import { getMonthLabels, getYearLabels } from '../utils'
 
 import type { IncomeExpense } from '../types'
 
@@ -22,33 +23,40 @@ export default function NetIncome({ scale, data }: NetIncomeProps) {
 
   const series: any[] = [
     {
-      type: 'bar',
+      color: '#a3de83',
       data: data.income,
       label: 'Income',
       stack: 'diverging',
-      color: '#a3de83'
+      type: 'bar',
+      valueFormatter: (val: number) => `$${val}`
     },
     {
-      type: 'bar',
+      color: '#ff5d6e',
       data: data.expense,
       label: 'Expense',
       stack: 'diverging',
-      color: '#ff5d6e'
+      type: 'bar',
+      valueFormatter: (val: number) => `$${Math.abs(val)}`
     },
     {
-      type: 'line',
+      color: '#4254fb',
+      curve: 'linear',
       data: data.income.map((val, i) => val + data.expense[i]),
-      color: '#4254fb'
+      label: 'Net',
+      type: 'line',
+      valueFormatter: (val: number) => `$${Math.abs(val)}`
     }
   ]
 
   let xAxisData: any[]
   switch(scale) {
     case 'Month':
-      xAxisData = MONTHS
+      // TODO: make this dynamic based on the length of the series
+      // as well as adding the year (ex: May '25)
+      xAxisData = getMonthLabels()
       break
     case 'Year':
-      xAxisData = getLast5Years()
+      xAxisData = getYearLabels(data.income.length)
       break
     default:
       xAxisData = []
@@ -56,9 +64,9 @@ export default function NetIncome({ scale, data }: NetIncomeProps) {
 
   const xAxis: any[] = [
     {
+      data: xAxisData,
       id: 'xAxis',
-      scaleType: 'band',
-      data: xAxisData
+      scaleType: 'band'
     }
   ]
 
@@ -72,8 +80,11 @@ export default function NetIncome({ scale, data }: NetIncomeProps) {
             yAxis={[{ id: 'yAxis'}]}
             height={300}
           >
-            <BarPlot />
+            <ChartsGrid horizontal />
+            <BarPlot borderRadius={3} />
             <LinePlot />
+            <MarkPlot />
+            <ChartsTooltip />
             <ChartsXAxis axisId='xAxis' />
             <ChartsYAxis axisId='yAxis' />
           </ChartContainer>
