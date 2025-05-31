@@ -3,57 +3,31 @@ import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
 import Grid from '@mui/material/Grid'
 
-import { BarChart } from '@mui/x-charts/BarChart'
 import { PieChart } from '@mui/x-charts/PieChart'
 
+import NetIncome from '../components/NetIncome'
+
 import '../styles/dashboard.css'
+
+import type { IncomeExpense } from '../types'
 
 
 export default function Dashboard() {
 
-  const seriesMonth = [
-    {
-      data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-      label: 'Income',
-      stack: 'diverging',
-      color: '#a3de83'
-    },
-    {
-      data: [-1, -2, -3, -4, -5, -6, -7, -8, -9, -10, -11, -12],
-      label: 'Expense',
-      stack: 'diverging',
-      color: '#ff5d6e'
-    }
-  ]
+  const dataMonth: IncomeExpense = {
+    income: [45, 46, 50, 45, 47, 48, 45, 45, 49, 46, 45, 50],
+    expense: [-25, -25, -30, -50, -30, -25, -20, -25, -27, -29, -33, -45]
+  }
 
-  const seriesYear = [
-    {
-      data: [1, 2, 3, 4, 5],
-      label: 'Income',
-      stack: 'diverging',
-      color: '#a3de83'
-    },
-    {
-      data: [-1, -2, -3, -4, -5],
-      label: 'Expense',
-      stack: 'diverging',
-      color: '#ff5d6e'
-    }
-  ]
+  const dataYear: IncomeExpense = {
+    income: [45, 46, 50, 45, 47],
+    expense: [-25, -25, -30, -50, -30]
+  }
 
   return (
     <div className='dashboard'>
       <h1>Dashboard</h1>
-      <Card variant='outlined' sx={{ mb: 2 }}>
-        <CardHeader title='Net Income (By Month)' />
-        <CardContent>
-          <BarChart
-            xAxis={[{ data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] }]}
-            series={seriesMonth}
-            height={280}
-          />
-        </CardContent>
-      </Card>
+      <NetIncome scale='Month' data={dataMonth} />
       <Grid container spacing={2}>
         <Grid size={{ sm: 12, lg: 6 }}>
           <Card variant='outlined'>
@@ -69,22 +43,13 @@ export default function Dashboard() {
                     ],
                   },
                 ]}
-                height={309} // TODO: make this the same height as bar chart
+                height={300} // TODO: make this the same height as bar chart
               />
             </CardContent>
           </Card>
         </Grid>
         <Grid size={{ sm: 12, lg: 6 }}>
-          <Card variant='outlined'>
-            <CardHeader title='Net Income (By Year)' />
-            <CardContent>
-              <BarChart
-                xAxis={[{ data: ['2021', '2022', '2023', '2024', '2025'] }]}
-                series={seriesYear}
-                height={280}
-              />
-            </CardContent>
-          </Card>
+          <NetIncome scale='Year' data={dataYear} />
         </Grid>
       </Grid>
     </div>
