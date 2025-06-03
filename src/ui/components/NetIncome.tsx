@@ -50,11 +50,18 @@ export default function NetIncome({ data, xAxis }: NetIncomeProps) {
     }
   ]
 
+  const yAxisConfig: any[] = [
+    {
+      id: 'yAxis',
+      valueFormatter: (val: number) => (val > 0) ? `$${val}` : `-$${Math.abs(val)}`
+    }
+  ]
+
   return (
     <ChartContainer
       series={series}
       xAxis={xAxisConfig}
-      yAxis={[{ id: 'yAxis'}]}
+      yAxis={yAxisConfig}
       height={300}
     >
       <ChartsGrid horizontal />
