@@ -1,7 +1,3 @@
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import CardHeader from '@mui/material/CardHeader'
-
 import { BarPlot } from '@mui/x-charts/BarChart'
 import { ChartContainer } from '@mui/x-charts/ChartContainer'
 import { ChartsGrid } from '@mui/x-charts/ChartsGrid'
@@ -10,16 +6,14 @@ import { ChartsXAxis } from '@mui/x-charts/ChartsXAxis'
 import { ChartsYAxis } from '@mui/x-charts/ChartsYAxis'
 import { LinePlot, MarkPlot } from '@mui/x-charts/LineChart'
 
-import { getMonthLabels, getYearLabels } from '../utils'
-
 import type { IncomeExpense } from '../types'
 
 type NetIncomeProps = {
-  scale: 'Month' | 'Year';
   data: IncomeExpense;
+  xAxis: string[];
 }
 
-export default function NetIncome({ scale, data }: NetIncomeProps) {
+export default function NetIncome({ data, xAxis }: NetIncomeProps) {
 
   const series: any[] = [
     {
@@ -48,47 +42,28 @@ export default function NetIncome({ scale, data }: NetIncomeProps) {
     }
   ]
 
-  let xAxisData: any[]
-  switch(scale) {
-    case 'Month':
-      // TODO: make this dynamic based on the length of the series
-      // as well as adding the year (ex: May '25)
-      xAxisData = getMonthLabels()
-      break
-    case 'Year':
-      xAxisData = getYearLabels(data.income.length)
-      break
-    default:
-      xAxisData = []
-  }
-
-  const xAxis: any[] = [
+  const xAxisConfig: any[] = [
     {
-      data: xAxisData,
+      data: xAxis,
       id: 'xAxis',
       scaleType: 'band'
     }
   ]
 
   return (
-    <Card variant='outlined' sx={{ mb: 2 }}>
-      <CardHeader title={`Net Income (by ${scale})`} />
-        <CardContent>
-          <ChartContainer
-            series={series}
-            xAxis={xAxis}
-            yAxis={[{ id: 'yAxis'}]}
-            height={300}
-          >
-            <ChartsGrid horizontal />
-            <BarPlot borderRadius={3} />
-            <LinePlot />
-            <MarkPlot />
-            <ChartsTooltip />
-            <ChartsXAxis axisId='xAxis' />
-            <ChartsYAxis axisId='yAxis' />
-          </ChartContainer>
-      </CardContent>
-    </Card>
+    <ChartContainer
+      series={series}
+      xAxis={xAxisConfig}
+      yAxis={[{ id: 'yAxis'}]}
+      height={300}
+    >
+      <ChartsGrid horizontal />
+      <BarPlot borderRadius={3} />
+      <LinePlot />
+      <MarkPlot />
+      <ChartsTooltip />
+      <ChartsXAxis axisId='xAxis' />
+      <ChartsYAxis axisId='yAxis' />
+    </ChartContainer>
   )
 }

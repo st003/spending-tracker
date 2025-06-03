@@ -14,20 +14,29 @@ import type { IncomeExpense } from '../types'
 
 export default function Dashboard() {
 
-  const dataMonth: IncomeExpense = {
+  const monthData: IncomeExpense = {
     income: [45, 46, 50, 45, 47, 48, 45, 45, 49, 46, 45, 50],
     expense: [-25, -25, -30, -50, -30, -25, -20, -25, -27, -29, -33, -45]
   }
 
-  const dataYear: IncomeExpense = {
+  const monthXAxis = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+  const yearData: IncomeExpense = {
     income: [45, 46, 50, 45, 47],
     expense: [-25, -25, -30, -50, -30]
   }
 
+  const yearXAxis = ['2020', '2021', '2022', '2023', '2024']
+
   return (
     <div className='dashboard'>
       <h1>Dashboard</h1>
-      <NetIncome scale='Month' data={dataMonth} />
+      <Card variant='outlined' sx={{ mb: 2 }}>
+        <CardHeader title='Net Income' />
+        <CardContent>
+          <NetIncome data={monthData} xAxis={monthXAxis} />
+        </CardContent>
+      </Card>
       <Grid container spacing={2}>
         <Grid size={{ sm: 12, lg: 6 }}>
           <Card variant='outlined'>
@@ -49,7 +58,12 @@ export default function Dashboard() {
           </Card>
         </Grid>
         <Grid size={{ sm: 12, lg: 6 }}>
-          <NetIncome scale='Year' data={dataYear} />
+          <Card variant='outlined' sx={{ mb: 2 }}>
+            <CardHeader title='Net Income' />
+            <CardContent>
+              <NetIncome data={yearData} xAxis={yearXAxis} />
+            </CardContent>
+          </Card>
         </Grid>
       </Grid>
     </div>
