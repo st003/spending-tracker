@@ -3,13 +3,13 @@ import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
 import Grid from '@mui/material/Grid'
 
-import { PieChart } from '@mui/x-charts/PieChart'
-
+import Expense from '../components/Expense'
 import NetIncome from '../components/NetIncome'
 
 import '../styles/dashboard.css'
 
 import type { IncomeExpense } from '../types'
+import { useMemo } from 'react'
 
 
 export default function Dashboard() {
@@ -20,6 +20,19 @@ export default function Dashboard() {
   }
 
   const monthXAxis = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+  const expenseMonth = useMemo(() => {
+    const today = new Date()
+    today.setMonth(today.getMonth() - 1)
+    const monthName = today.toLocaleString('default', { month: 'long' })
+    return `${monthName} ${today.getFullYear()}`
+  }, [])
+
+  const expenseData = [
+    { value: 100, label: 'Category 1' },
+    { value: 150, label: 'Category 2' },
+    { value: 200, label: 'Category 3' }
+  ]
 
   const yearData: IncomeExpense = {
     income: [45, 46, 50, 45, 47],
@@ -32,7 +45,7 @@ export default function Dashboard() {
     <div className='dashboard'>
       <h1>Dashboard</h1>
       <Card variant='outlined' sx={{ mb: 2 }}>
-        <CardHeader title='Net Income' />
+        <CardHeader title='Net Income (By Month)' />
         <CardContent>
           <NetIncome data={monthData} xAxis={monthXAxis} />
         </CardContent>
@@ -40,26 +53,15 @@ export default function Dashboard() {
       <Grid container spacing={2}>
         <Grid size={{ sm: 12, lg: 6 }}>
           <Card variant='outlined'>
-            <CardHeader title='Expenses (Previous Month)' />
+            <CardHeader title={`Expenses (${expenseMonth})`} />
             <CardContent>
-              <PieChart
-                series={[
-                  {
-                    data: [
-                      { id: 0, value: 10, label: 'Category 1' },
-                      { id: 1, value: 15, label: 'Category 2' },
-                      { id: 2, value: 20, label: 'Category 3' },
-                    ],
-                  },
-                ]}
-                height={300} // TODO: make this the same height as bar chart
-              />
+              <Expense data={expenseData} />
             </CardContent>
           </Card>
         </Grid>
         <Grid size={{ sm: 12, lg: 6 }}>
           <Card variant='outlined' sx={{ mb: 2 }}>
-            <CardHeader title='Net Income' />
+            <CardHeader title='Net Income (By Year)' />
             <CardContent>
               <NetIncome data={yearData} xAxis={yearXAxis} />
             </CardContent>
