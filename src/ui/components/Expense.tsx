@@ -3,6 +3,7 @@ import { PieChart } from '@mui/x-charts/PieChart'
 
 import type { ExpenseCategory } from '../types'
 
+
 type ExpenseProps = {
   data: ExpenseCategory[];
 }

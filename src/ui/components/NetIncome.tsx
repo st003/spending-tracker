@@ -8,6 +8,7 @@ import { LinePlot, MarkPlot } from '@mui/x-charts/LineChart'
 
 import type { IncomeExpense } from '../types'
 
+
 type NetIncomeProps = {
   data: IncomeExpense;
   xAxis: string[];

@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
@@ -9,7 +11,6 @@ import NetIncome from '../components/NetIncome'
 import '../styles/dashboard.css'
 
 import type { IncomeExpense } from '../types'
-import { useMemo } from 'react'
 
 
 export default function Dashboard() {
