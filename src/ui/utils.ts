@@ -2,7 +2,7 @@ import type { Categories, Expense, ExpenseCategory } from './types'
 
 
 export function formatAmount(value: number): string {
-  const dollars = value / 100
+  const dollars = Math.abs(value / 100)
   return `$${dollars.toFixed(2)}`
 }
 

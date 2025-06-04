@@ -6,6 +6,8 @@ import { ChartsXAxis } from '@mui/x-charts/ChartsXAxis'
 import { ChartsYAxis } from '@mui/x-charts/ChartsYAxis'
 import { LinePlot, MarkPlot } from '@mui/x-charts/LineChart'
 
+import { formatAmount } from '../utils'
+
 import type { IncomeExpense } from '../types'
 
 
@@ -23,7 +25,7 @@ export default function NetIncome({ data, xAxis }: NetIncomeProps) {
       label: 'Income',
       stack: 'diverging',
       type: 'bar',
-      valueFormatter: (val: number) => `$${val}`
+      valueFormatter: (val: number) => formatAmount(val)
     },
     {
       color: '#ff5d6e',
@@ -31,7 +33,7 @@ export default function NetIncome({ data, xAxis }: NetIncomeProps) {
       label: 'Expense',
       stack: 'diverging',
       type: 'bar',
-      valueFormatter: (val: number) => `$${Math.abs(val)}`
+      valueFormatter: (val: number) => formatAmount(val)
     },
     {
       color: '#4254fb',
@@ -39,7 +41,7 @@ export default function NetIncome({ data, xAxis }: NetIncomeProps) {
       data: data.income.map((val, i) => val + data.expense[i]),
       label: 'Net',
       type: 'line',
-      valueFormatter: (val: number) => `$${Math.abs(val)}`
+      valueFormatter: (val: number) => formatAmount(val)
     }
   ]
 
@@ -54,7 +56,8 @@ export default function NetIncome({ data, xAxis }: NetIncomeProps) {
   const yAxisConfig: any[] = [
     {
       id: 'yAxis',
-      valueFormatter: (val: number) => (val > 0) ? `$${val}` : `-$${Math.abs(val)}`
+      width: 60,
+      valueFormatter: (val: number) => (val >= 0) ? `$${val / 100}` : `-$${Math.abs(val / 100)}`
     }
   ]
 

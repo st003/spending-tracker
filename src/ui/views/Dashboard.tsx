@@ -20,25 +20,26 @@ import type { IncomeExpense } from '../types'
 
 export default function Dashboard() {
 
+  // net income month chart
   const monthData: IncomeExpense = {
-    income: [45, 46, 50, 45, 47, 48, 45, 45, 49, 46, 45, 50],
-    expense: [-25, -25, -30, -50, -30, -25, -20, -25, -27, -29, -33, -45]
+    income: [4500, 4600, 5000, 4500, 4700, 4800, 4500, 4500, 4900, 4600, 4500, 5000],
+    expense: [-2500, -2500, -3000, -5000, -3000, -2500, -2000, -2500, -2700, -2900, -3300, -4500]
   }
 
   const monthXAxis = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
-  const expenseMonth = useMemo(() => {
-    const today = new Date()
-    today.setMonth(today.getMonth() - 1)
-    const monthName = today.toLocaleString('default', { month: 'long' })
-    return `${monthName} ${today.getFullYear()}`
-  }, [])
+  // expenses chart
+  const today = new Date()
+  today.setMonth(today.getMonth() - 1)
+  const monthName = today.toLocaleString('default', { month: 'long' })
+  const expenseMonth = `${monthName} ${today.getFullYear()}`
 
   const expenseData = getTotalExpensesByCategory(expenses)
 
+  // net income year chart
   const yearData: IncomeExpense = {
-    income: [45, 46, 50, 45, 47],
-    expense: [-25, -25, -30, -50, -30]
+    income: [4500, 4600, 5000, 4500, 4700],
+    expense: [-2500, -2500, -3000, -5000, -3000]
   }
 
   const yearXAxis = ['2020', '2021', '2022', '2023', '2024']
