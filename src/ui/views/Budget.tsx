@@ -10,55 +10,18 @@ import TableRow from '@mui/material/TableRow'
 
 import Expense from '../components/Expense'
 
-import type { Expense as ExpenseType } from '../types'
+import { expenses, getExpensesByCategory } from '../data'
 
 
 export default function Budget() {
 
-  const expenseData = [
-    { value: 100, label: 'Category 1' },
-    { value: 150, label: 'Category 2' },
-    { value: 200, label: 'Category 3' }
-  ]
-
-  const expenses: ExpenseType[] = [
-    {
-      desc: 'Electric Bill',
-      category: 'Utilities',
-      amount: '$70.00',
-      date: '2025-05-27'
-    },
-    {
-      desc: 'Internet Bill',
-      category: 'Utilities',
-      amount: '$90.00',
-      date: '2025-05-23'
-    },
-    {
-      desc: 'Movie Tickets',
-      category: 'Entertainment',
-      amount: '$14.99',
-      date: '2025-05-14'
-    },
-    {
-      desc: 'Amazon Purchase',
-      category: 'Shopping',
-      amount: '$30.54',
-      date: '2025-05-05'
-    },
-    {
-      desc: 'Safeway',
-      category: 'Groceries',
-      amount: '$49.89',
-      date: '2025-05-02'
-    }
-  ]
+  const expenseData = getExpensesByCategory(expenses)
 
   const expenseRows = expenses.map(exp => (
     <TableRow>
       <TableCell>{exp.desc}</TableCell>
       <TableCell>{exp.category}</TableCell>
-      <TableCell>{exp.amount}</TableCell>
+      <TableCell>${exp.amount}</TableCell>
       <TableCell>{exp.date}</TableCell>
     </TableRow>
   ))

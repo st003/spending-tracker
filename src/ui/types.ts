@@ -1,7 +1,11 @@
+export type Categories = {
+  [key: string]: number
+}
+
 export type Expense = {
   desc: string;
   category: string;
-  amount: string;
+  amount: number;
   date: string;
 }
 
