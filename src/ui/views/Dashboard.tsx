@@ -8,7 +8,12 @@ import Grid from '@mui/material/Grid'
 import Expense from '../components/Expense'
 import NetIncome from '../components/NetIncome'
 
+import { getTotalExpensesByCategory } from '../utils'
+
 import '../styles/dashboard.css'
+
+import { expenses } from '../data'
+
 
 import type { IncomeExpense } from '../types'
 
@@ -29,11 +34,7 @@ export default function Dashboard() {
     return `${monthName} ${today.getFullYear()}`
   }, [])
 
-  const expenseData = [
-    { value: 100, label: 'Category 1' },
-    { value: 150, label: 'Category 2' },
-    { value: 200, label: 'Category 3' }
-  ]
+  const expenseData = getTotalExpensesByCategory(expenses)
 
   const yearData: IncomeExpense = {
     income: [45, 46, 50, 45, 47],

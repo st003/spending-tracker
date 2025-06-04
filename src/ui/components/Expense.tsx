@@ -2,6 +2,8 @@
 import { mangoFusionPalette } from '@mui/x-charts/colorPalettes'
 import { PieChart } from '@mui/x-charts/PieChart'
 
+import { formatAmount } from '../utils'
+
 import type { ExpenseCategory } from '../types'
 
 
@@ -17,7 +19,7 @@ export default function Expense({ data }: ExpenseProps) {
       data: data,
       innerRadius: 50,
       paddingAngle: 1,
-      valueFormatter: (category: any) => `$${category.value}`
+      valueFormatter: (category: any) => formatAmount(category.value)
     }
   ]
 

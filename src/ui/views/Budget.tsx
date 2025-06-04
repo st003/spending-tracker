@@ -10,18 +10,20 @@ import TableRow from '@mui/material/TableRow'
 
 import Expense from '../components/Expense'
 
-import { expenses, getExpensesByCategory } from '../data'
+import { formatAmount, getTotalExpensesByCategory } from '../utils'
+
+import { expenses } from '../data'
 
 
 export default function Budget() {
 
-  const expenseData = getExpensesByCategory(expenses)
+  const expenseData = getTotalExpensesByCategory(expenses)
 
   const expenseRows = expenses.map(exp => (
     <TableRow>
       <TableCell>{exp.desc}</TableCell>
       <TableCell>{exp.category}</TableCell>
-      <TableCell>${exp.amount}</TableCell>
+      <TableCell>{formatAmount(exp.amount)}</TableCell>
       <TableCell>{exp.date}</TableCell>
     </TableRow>
   ))
