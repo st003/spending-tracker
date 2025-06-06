@@ -3,6 +3,7 @@ export type Categories = {
 }
 
 export type Expense = {
+  id: number;
   desc: string;
   category: string;
   amount: number;
