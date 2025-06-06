@@ -41,7 +41,7 @@ export default function Budget() {
         <CardHeader title='Expenses' />
         <CardContent>
           <TableContainer>
-            <Table>
+            <Table size='small'>
               <TableHead>
                 <TableRow>
                   <TableCell>Description</TableCell>
