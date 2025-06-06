@@ -10,6 +10,5 @@ Budget Page:
 DB Selection
 Data Import / Export
 
-Investigate window close behavior on mac
 Customize main menu
 Create Icon
