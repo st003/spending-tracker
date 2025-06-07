@@ -1,5 +1,3 @@
-
-import { mangoFusionPalette } from '@mui/x-charts/colorPalettes'
 import { PieChart } from '@mui/x-charts/PieChart'
 
 import { formatAmount } from '../utils'
@@ -23,5 +21,5 @@ export default function Expense({ data }: ExpenseProps) {
     }
   ]
 
-  return <PieChart series={expenseSeries} height={300} colors={mangoFusionPalette} />
+  return <PieChart series={expenseSeries} height={300} />
 }

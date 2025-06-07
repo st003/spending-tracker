@@ -4,10 +4,10 @@ export type Categories = {
 
 export type Expense = {
   id: number;
-  desc: string;
+  description: string;
   category: string;
   amount: number;
-  date: string;
+  date: Date;
 }
 
 export type ExpenseCategory = {
@@ -15,7 +15,11 @@ export type ExpenseCategory = {
   label: string;
 }
 
+export type ExpenseProperty = 'id'|'description'|'category'|'amount'|'date'
+
 export type IncomeExpense = {
   income: number[];
   expense: number[];
 }
+
+export type OrderByDirection = 'asc'|'desc'

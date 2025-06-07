@@ -1,12 +1,11 @@
 Tutorial video:
 https://www.youtube.com/watch?v=fP-371MN0Ck&list=WL&index=2&t=1050s
 
-
-Budget Page:
-- Sorting
-
 DB Selection
 Data Import / Export
 
 Customize main menu
 Create Icon
+Darkmode
+Data export
+JSDoc comments

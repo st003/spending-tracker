@@ -10,20 +10,62 @@ import TableCell from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
+import TableSortLabel from '@mui/material/TableSortLabel'
 
 import Expense from '../components/Expense'
 
-import { formatAmount, getTotalExpensesByCategory } from '../utils'
-
 import { expenses } from '../data'
+import {
+  capitalize,
+  formatDate,
+  formatAmount,
+  getTotalExpensesByCategory,
+  sortExpenseData
+} from '../utils'
 
+import type { ExpenseProperty, OrderByDirection } from '../types'
+
+
+const LABELS: ExpenseProperty[] = ['description', 'category', 'amount', 'date']
 
 export default function Budget() {
+
+  const [orderByProperty, setOrderByProperty] = useState<ExpenseProperty>('date')
+  const [orderByDirection, setOrderByDirection] = useState<OrderByDirection>('desc')
+
+  // expense headers
+
+  function handleOrderBy(event: React.MouseEvent, label: ExpenseProperty) {
+    if (orderByProperty !== label) {
+      setOrderByProperty(label)
+      setOrderByDirection('desc')
+    } else {
+      const newOrderByDirection = (orderByDirection === 'desc') ? 'asc' : 'desc'
+      setOrderByDirection(newOrderByDirection)
+    }
+  }
+
+  const expenseHeaderCells = LABELS.map(label => (
+    <TableCell
+      key={label}
+      sortDirection={orderByDirection}
+    >
+      <TableSortLabel
+        active={orderByProperty === label}
+        direction={orderByDirection}
+        onClick={event => handleOrderBy(event, label)}
+      >
+        {capitalize(label)}
+      </TableSortLabel>
+    </TableCell>
+  ))
+
+  // expense rows
 
   const [pageNumber, setPageNumber] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
 
-  function handleChangePage(event: React.MouseEvent<HTMLButtonElement> | null, newPageNumber: number) {
+  function handleChangePage(event: React.MouseEvent | null, newPageNumber: number) {
     setPageNumber(newPageNumber)
   }
 
@@ -32,19 +74,23 @@ export default function Budget() {
     setPageNumber(0)
   };
 
-  const expenseData = getTotalExpensesByCategory(expenses)
+  const expenseData = useMemo(() => getTotalExpensesByCategory(expenses), [])
 
+  // controls the data to be displayed in the table
   const visibleRows = useMemo(() => {
-    // controls the data to be displayed in the table
-    return expenses.slice(pageNumber * rowsPerPage, (pageNumber * rowsPerPage) + rowsPerPage)
-  },[pageNumber, rowsPerPage])
+    return expenses
+      .slice() // make a copy to prevent in-place sorting
+      .sort((a, b) => sortExpenseData(orderByProperty, orderByDirection, a, b))
+      .slice(pageNumber * rowsPerPage, (pageNumber * rowsPerPage) + rowsPerPage)
+  },
+  [pageNumber, rowsPerPage, orderByProperty, orderByDirection])
 
   const expenseRows = visibleRows.map(exp => (
     <TableRow key={exp.id}>
-      <TableCell>{exp.desc}</TableCell>
+      <TableCell>{exp.description}</TableCell>
       <TableCell>{exp.category}</TableCell>
       <TableCell>{formatAmount(exp.amount)}</TableCell>
-      <TableCell>{exp.date}</TableCell>
+      <TableCell>{formatDate(exp.date)}</TableCell>
     </TableRow>
   ))
 
@@ -64,10 +110,7 @@ export default function Budget() {
             <Table size='small'>
               <TableHead>
                 <TableRow>
-                  <TableCell>Description</TableCell>
-                  <TableCell>Category</TableCell>
-                  <TableCell>Amount</TableCell>
-                  <TableCell>Date</TableCell>
+                  {expenseHeaderCells}
                 </TableRow>
               </TableHead>
               <TableBody>
