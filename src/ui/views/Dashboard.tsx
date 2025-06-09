@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useState } from 'react'
 
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -12,10 +12,7 @@ import { getTotalExpensesByCategory } from '../utils'
 
 import '../styles/dashboard.css'
 
-import { expenses } from '../data'
-
-
-import type { IncomeExpense } from '../types'
+import type { ExpenseCategory, IncomeExpense } from '../types'
 
 
 export default function Dashboard() {
@@ -29,12 +26,26 @@ export default function Dashboard() {
   const monthXAxis = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
   // expenses chart
+  const [expenseData, setExpenseData] = useState<ExpenseCategory[]>([])
+
   const today = new Date()
   today.setMonth(today.getMonth() - 1)
   const monthName = today.toLocaleString('default', { month: 'long' })
   const expenseMonth = `${monthName} ${today.getFullYear()}`
 
-  const expenseData = getTotalExpensesByCategory(expenses)
+  useEffect(() => {
+    (async () => {
+      try {
+        // @ts-ignore
+        const result = await window.electronAPI.getExpenses()
+        const categories = getTotalExpensesByCategory(result)
+        setExpenseData(categories)
+      } catch (error) {
+        // TODO: improve error handling
+        console.error(error)
+      }
+    })()
+  }, [])
 
   // net income year chart
   const yearData: IncomeExpense = {

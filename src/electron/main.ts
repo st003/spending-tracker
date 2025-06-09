@@ -1,12 +1,19 @@
 import path from 'path'
-import { app, BrowserWindow } from 'electron'
+
+import { app, BrowserWindow, ipcMain } from 'electron'
+
+import { getExpenses } from './data.js';
+import { getPreloadScriptPath } from './utils.js';
 
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
     // TODO: make this fill the screen on open
     width: 1280,
-    height: 720
+    height: 720,
+    webPreferences: {
+      preload: getPreloadScriptPath()
+    }
   });
 
   // when in development mode, load the window directly from Vite so we can have hot module reloading
@@ -17,6 +24,10 @@ function createWindow() {
     // app.getAppPath() allows the electro app to find its files no matter where it exists on the file system
     mainWindow.loadFile(path.join(app.getAppPath(), '/dist-ui/index.html'))
   }
+
+  ipcMain.handle('getExpenses', () => {
+    return getExpenses()
+  })
 }
 
 // app main statup logic

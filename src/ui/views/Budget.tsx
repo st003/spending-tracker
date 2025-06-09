@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -14,7 +14,6 @@ import TableSortLabel from '@mui/material/TableSortLabel'
 
 import Expense from '../components/Expense'
 
-import { expenses } from '../data'
 import {
   capitalize,
   formatDate,
@@ -23,15 +22,31 @@ import {
   sortExpenseData
 } from '../utils'
 
-import type { ExpenseProperty, OrderByDirection } from '../types'
+import type { Expense as ExpenseType, ExpenseProperty, OrderByDirection } from '../types'
 
 
 const LABELS: ExpenseProperty[] = ['description', 'category', 'amount', 'date']
 
 export default function Budget() {
 
+  const [expenses, setExpenses] = useState<ExpenseType[]>([])
   const [orderByProperty, setOrderByProperty] = useState<ExpenseProperty>('date')
   const [orderByDirection, setOrderByDirection] = useState<OrderByDirection>('desc')
+
+  // get data from backend
+
+  useEffect(() => {
+    (async () => {
+      try {
+        // @ts-ignore
+        const result = await window.electronAPI.getExpenses()
+        setExpenses(result)
+      } catch (error) {
+        // TODO: improve error handling
+        console.error(error)
+      }
+    })()
+  }, [])
 
   // expense headers
 
@@ -74,7 +89,7 @@ export default function Budget() {
     setPageNumber(0)
   };
 
-  const expenseData = useMemo(() => getTotalExpensesByCategory(expenses), [])
+  const expenseData = useMemo(() => getTotalExpensesByCategory(expenses), [expenses])
 
   // controls the data to be displayed in the table
   const visibleRows = useMemo(() => {
@@ -83,7 +98,7 @@ export default function Budget() {
       .sort((a, b) => sortExpenseData(orderByProperty, orderByDirection, a, b))
       .slice(pageNumber * rowsPerPage, (pageNumber * rowsPerPage) + rowsPerPage)
   },
-  [pageNumber, rowsPerPage, orderByProperty, orderByDirection])
+  [expenses, pageNumber, rowsPerPage, orderByProperty, orderByDirection])
 
   const expenseRows = visibleRows.map(exp => (
     <TableRow key={exp.id}>
