@@ -50,7 +50,7 @@ export default function Budget() {
 
   // expense headers
 
-  function handleOrderBy(event: React.MouseEvent, label: ExpenseProperty) {
+  function handleOrderBy(_: React.MouseEvent, label: ExpenseProperty) {
     if (orderByProperty !== label) {
       setOrderByProperty(label)
       setOrderByDirection('desc')
@@ -80,7 +80,7 @@ export default function Budget() {
   const [pageNumber, setPageNumber] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
 
-  function handleChangePage(event: React.MouseEvent | null, newPageNumber: number) {
+  function handleChangePage(_: React.MouseEvent | null, newPageNumber: number) {
     setPageNumber(newPageNumber)
   }
 

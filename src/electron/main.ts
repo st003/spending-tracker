@@ -31,7 +31,7 @@ function createWindow() {
     return getExpenses()
   })
 
-  ipcMain.handle('getNetIncome', (event, range: NetIncomeRange) => {
+  ipcMain.handle('getNetIncome', (_, range: NetIncomeRange) => {
     return getNetIncome(range)
   })
 }
