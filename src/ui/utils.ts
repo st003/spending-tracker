@@ -1,6 +1,5 @@
 import type { Categories, Expense, ExpenseCategory, ExpenseProperty } from './types'
 
-
 export function capitalize(word: string): string {
   return word.charAt(0).toUpperCase() + word.slice(1)
 }

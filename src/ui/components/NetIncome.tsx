@@ -10,7 +10,6 @@ import { formatAmount } from '../utils'
 
 import type { IncomeExpense } from '../types'
 
-
 type NetIncomeProps = {
   data: IncomeExpense;
   xAxis: string[];

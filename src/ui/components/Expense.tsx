@@ -4,7 +4,6 @@ import { formatAmount } from '../utils'
 
 import type { ExpenseCategory } from '../types'
 
-
 type ExpenseProps = {
   data: ExpenseCategory[];
 }

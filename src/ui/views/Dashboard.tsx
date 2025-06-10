@@ -14,7 +14,6 @@ import '../styles/dashboard.css'
 
 import type { ExpenseCategory, IncomeExpense } from '../types'
 
-
 export default function Dashboard() {
 
   // net income month chart

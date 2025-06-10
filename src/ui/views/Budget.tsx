@@ -24,7 +24,6 @@ import {
 
 import type { Expense as ExpenseType, ExpenseProperty, OrderByDirection } from '../types'
 
-
 const LABELS: ExpenseProperty[] = ['description', 'category', 'amount', 'date']
 
 export default function Budget() {

@@ -2,7 +2,6 @@
 
 import type { Expense, NetIncome, NetIncomeRange } from './types.js'
 
-
 export function getExpenses(): Expense[] {
   return [
     {

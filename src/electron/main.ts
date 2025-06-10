@@ -7,7 +7,6 @@ import { getPreloadScriptPath } from './utils.js';
 
 import type { NetIncomeRange } from './types.js'
 
-
 function createWindow() {
   const mainWindow = new BrowserWindow({
     // TODO: make this fill the screen on open
