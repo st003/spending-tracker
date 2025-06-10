@@ -18,12 +18,33 @@ import type { ExpenseCategory, IncomeExpense } from '../types'
 export default function Dashboard() {
 
   // net income month chart
-  const monthData: IncomeExpense = {
-    income: [4500, 4600, 5000, 4500, 4700, 4800, 4500, 4500, 4900, 4600, 4500, 5000],
-    expense: [-2500, -2500, -3000, -5000, -3000, -2500, -2000, -2500, -2700, -2900, -3300, -4500]
-  }
+  const [monthData, setMonthData] = useState<IncomeExpense>({ income: [], expense: [] })
+  const [monthXAxis, setMonthXAxis] = useState<string[]>([])
 
-  const monthXAxis = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  useEffect(() => {
+    (async () => {
+      try {
+        // @ts-ignore
+        const result = await window.electronAPI.getNetIncome('month')
+
+        const data: IncomeExpense = { income: [], expense: [] }
+        const xAxis: string[] = []
+
+        for (const month of result) {
+          data.income.push(month.income)
+          data.expense.push(month.expense)
+          xAxis.push(month.range)
+        }
+
+        setMonthData(data)
+        setMonthXAxis(xAxis)
+
+      } catch (error) {
+        // TODO: improve error handling
+        console.error(error)
+      }
+    })()
+  }, [])
 
   // expenses chart
   const [expenseData, setExpenseData] = useState<ExpenseCategory[]>([])
@@ -48,12 +69,36 @@ export default function Dashboard() {
   }, [])
 
   // net income year chart
-  const yearData: IncomeExpense = {
-    income: [4500, 4600, 5000, 4500, 4700],
-    expense: [-2500, -2500, -3000, -5000, -3000]
-  }
 
-  const yearXAxis = ['2020', '2021', '2022', '2023', '2024']
+    const [yearData, setYearData] = useState<IncomeExpense>({ income: [], expense: [] })
+  const [yearXAxis, setYearXAxis] = useState<string[]>([])
+
+  useEffect(() => {
+    (async () => {
+      try {
+        // @ts-ignore
+        const result = await window.electronAPI.getNetIncome('year')
+
+        console.log(result)
+
+        const data: IncomeExpense = { income: [], expense: [] }
+        const xAxis: string[] = []
+
+        for (const month of result) {
+          data.income.push(month.income)
+          data.expense.push(month.expense)
+          xAxis.push(month.range)
+        }
+
+        setYearData(data)
+        setYearXAxis(xAxis)
+
+      } catch (error) {
+        // TODO: improve error handling
+        console.error(error)
+      }
+    })()
+  }, [])
 
   return (
     <div className='dashboard'>

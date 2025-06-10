@@ -2,8 +2,10 @@ import path from 'path'
 
 import { app, BrowserWindow, ipcMain } from 'electron'
 
-import { getExpenses } from './data.js';
+import { getExpenses, getNetIncome } from './data.js';
 import { getPreloadScriptPath } from './utils.js';
+
+import type { NetIncomeRange } from './types.js'
 
 
 function createWindow() {
@@ -27,6 +29,10 @@ function createWindow() {
 
   ipcMain.handle('getExpenses', () => {
     return getExpenses()
+  })
+
+  ipcMain.handle('getNetIncome', (event, range: NetIncomeRange) => {
+    return getNetIncome(range)
   })
 }
 
