@@ -78,8 +78,6 @@ export default function Dashboard() {
         // @ts-ignore
         const result = await window.electronAPI.getNetIncome('year')
 
-        console.log(result)
-
         const data: IncomeExpense = { income: [], expense: [] }
         const xAxis: string[] = []
 
