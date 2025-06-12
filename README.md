@@ -2,15 +2,16 @@
 
 An Electron app for tracking and reporting personal income and expenditures. Build with TypeScript, Electron, React, and SQLite. This [tutorial](https://www.youtube.com/watch?v=fP-371MN0Ck) was used as the basis for setting up the project.
 
-_This project is still in early development_
+_This project is still in development_
 
 ## Getting Started
 
-Prior knowledge of TypeScript, Electron, React, and SQLite are required.
+Prior knowledge of TypeScript, Electron, React, and SQLite are required. Knowledge of Vite, electron-builder, Mui are recommended.
 
 ### Prerequisites
 
-Node.js 22+
+* Node.js 22+
+* An M1 series mac (when packaging for mac)
 
 ### Directory Structure
 
@@ -37,7 +38,25 @@ npm run dev
 
 ### Packaging
 
-There are no instructions for packaging at this time.
+See each target platform's section for details.
+
+#### MacOS (M-Series)
+
+To package the application for MacOS with M-series processors, run the command:
+
+```
+npm run package:mac
+```
+
+_Note: cross-compiling for Mac from a Linux distro is not supported by eletron-builder at this time._
+
+#### Linux
+
+Packaging for Linux using Fedora results in GTK errors.
+
+#### Windows
+
+Packaging for Windows is configured at this time.
 
 ## Running the tests
 
