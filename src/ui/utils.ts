@@ -1,5 +1,11 @@
 import type { Categories, Expense, ExpenseCategory, ExpenseProperty } from './types'
 
+/**
+ * Takes a word and capitalizes the first letter
+ *
+ * @param word The word to be capitalized
+ * @returns The word capitalized
+ */
 export function capitalize(word: string): string {
   return word.charAt(0).toUpperCase() + word.slice(1)
 }
@@ -8,17 +14,33 @@ export function capitalize(word: string): string {
  * Converts Date to YYYY-MM-DD format string
  *
  * @param input The Date object to format
- * @returns string in format YYYY-MM-DD
+ * @returns String in format YYYY-MM-DD
  */
 export function formatDate(input: Date): string {
   return input.toISOString().slice(0, 10)
 }
 
+/**
+ * Formats cents into a string representation of the
+ * dollar amount. Example:
+ *
+ * 10000 => '$100.00'
+ *
+ * @param value The number of cents
+ * @returns String representation of the dollar amount
+ */
 export function formatAmount(value: number): string {
   const dollars = Math.abs(value / 100)
   return `$${dollars.toFixed(2)}`
 }
 
+/**
+ * Iterates an array of expenses and computes a sum of total expenses
+ * by category.
+ *
+ * @param expenses expenses to be summed by category
+ * @returns An array of categories and their total expenses
+ */
 export function getTotalExpensesByCategory(expenses: Expense[]): ExpenseCategory[] {
 
   const categories: Categories = {}
@@ -39,6 +61,15 @@ export function getTotalExpensesByCategory(expenses: Expense[]): ExpenseCategory
   return expenseCategories
 }
 
+/**
+ * Helper function for sorting objects by property.
+ *
+ * @param property The object property to sort by
+ * @param direction Sort asc or desc
+ * @param a The evaluated object
+ * @param b The compare object
+ * @returns -1, 0, 1
+ */
 export function sortExpenseData(property: ExpenseProperty, direction: string, a: Expense, b: Expense, ): number {
 
   if (direction === 'asc') {

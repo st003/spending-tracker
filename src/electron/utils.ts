@@ -9,7 +9,7 @@ import { app } from 'electron'
  *
  * @returns The path to the preload script
  */
-export function getPreloadScriptPath() {
+export function getPreloadScriptPath(): string {
   return path.join(
     app.getAppPath(),
     (process.env.NODE_ENV === 'development') ? '.' : '..',
