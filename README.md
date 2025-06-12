@@ -11,7 +11,6 @@ Prior knowledge of TypeScript, Electron, React, and SQLite are required. Knowled
 ### Prerequisites
 
 * Node.js 22+
-* An M1 series mac (when packaging for mac)
 
 ### Directory Structure
 
@@ -38,7 +37,7 @@ npm run dev
 
 ### Packaging
 
-See each target platform's section for details.
+See each target platform's section for details. Cross-compiling is unstable. It's recommended to package on the same platform as the target platform.
 
 #### MacOS (M-Series)
 
@@ -52,11 +51,17 @@ _Note: cross-compiling for Mac from a Linux distro is not supported by eletron-b
 
 #### Linux
 
-Packaging for Linux using Fedora results in GTK errors.
+Packaging for Linux configured but unstable. To package for Linux AppImage. Run the command:
+
+```
+npm run package:linux
+```
+
+_Warning: Fedora 41 results in GTK errors._
 
 #### Windows
 
-Packaging for Windows is configured at this time.
+Packaging for Windows is not configured at this time.
 
 ## Running the tests
 
