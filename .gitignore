@@ -24,3 +24,7 @@ dist-ui
 *.njsproj
 *.sln
 *.sw?
+
+# database
+*.db
+*.db*
