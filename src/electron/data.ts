@@ -2,41 +2,54 @@ import sqlite3 from 'sqlite3'
 
 import type { Expense, NetIncome, NetIncomeRange } from './types.js'
 
-// TODO: move this into a wrapper function with close
-const db = new sqlite3.Database('data.db', error => {
-  if (error) {
-    console.error('Unable to open database:', error.message)
-  } else {
-    console.log('Successfully connected to the database')
-  }
-})
+type ExpenseDBRow = {
+  id: number;
+  description: string;
+  amount: number;
+  payment_date: string;
+  category_name: string;
+}
 
 export function getExpenses(): Promise<Expense[]> {
+
   return new Promise((resolve, reject) => {
 
-    db.all('SELECT * FROM Payments', (error, rows) => {
+    const db = new sqlite3.Database('data.db', error => {
+      if (error) reject(error)
+    })
+
+    const sql = `
+      SELECT
+        P.id,
+        P.description,
+        P.amount,
+        P.payment_date,
+        C.name AS category_name
+      FROM Payments P
+      JOIN Categories C ON C.id = P.category_id
+    `
+
+    db.all(sql, (error, rows: ExpenseDBRow[]) => {
+
       if (error) {
+        db.close()
         reject(error)
 
       } else {
+        const expenses = rows.map(row => ({
+          id: row.id,
+          description: row.description,
+          category: row.category_name,
+          amount: row.amount,
+          date: new Date(row.payment_date)
+        }))
 
-        // TODO: fix use of any here
-        const expenses = rows.map((row: any) => {
-          return {
-            id: row.id,
-            description: row.description,
-            category: String(row.category_id),
-            amount: row.amount,
-            date: new Date(row.payment_date)
-          }
-        })
-
+        db.close()
         resolve(expenses)
       }
     })
   })
 }
-
 
 export function getNetIncome(range: NetIncomeRange): NetIncome[] {
 
