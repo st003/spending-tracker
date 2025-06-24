@@ -26,8 +26,13 @@ function createWindow() {
     mainWindow.loadFile(path.join(app.getAppPath(), '/dist-ui/index.html'))
   }
 
-  ipcMain.handle('getExpenses', () => {
-    return getExpenses()
+  ipcMain.handle('getExpenses', async () => {
+    try {
+      return await getExpenses()
+    } catch (error) {
+      console.log(error)
+      return []
+    }
   })
 
   ipcMain.handle('getNetIncome', (_, range: NetIncomeRange) => {

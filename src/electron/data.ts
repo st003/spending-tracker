@@ -2,7 +2,7 @@ import sqlite3 from 'sqlite3'
 
 import type { Expense, NetIncome, NetIncomeRange } from './types.js'
 
-// TODO: move this to main?
+// TODO: move this into a wrapper function with close
 const db = new sqlite3.Database('data.db', error => {
   if (error) {
     console.error('Unable to open database:', error.message)
@@ -11,37 +11,30 @@ const db = new sqlite3.Database('data.db', error => {
   }
 })
 
-export function getExpenses(): Expense[] {
+export function getExpenses(): Promise<Expense[]> {
+  return new Promise((resolve, reject) => {
 
-  const expenses: Expense[] = []
+    db.all('SELECT * FROM Payments', (error, rows) => {
+      if (error) {
+        reject(error)
 
-  db.all('SELECT * FROM Payments', (error, rows) => {
+      } else {
 
-    if (error) {
-      console.error(error)
-      return
-
-    } else {
-
-      // TODO: fix use of any here
-      rows.forEach((row: any) => {
-        console.log(row.id)
-        expenses.push({
-          id: row.id,
-          description: row.description,
-          category: String(row.category_id),
-          amount: row.amount,
-          date: new Date(row.payment_date)
+        // TODO: fix use of any here
+        const expenses = rows.map((row: any) => {
+          return {
+            id: row.id,
+            description: row.description,
+            category: String(row.category_id),
+            amount: row.amount,
+            date: new Date(row.payment_date)
+          }
         })
-      })
 
-    }
+        resolve(expenses)
+      }
+    })
   })
-
-  // TODO: do we need to close the db connection here?
-
-  console.log('expenses:', expenses)
-  return expenses
 }
 
 
