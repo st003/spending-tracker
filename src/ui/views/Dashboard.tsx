@@ -52,7 +52,7 @@ export default function Dashboard() {
   const today = new Date()
   today.setUTCMonth(today.getUTCMonth() - 1)
   const monthName = today.toLocaleString('default', { month: 'long' })
-  const expenseMonth = `${monthName} ${today.getUTCFullYear()}`
+  const expenseMonthLabel = `${monthName} ${today.getUTCFullYear()}`
 
   const [monthSelection, setMonthSelection] = useState(today.toISOString().slice(0, 7))
   const [expenseData, setExpenseData] = useState<ExpenseCategory[]>([])
@@ -114,7 +114,7 @@ export default function Dashboard() {
         <Grid size={{ sm: 12, lg: 6 }}>
           <Card variant='outlined'>
             <CardHeader
-              title={`Expenses (${expenseMonth})`}
+              title={`Expenses (${expenseMonthLabel})`}
               action={
                 // TODO: hook this up to a dialog modal with month input
                 <IconButton>

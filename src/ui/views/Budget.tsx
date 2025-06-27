@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
+import Grid from '@mui/material/Grid'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableContainer from '@mui/material/TableContainer'
@@ -28,6 +29,12 @@ const LABELS: ExpenseProperty[] = ['description', 'category', 'amount', 'date']
 
 export default function Budget() {
 
+  const today = new Date()
+  today.setUTCMonth(today.getUTCMonth() - 1)
+  const monthName = today.toLocaleString('default', { month: 'long' })
+  const expenseMonthLabel = `${monthName} ${today.getUTCFullYear()}`
+
+  const [monthSelection, setMonthSelection] = useState(today.toISOString().slice(0, 7))
   const [expenses, setExpenses] = useState<ExpenseType[]>([])
   const [orderByProperty, setOrderByProperty] = useState<ExpenseProperty>('date')
   const [orderByDirection, setOrderByDirection] = useState<OrderByDirection>('desc')
@@ -38,7 +45,7 @@ export default function Budget() {
     (async () => {
       try {
         // @ts-ignore
-        const result = await window.electronAPI.getExpenses()
+        const result = await window.electronAPI.getExpensesForMonth(monthSelection)
         setExpenses(result)
       } catch (error) {
         // TODO: improve error handling
@@ -110,7 +117,14 @@ export default function Budget() {
 
   return (
     <>
-      <h1>Budget</h1>
+      <Grid container>
+        <Grid size={{ xs: 6 }}>
+          <h1>Budget</h1>
+        </Grid>
+        <Grid size={{ xs: 6 }} sx={{ textAlign: 'right' }}>
+          <h2>{expenseMonthLabel}</h2>
+        </Grid>
+      </Grid>
       <Card variant='outlined' sx={{ mb: 2 }}>
         <CardHeader title='Categories' />
         <CardContent>
