@@ -10,6 +10,6 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  getExpenses: () => ipcRenderer.invoke('getExpenses'),
+  getExpensesForMonth: (isoYYYYMM: string) => ipcRenderer.invoke('getExpensesForMonth', isoYYYYMM),
   getNetIncome: (range: string) => ipcRenderer.invoke('getNetIncome', range)
 })

@@ -26,10 +26,9 @@ function createWindow() {
     mainWindow.loadFile(path.join(app.getAppPath(), '/dist-ui/index.html'))
   }
 
-  ipcMain.handle('getExpenses', async () => {
+  ipcMain.handle('getExpensesForMonth', async (_, isoYYYYMM: string) => {
     try {
-      const month = new Date().toISOString().slice(0, 7) // TODO: temporary. get this value from the frontend
-      return await getExpensesForMonth(month)
+      return await getExpensesForMonth(isoYYYYMM)
     } catch (error) {
       console.log(error)
       return []

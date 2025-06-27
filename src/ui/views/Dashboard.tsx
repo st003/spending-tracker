@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
 
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
 import Grid from '@mui/material/Grid'
+import IconButton from '@mui/material/IconButton'
 
 import Expense from '../components/Expense'
 import NetIncome from '../components/NetIncome'
@@ -46,18 +49,19 @@ export default function Dashboard() {
   }, [])
 
   // expenses chart
-  const [expenseData, setExpenseData] = useState<ExpenseCategory[]>([])
-
   const today = new Date()
-  today.setMonth(today.getMonth() - 1)
+  today.setUTCMonth(today.getUTCMonth() - 1)
   const monthName = today.toLocaleString('default', { month: 'long' })
-  const expenseMonth = `${monthName} ${today.getFullYear()}`
+  const expenseMonth = `${monthName} ${today.getUTCFullYear()}`
+
+  const [monthSelection, setMonthSelection] = useState(today.toISOString().slice(0, 7))
+  const [expenseData, setExpenseData] = useState<ExpenseCategory[]>([])
 
   useEffect(() => {
     (async () => {
       try {
         // @ts-ignore
-        const result = await window.electronAPI.getExpenses()
+        const result = await window.electronAPI.getExpensesForMonth(monthSelection)
         const categories = getTotalExpensesByCategory(result)
         setExpenseData(categories)
       } catch (error) {
@@ -69,7 +73,7 @@ export default function Dashboard() {
 
   // net income year chart
 
-    const [yearData, setYearData] = useState<IncomeExpense>({ income: [], expense: [] })
+  const [yearData, setYearData] = useState<IncomeExpense>({ income: [], expense: [] })
   const [yearXAxis, setYearXAxis] = useState<string[]>([])
 
   useEffect(() => {
@@ -109,7 +113,15 @@ export default function Dashboard() {
       <Grid container spacing={2}>
         <Grid size={{ sm: 12, lg: 6 }}>
           <Card variant='outlined'>
-            <CardHeader title={`Expenses (${expenseMonth})`} />
+            <CardHeader
+              title={`Expenses (${expenseMonth})`}
+              action={
+                // TODO: hook this up to a dialog modal with month input
+                <IconButton>
+                  <MoreVertIcon />
+                </IconButton>
+              }
+            />
             <CardContent>
               <Expense data={expenseData} />
             </CardContent>
