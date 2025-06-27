@@ -1,5 +1,7 @@
 import sqlite3 from 'sqlite3'
 
+import { getMonthRange } from './utils.js'
+
 import type { Expense, NetIncome, NetIncomeRange } from './types.js'
 
 type ExpenseDBRow = {
@@ -10,7 +12,7 @@ type ExpenseDBRow = {
   category_name: string;
 }
 
-export function getExpenses(): Promise<Expense[]> {
+export function getExpenses(month: string): Promise<Expense[]> {
 
   return new Promise((resolve, reject) => {
 
@@ -27,9 +29,12 @@ export function getExpenses(): Promise<Expense[]> {
         C.name AS category_name
       FROM Payments P
       JOIN Categories C ON C.id = P.category_id
+      WHERE P.payment_date >= ? AND P.payment_date < ?
     `
 
-    db.all(sql, (error, rows: ExpenseDBRow[]) => {
+    const params = getMonthRange(month)
+
+    db.all(sql, params, (error, rows: ExpenseDBRow[]) => {
 
       if (error) {
         db.close()

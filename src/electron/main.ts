@@ -28,7 +28,8 @@ function createWindow() {
 
   ipcMain.handle('getExpenses', async () => {
     try {
-      return await getExpenses()
+      const month = new Date().toISOString().slice(0, 7) // TODO: temporary. get this value from the frontend
+      return await getExpenses(month)
     } catch (error) {
       console.log(error)
       return []
