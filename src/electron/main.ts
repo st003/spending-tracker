@@ -2,7 +2,7 @@ import path from 'path'
 
 import { app, BrowserWindow, ipcMain } from 'electron'
 
-import { getExpenses, getNetIncome } from './data.js';
+import { getExpensesForMonth, getNetIncome } from './data.js';
 import { getPreloadScriptPath } from './utils.js';
 
 import type { NetIncomeRange } from './types.js'
@@ -29,7 +29,7 @@ function createWindow() {
   ipcMain.handle('getExpenses', async () => {
     try {
       const month = new Date().toISOString().slice(0, 7) // TODO: temporary. get this value from the frontend
-      return await getExpenses(month)
+      return await getExpensesForMonth(month)
     } catch (error) {
       console.log(error)
       return []

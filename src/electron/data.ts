@@ -12,7 +12,7 @@ type ExpenseDBRow = {
   category_name: string;
 }
 
-export function getExpenses(month: string): Promise<Expense[]> {
+export function getExpensesForMonth(month: string): Promise<Expense[]> {
 
   return new Promise((resolve, reject) => {
 
