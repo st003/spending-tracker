@@ -51,7 +51,7 @@ _Note: cross-compiling for Mac from a Linux distro is not supported by eletron-b
 
 #### Linux
 
-Packaging for Linux configured but unstable. To package for Linux AppImage. Run the command:
+Packaging for Linux is configured but unstable. To package for Linux AppImage. Run the command:
 
 ```
 npm run package:linux

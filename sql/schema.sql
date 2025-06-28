@@ -7,8 +7,8 @@ CREATE TABLE "Categories" (
 
 CREATE TABLE "Payments" (
     "id" INTEGER NOT NULL,
-    "amount" INTEGER NOT NULL,
     "payment_date" TEXT NOT NULL, -- add index?
+    "amount" INTEGER NOT NULL,
     "description" TEXT NOT NULL,
     "category_id" INTEGER NOT NULL, -- add index?
     "created_date" TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
