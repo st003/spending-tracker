@@ -8,10 +8,11 @@ import CardHeader from '@mui/material/CardHeader'
 import Grid from '@mui/material/Grid'
 import IconButton from '@mui/material/IconButton'
 
+import BudgetFilterDialog from '../components/BudgetFIlterDialog'
 import Expense from '../components/Expense'
 import NetIncome from '../components/NetIncome'
 
-import { getTotalExpensesByCategory } from '../utils'
+import { getExpensesForMonth } from '../data'
 
 import '../styles/dashboard.css'
 
@@ -51,28 +52,31 @@ export default function Dashboard() {
   // expenses chart
   const today = new Date()
   today.setUTCMonth(today.getUTCMonth() - 1)
-  const monthName = today.toLocaleString('default', { month: 'long' })
-  const expenseMonthLabel = `${monthName} ${today.getUTCFullYear()}`
+
+  // TODO: render this in a sperate component dynamically
+  // const monthName = today.toLocaleString('default', { month: 'long' })
+  // const expenseMonthLabel = `${monthName} ${today.getUTCFullYear()}`
 
   const [monthSelection, setMonthSelection] = useState(today.toISOString().slice(0, 7))
   const [expenseData, setExpenseData] = useState<ExpenseCategory[]>([])
+  const [showExpenseFilterSettings, setShowExpenseFilterSettings] = useState(false)
+
+  const applyExpenseFilters = async (newMonthSelection: string) => {
+    setMonthSelection(newMonthSelection)
+    setShowExpenseFilterSettings(false)
+    const categories = await getExpensesForMonth(window, newMonthSelection)
+    setExpenseData(categories)
+  }
 
   useEffect(() => {
     (async () => {
-      try {
-        // @ts-ignore
-        const result = await window.electronAPI.getExpensesForMonth(monthSelection)
-        const categories = getTotalExpensesByCategory(result)
-        setExpenseData(categories)
-      } catch (error) {
-        // TODO: improve error handling
-        console.error(error)
-      }
+      // @ts-ignore
+      const categories = await getExpensesForMonth(window, monthSelection)
+      setExpenseData(categories)
     })()
   }, [])
 
   // net income year chart
-
   const [yearData, setYearData] = useState<IncomeExpense>({ income: [], expense: [] })
   const [yearXAxis, setYearXAxis] = useState<string[]>([])
 
@@ -114,10 +118,9 @@ export default function Dashboard() {
         <Grid size={{ sm: 12, lg: 6 }}>
           <Card variant='outlined'>
             <CardHeader
-              title={`Expenses (${expenseMonthLabel})`}
+              title={`Expenses (${monthSelection})`}
               action={
-                // TODO: hook this up to a dialog modal with month input
-                <IconButton>
+                <IconButton onClick={() => setShowExpenseFilterSettings(true)}>
                   <MoreVertIcon />
                 </IconButton>
               }
@@ -126,6 +129,12 @@ export default function Dashboard() {
               <Expense data={expenseData} />
             </CardContent>
           </Card>
+          <BudgetFilterDialog
+            open={showExpenseFilterSettings}
+            setOpen={setShowExpenseFilterSettings}
+            monthSelection={monthSelection}
+            handleApply={applyExpenseFilters}
+          />
         </Grid>
         <Grid size={{ sm: 12, lg: 6 }}>
           <Card variant='outlined' sx={{ mb: 2 }}>
