@@ -30,7 +30,8 @@ export function getExpensesForMonth(month: string): Promise<Expense[]> {
       FROM Payments P
       JOIN Categories C ON C.id = P.category_id
       WHERE P.amount < 0
-      AND P.payment_date >= ? AND P.payment_date < ?
+      AND P.payment_date >= ?
+      AND P.payment_date < ?
     `
 
     const params = getMonthRange(month)

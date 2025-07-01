@@ -34,9 +34,12 @@ export function getMonthRange(isoYYYYMM: string): string[] {
 
   let nextMonth: string
   if (currentMonth.getUTCMonth() == 11) {
-    nextMonth = `${currentMonth.getUTCFullYear() + 1}-01-01`
+    currentMonth.setUTCFullYear(currentMonth.getUTCFullYear() + 1)
+    currentMonth.setUTCMonth(0)
+    nextMonth = currentMonth.toISOString().slice(0, 10)
   } else {
-    nextMonth = `${currentMonth.getUTCFullYear()}-${currentMonth.getUTCMonth() + 2}-01`
+    currentMonth.setUTCMonth(currentMonth.getUTCMonth() + 1)
+    nextMonth = currentMonth.toISOString().slice(0, 10)
   }
 
   return [thisMonth, nextMonth]

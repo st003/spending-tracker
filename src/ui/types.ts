@@ -11,8 +11,8 @@ export type Expense = {
 }
 
 export type ExpenseCategory = {
-  value: number;
   label: string;
+  value: number;
 }
 
 export type ExpenseProperty = 'id'|'description'|'category'|'amount'|'date'

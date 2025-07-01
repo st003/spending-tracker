@@ -47,15 +47,15 @@ export function getTotalExpensesByCategory(expenses: Expense[]): ExpenseCategory
 
   for (const exp of expenses) {
     if (exp.category in categories) {
-      categories[exp.category] += exp.amount
+      categories[exp.category] += Math.abs(exp.amount)
     } else {
-      categories[exp.category] = exp.amount
+      categories[exp.category] = Math.abs(exp.amount)
     }
   }
 
   const expenseCategories: ExpenseCategory[] = []
-  for (const key in categories) {
-    expenseCategories.push({ value: categories[key], label: key })
+  for (const k in categories) {
+    expenseCategories.push({ label: k, value: categories[k] })
   }
 
   return expenseCategories

@@ -1,12 +1,12 @@
 import { getTotalExpensesByCategory } from './utils'
 
-import type { ExpenseCategory } from './types'
+import type { Expense, ExpenseCategory } from './types'
 
 export async function getExpensesForMonth(window: Window, monthSelection: string): Promise<ExpenseCategory[]> {
   try {
     // TODO: fix type safety
     // @ts-ignore
-    const result = await window.electronAPI.getExpensesForMonth(monthSelection)
+    const result: Expense[] = await window.electronAPI.getExpensesForMonth(monthSelection)
     return getTotalExpensesByCategory(result)
   } catch (error) {
     console.error(error)
