@@ -1,6 +1,6 @@
 import sqlite3 from 'sqlite3'
 
-import { getMonthRange } from './utils.js'
+import { getMonthRange, getNetIncomeMonths } from './utils.js'
 
 import type { Expense, NetIncome, NetIncomeRange } from './types.js'
 
@@ -13,7 +13,6 @@ type ExpenseDBRow = {
 }
 
 export function getExpensesForMonth(month: string): Promise<Expense[]> {
-
   return new Promise((resolve, reject) => {
 
     const db = new sqlite3.Database('data.db', error => {
@@ -53,6 +52,46 @@ export function getExpensesForMonth(month: string): Promise<Expense[]> {
 
         db.close()
         resolve(expenses)
+      }
+    })
+  })
+}
+
+export function getNetIncomeByMonth(start: string, end: string): Promise<NetIncome[]> {
+  return new Promise((resolve, reject) => {
+
+    const db = new sqlite3.Database('data.db', error => {
+      if (error) reject(error)
+    })
+
+    const sql = `
+      SELECT
+        id,
+        amount,
+        payment_date
+      FROM Payments
+      WHERE payment_date >= ?
+      AND payment_date < ?
+    `
+
+    // TODO: make start and end YYYY-MM-DD. Also, make end the first day of the month after the end range
+    db.all(sql, ['2022-01-01', '2023-01-01'], (error, rows: ExpenseDBRow[]) => {
+
+      if (error) {
+        db.close()
+        reject(error)
+
+      } else {
+        const expenses = rows.map(row => ({
+          id: row.id,
+          amount: row.amount,
+          date: new Date(row.payment_date)
+        }))
+
+        const months = getNetIncomeMonths(expenses)
+
+        db.close()
+        resolve(months)
       }
     })
   })
