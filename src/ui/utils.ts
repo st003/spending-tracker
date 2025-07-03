@@ -11,13 +11,26 @@ export function capitalize(word: string): string {
 }
 
 /**
- * Converts Date to YYYY-MM-DD format string
+ * Converts a Date to YYYY-MM-DD format string
  *
  * @param input The Date object to format
  * @returns String in format YYYY-MM-DD
  */
-export function formatDate(input: Date): string {
+export function formatDateYYYYMMDD(input: Date): string {
   return input.toISOString().slice(0, 10)
+}
+
+/**
+ * Converts a Date to an English Month and Year. Example:
+ * 2025-05 => 'May 2025'
+ *
+ * @param date The Date object to format
+ * @returns String in format "month YYYY"
+ */
+export function formatMonthLabel(date: Date): string {
+  const monthName = date.toLocaleString('default', { month: 'long', timeZone: 'UTC' })
+  const expenseMonthLabel = `${monthName} ${date.getUTCFullYear()}`
+  return expenseMonthLabel
 }
 
 /**

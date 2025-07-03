@@ -17,7 +17,7 @@ import Expense from '../components/Expense'
 
 import {
   capitalize,
-  formatDate,
+  formatDateYYYYMMDD,
   formatAmount,
   getTotalExpensesByCategory,
   sortExpenseData
@@ -111,7 +111,7 @@ export default function Budget() {
       <TableCell>{exp.description}</TableCell>
       <TableCell>{exp.category}</TableCell>
       <TableCell>{formatAmount(exp.amount)}</TableCell>
-      <TableCell>{formatDate(exp.date)}</TableCell>
+      <TableCell>{formatDateYYYYMMDD(exp.date)}</TableCell>
     </TableRow>
   ))
 

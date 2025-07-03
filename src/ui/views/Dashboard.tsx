@@ -13,6 +13,7 @@ import Expense from '../components/Expense'
 import NetIncome from '../components/NetIncome'
 
 import { getExpensesForMonth } from '../data'
+import { formatMonthLabel } from '../utils'
 
 import '../styles/dashboard.css'
 
@@ -53,16 +54,14 @@ export default function Dashboard() {
   const today = new Date()
   today.setUTCMonth(today.getUTCMonth() - 1)
 
-  // TODO: render this in a sperate component dynamically
-  // const monthName = today.toLocaleString('default', { month: 'long' })
-  // const expenseMonthLabel = `${monthName} ${today.getUTCFullYear()}`
-
   const [monthSelection, setMonthSelection] = useState(today.toISOString().slice(0, 7))
+  const [expenseMonthLabel, setExpenseMonthLabel] = useState(formatMonthLabel(today))
   const [expenseData, setExpenseData] = useState<ExpenseCategory[]>([])
   const [showExpenseFilterSettings, setShowExpenseFilterSettings] = useState(false)
 
   const applyExpenseFilters = async (newMonthSelection: string) => {
     setMonthSelection(newMonthSelection)
+    setExpenseMonthLabel(formatMonthLabel(new Date(newMonthSelection)))
     setShowExpenseFilterSettings(false)
     const categories = await getExpensesForMonth(window, newMonthSelection)
     setExpenseData(categories)
@@ -118,7 +117,7 @@ export default function Dashboard() {
         <Grid size={{ sm: 12, lg: 6 }}>
           <Card variant='outlined'>
             <CardHeader
-              title={`Expenses (${monthSelection})`}
+              title={`Expenses (${expenseMonthLabel})`}
               action={
                 <IconButton onClick={() => setShowExpenseFilterSettings(true)}>
                   <MoreVertIcon />
