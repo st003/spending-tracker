@@ -11,6 +11,7 @@ CREATE TABLE "Payments" (
     "amount" INTEGER NOT NULL,
     "description" TEXT NOT NULL,
     "category_id" INTEGER NOT NULL, -- add index?
+    "note" TEXT,
     "created_date" TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY("id" AUTOINCREMENT),
     FOREIGN KEY("category_id") REFERENCES "Categories"("id")
