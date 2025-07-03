@@ -15,7 +15,7 @@ import NetIncome from '../components/NetIncome'
 import { getExpensesCategoriesForMonth } from '../data'
 import { formatMonthLabel } from '../utils'
 
-import '../styles/dashboard.css'
+import '../styles/Dashboard.css'
 
 import type { ExpenseCategory, IncomeExpense } from '../types'
 
