@@ -2,7 +2,7 @@ import { getTotalExpensesByCategory } from './utils'
 
 import type { Expense, ExpenseCategory } from './types'
 
-export async function getExpensesForMonth(window: Window, monthSelection: string): Promise<ExpenseCategory[]> {
+export async function getExpensesCategoriesForMonth(window: Window, monthSelection: string): Promise<ExpenseCategory[]> {
   try {
     // TODO: fix type safety
     // @ts-ignore

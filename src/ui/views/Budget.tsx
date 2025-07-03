@@ -1,9 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
 import Grid from '@mui/material/Grid'
+import IconButton from '@mui/material/IconButton'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableContainer from '@mui/material/TableContainer'
@@ -13,15 +16,19 @@ import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
 import TableSortLabel from '@mui/material/TableSortLabel'
 
+import BudgetFilterDialog from '../components/BudgetFIlterDialog'
 import Expense from '../components/Expense'
 
 import {
   capitalize,
   formatDateYYYYMMDD,
+  formatMonthLabel,
   formatAmount,
   getTotalExpensesByCategory,
   sortExpenseData
 } from '../utils'
+
+import '../styles/Budget.css'
 
 import type { Expense as ExpenseType, ExpenseProperty, OrderByDirection } from '../types'
 
@@ -31,25 +38,41 @@ export default function Budget() {
 
   const today = new Date()
   today.setUTCMonth(today.getUTCMonth() - 1)
-  const monthName = today.toLocaleString('default', { month: 'long' })
-  const expenseMonthLabel = `${monthName} ${today.getUTCFullYear()}`
 
   const [monthSelection, setMonthSelection] = useState(today.toISOString().slice(0, 7))
+  const [expenseMonthLabel, setExpenseMonthLabel] = useState(formatMonthLabel(today))
+  const [showExpenseFilterSettings, setShowExpenseFilterSettings] = useState(false)
   const [expenses, setExpenses] = useState<ExpenseType[]>([])
   const [orderByProperty, setOrderByProperty] = useState<ExpenseProperty>('date')
   const [orderByDirection, setOrderByDirection] = useState<OrderByDirection>('desc')
 
-  // get data from backend
+  const applyExpenseFilters = async (newMonthSelection: string) => {
+    try {
+      // TODO: add type safety here
+      // @ts-ignore
+      const expenses: Expense[] = await window.electronAPI.getExpensesForMonth(newMonthSelection)
+      setExpenses(expenses)
+    } catch (error) {
+      console.log(error)
+      setExpenses([])
+    } finally {
+      setMonthSelection(newMonthSelection)
+      setExpenseMonthLabel(formatMonthLabel(new Date(newMonthSelection)))
+      setShowExpenseFilterSettings(false)
+    }
+  }
 
+  // get initial data
   useEffect(() => {
     (async () => {
       try {
+        // TODO: add type safety here
         // @ts-ignore
-        const result = await window.electronAPI.getExpensesForMonth(monthSelection)
-        setExpenses(result)
+        const expenses: Expense[] = await window.electronAPI.getExpensesForMonth(monthSelection)
+        setExpenses(expenses)
       } catch (error) {
-        // TODO: improve error handling
-        console.error(error)
+        console.log(error)
+        setExpenses([])
       }
     })()
   }, [])
@@ -122,7 +145,10 @@ export default function Budget() {
           <h1>Budget</h1>
         </Grid>
         <Grid size={{ xs: 6 }} sx={{ textAlign: 'right' }}>
-          <h2>{expenseMonthLabel}</h2>
+          <span className='budgetMonthSelectionLabel'>{expenseMonthLabel}</span>
+          <IconButton sx={{ marginLeft: '0.5rem' }} onClick={() => setShowExpenseFilterSettings(true)}>
+            <MoreVertIcon />
+          </IconButton>
         </Grid>
       </Grid>
       <Card variant='outlined' sx={{ mb: 2 }}>
@@ -130,6 +156,12 @@ export default function Budget() {
         <CardContent>
           <Expense data={expenseData} />
         </CardContent>
+        <BudgetFilterDialog
+          open={showExpenseFilterSettings}
+          setOpen={setShowExpenseFilterSettings}
+          monthSelection={monthSelection}
+          handleApply={applyExpenseFilters}
+        />
       </Card>
       <Card variant='outlined'>
         <CardHeader title='Expenses' />

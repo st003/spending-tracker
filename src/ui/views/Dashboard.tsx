@@ -12,7 +12,7 @@ import BudgetFilterDialog from '../components/BudgetFIlterDialog'
 import Expense from '../components/Expense'
 import NetIncome from '../components/NetIncome'
 
-import { getExpensesForMonth } from '../data'
+import { getExpensesCategoriesForMonth } from '../data'
 import { formatMonthLabel } from '../utils'
 
 import '../styles/dashboard.css'
@@ -63,14 +63,14 @@ export default function Dashboard() {
     setMonthSelection(newMonthSelection)
     setExpenseMonthLabel(formatMonthLabel(new Date(newMonthSelection)))
     setShowExpenseFilterSettings(false)
-    const categories = await getExpensesForMonth(window, newMonthSelection)
+    const categories = await getExpensesCategoriesForMonth(window, newMonthSelection)
     setExpenseData(categories)
   }
 
   useEffect(() => {
     (async () => {
       // @ts-ignore
-      const categories = await getExpensesForMonth(window, monthSelection)
+      const categories = await getExpensesCategoriesForMonth(window, monthSelection)
       setExpenseData(categories)
     })()
   }, [])
