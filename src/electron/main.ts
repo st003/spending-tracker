@@ -2,7 +2,7 @@ import path from 'path'
 
 import { app, BrowserWindow, ipcMain } from 'electron'
 
-import { getExpensesForMonth, getNetIncome } from './data.js';
+import { getExpensesForMonth, getNetIncomeByMonth, getNetIncome } from './data.js';
 import { getPreloadScriptPath } from './utils.js';
 
 import type { NetIncomeRange } from './types.js'
@@ -30,7 +30,16 @@ function createWindow() {
     try {
       return await getExpensesForMonth(isoYYYYMM)
     } catch (error) {
-      console.log(error)
+      console.error(error)
+      return []
+    }
+  })
+
+  ipcMain.handle('getNetIncomeByMonth', async (_, start: string, end: string) => {
+    try {
+      return await getNetIncomeByMonth(start, end)
+    } catch (error) {
+      console.error(error)
       return []
     }
   })

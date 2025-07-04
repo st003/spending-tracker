@@ -29,7 +29,7 @@ export default function Dashboard() {
     (async () => {
       try {
         // @ts-ignore
-        const result = await window.electronAPI.getNetIncome('month')
+        const result = await window.electronAPI.getNetIncomeByMonth('2021-01-01', '2022-01-01')
 
         const data: IncomeExpense = { income: [], expense: [] }
         const xAxis: string[] = []

@@ -73,9 +73,9 @@ export function getNetIncomeByMonth(start: string, end: string): Promise<NetInco
       WHERE payment_date >= ?
       AND payment_date < ?
     `
+    // TODO: <= or < for end date?
 
-    // TODO: make start and end YYYY-MM-DD. Also, make end the first day of the month after the end range
-    db.all(sql, ['2022-01-01', '2023-01-01'], (error, rows: ExpenseDBRow[]) => {
+    db.all(sql, [start, end], (error, rows: ExpenseDBRow[]) => {
 
       if (error) {
         db.close()
@@ -98,71 +98,6 @@ export function getNetIncomeByMonth(start: string, end: string): Promise<NetInco
 }
 
 export function getNetIncome(range: NetIncomeRange): NetIncome[] {
-
-  if (range === 'month') {
-    return [
-      {
-        income: 450_000,
-        expense: -250_000,
-        range: 'Jan \'24'
-      },
-      {
-        income: 470_000,
-        expense: -230_000,
-        range: 'Feb \'24'
-      },
-      {
-        income: 500_000,
-        expense: -300_000,
-        range: 'Mar \'24'
-      },
-      {
-        income: 450_000,
-        expense: -300_000,
-        range: 'Apr \'24'
-      },
-      {
-        income: 470_000,
-        expense: -500_000,
-        range: 'May \'24'
-      },
-      {
-        income: 480_000,
-        expense: -300_000,
-        range: 'Jun \'24'
-      },
-      {
-        income: 450_000,
-        expense: -250_000,
-        range: 'Jul \'24'
-      },
-      {
-        income: 490_000,
-        expense: -200_000,
-        range: 'Aug \'24'
-      },
-      {
-        income: 460_000,
-        expense: -277_000,
-        range: 'Sep \'24'
-      },
-      {
-        income: 450_000,
-        expense: -250_000,
-        range: 'Oct \'24'
-      },
-      {
-        income: 450_000,
-        expense: -330_000,
-        range: 'Nov \'24'
-      },
-      {
-        income: 550_000,
-        expense: -450_000,
-        range: 'Dec \'24'
-      }
-    ]
-  }
 
   if (range === 'year') {
     return [

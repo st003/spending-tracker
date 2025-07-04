@@ -55,7 +55,7 @@ export default function NetIncome({ data, xAxis }: NetIncomeProps) {
   const yAxisConfig: any[] = [
     {
       id: 'yAxis',
-      width: 60,
+      width: 70,
       valueFormatter: (val: number) => (val >= 0) ? `$${val / 100}` : `-$${Math.abs(val / 100)}`
     }
   ]

@@ -52,8 +52,8 @@ type NetIncomeMonths = {
 }
 
 /**
- * Groups expenses in from the same month-year into a NetIncome object and returns
- * each month's NetIncome.
+ * Groups expenses in from the same month & year into a NetIncome object and returns
+ * each month's total income and expenses.
  *
  * @param expenses An array of Expenses
  * @returns An array of NetIncomes
@@ -63,26 +63,57 @@ export function getNetIncomeMonths(expenses: Expense[]): NetIncome[] {
   const months: NetIncomeMonths = {}
 
   for (const exp of expenses) {
+
     // use "YYYY-MM" as the object key
-    const yearMonthKey = new Date(exp.date).toISOString().slice(0, 7)
-    if (yearMonthKey in months) {
-      if (exp.amount > 0) months[yearMonthKey].income += exp.amount
-      else months[yearMonthKey].expense += exp.amount
+    const key = new Date(exp.date).toISOString().slice(0, 7)
+
+    if (key in months) {
+
+      if (exp.amount > 0) months[key].income += exp.amount
+      else months[key].expense += exp.amount
 
     } else {
-      const month = {
+
+      const month: NetIncome = {
         income: 0,
         expense: 0,
-        range: yearMonthKey // TODO: temp, format example "Jan '25"
+        range: getNetIncomeRangeLabelMonth(exp.date)
       }
 
       if (exp.amount > 0) month.income += exp.amount
       else month.expense += exp.amount
 
-      months[yearMonthKey] = month
+      months[key] = month
     }
   }
 
-  // TODO: how do I garuntee a correct sort order oldest to newest?
-  return Object.values(months)
+  // convert string ISO date key YYYY-MM to an integer
+  // do an integer sort
+  const sortKeys = Object.keys(months).sort((a, b) => {
+    const aAsNum = new Date(a).getTime()
+    const bAsNum = new Date(b).getTime()
+    return aAsNum - bAsNum
+  })
+
+  const netIncomes: NetIncome[] = []
+  for (const key of sortKeys) {
+    netIncomes.push(months[key])
+  }
+
+  return netIncomes
+}
+
+/**
+ * Takes a Date and returns a formatted string with the short month
+ * and a 2-digit yeat. Example:
+ *
+ * 2025-05-01 => "May '25"
+ *
+ * @param date A Date object
+ * @returns A formatted string
+ */
+function getNetIncomeRangeLabelMonth(date: Date): string {
+  const shortMonth = date.toLocaleString('default', { month: 'short', timeZone: 'UTC' })
+  const twoDigityear = date.getUTCFullYear().toString().slice(2, 4)
+  return `${shortMonth} '${twoDigityear}`
 }

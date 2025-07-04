@@ -11,5 +11,7 @@ const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('electronAPI', {
   getExpensesForMonth: (isoYYYYMM: string) => ipcRenderer.invoke('getExpensesForMonth', isoYYYYMM),
+  getNetIncomeByMonth: (start: string, end: string) => ipcRenderer.invoke('getNetIncomeByMonth', start, end),
+  // TODO: remove this
   getNetIncome: (range: string) => ipcRenderer.invoke('getNetIncome', range)
 })
