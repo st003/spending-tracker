@@ -40,7 +40,7 @@ export default function NetIncome({ data, xAxis }: NetIncomeProps) {
       data: data.income.map((val, i) => val + data.expense[i]),
       label: 'Net',
       type: 'line',
-      valueFormatter: (val: number) => formatAmount(val)
+      valueFormatter: (val: number) => `$${(val / 100).toFixed(2)}`
     }
   ]
 

@@ -12,4 +12,8 @@ export type NetIncome = {
   range: string
 }
 
+export type NetIncomeBucket = {
+  [key: string]: NetIncome
+}
+
 export type NetIncomeRange = 'month'|'year'

@@ -2,7 +2,7 @@ import path from 'path'
 
 import { app } from 'electron'
 
-import type { Expense, NetIncome } from './types.js'
+import type { Expense, NetIncome, NetIncomeBucket } from './types.js'
 
 /**
  * Because preload scripts are injected into the frontend they will reside
@@ -47,10 +47,6 @@ export function getMonthRange(isoYYYYMM: string): string[] {
   return [thisMonth, nextMonth]
 }
 
-type NetIncomeMonths = {
-  [key: string]: NetIncome
-}
-
 /**
  * Groups expenses in from the same month & year into a NetIncome object and returns
  * each month's total income and expenses.
@@ -60,12 +56,12 @@ type NetIncomeMonths = {
  */
 export function getNetIncomeMonths(expenses: Expense[]): NetIncome[] {
 
-  const months: NetIncomeMonths = {}
+  const months: NetIncomeBucket = {}
 
   for (const exp of expenses) {
 
     // use "YYYY-MM" as the object key
-    const key = new Date(exp.date).toISOString().slice(0, 7)
+    const key = exp.date.toISOString().slice(0, 7)
 
     if (key in months) {
 
@@ -116,4 +112,53 @@ function getNetIncomeRangeLabelMonth(date: Date): string {
   const shortMonth = date.toLocaleString('default', { month: 'short', timeZone: 'UTC' })
   const twoDigityear = date.getUTCFullYear().toString().slice(2, 4)
   return `${shortMonth} '${twoDigityear}`
+}
+
+/**
+ * Groups expenses in from the same year into a NetIncome object and returns
+ * each month's total income and expenses.
+ *
+ * @param expenses An array of Expenses
+ * @returns An array of NetIncomes
+ */
+export function getNetIncomesYear(expenses: Expense[]): NetIncome[] {
+
+  const years: NetIncomeBucket = {}
+
+  for (const exp of expenses) {
+
+    // use year as the object key
+    const key = exp.date.getUTCFullYear().toString()
+
+    if (key in years) {
+
+      if (exp.amount > 0) years[key].income += exp.amount
+      else years[key].expense += exp.amount
+
+    } else {
+
+      const year: NetIncome = {
+        income: 0,
+        expense: 0,
+        range: key.toString()
+      }
+
+      if (exp.amount > 0) year.income += exp.amount
+      else year.expense += exp.amount
+
+      years[key] = year
+    }
+  }
+
+  // Object.keys() alway casts the key to type string...
+  const sortKeys = Object.keys(years).sort((a, b) => {
+    return Number(a) - Number(b)
+  })
+
+  const netIncomes: NetIncome[] = []
+  for (const key of sortKeys) {
+    netIncomes.push(years[key])
+  }
+
+  return netIncomes
 }

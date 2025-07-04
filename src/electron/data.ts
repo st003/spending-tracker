@@ -1,6 +1,6 @@
 import sqlite3 from 'sqlite3'
 
-import { getMonthRange, getNetIncomeMonths } from './utils.js'
+import { getMonthRange, getNetIncomeMonths, getNetIncomesYear } from './utils.js'
 
 import type { Expense, NetIncome, NetIncomeRange } from './types.js'
 
@@ -57,7 +57,7 @@ export function getExpensesForMonth(month: string): Promise<Expense[]> {
   })
 }
 
-export function getNetIncomeByMonth(start: string, end: string): Promise<NetIncome[]> {
+export function getNetIncome(range: NetIncomeRange, start: string, end: string): Promise<NetIncome[]> {
   return new Promise((resolve, reject) => {
 
     const db = new sqlite3.Database('data.db', error => {
@@ -88,46 +88,13 @@ export function getNetIncomeByMonth(start: string, end: string): Promise<NetInco
           date: new Date(row.payment_date)
         }))
 
-        const months = getNetIncomeMonths(expenses)
+        let netIncomes: NetIncome[] = []
+        if (range === 'month') netIncomes = getNetIncomeMonths(expenses)
+        if (range === 'year') netIncomes = getNetIncomesYear(expenses)
 
         db.close()
-        resolve(months)
+        resolve(netIncomes)
       }
     })
   })
-}
-
-export function getNetIncome(range: NetIncomeRange): NetIncome[] {
-
-  if (range === 'year') {
-    return [
-      {
-        income: 5_500_000,
-        expense: -4_500_000,
-        range: '2020'
-      },
-      {
-        income: 6_200_000,
-        expense: -4_800_000,
-        range: '2021'
-      },
-      {
-        income: 7_000_000,
-        expense: -5_300_000,
-        range: '2022'
-      },
-      {
-        income: 7_000_000,
-        expense: -5_500_000,
-        range: '2023'
-      },
-      {
-        income: 8_800_000,
-        expense: -5_000_000,
-        range: '2024'
-      }
-    ]
-  }
-
-  return []
 }

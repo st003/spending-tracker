@@ -2,8 +2,8 @@ import path from 'path'
 
 import { app, BrowserWindow, ipcMain } from 'electron'
 
-import { getExpensesForMonth, getNetIncomeByMonth, getNetIncome } from './data.js';
-import { getPreloadScriptPath } from './utils.js';
+import { getExpensesForMonth, getNetIncome } from './data.js'
+import { getPreloadScriptPath } from './utils.js'
 
 import type { NetIncomeRange } from './types.js'
 
@@ -35,17 +35,13 @@ function createWindow() {
     }
   })
 
-  ipcMain.handle('getNetIncomeByMonth', async (_, start: string, end: string) => {
+  ipcMain.handle('getNetIncome', async (_, range: NetIncomeRange, start: string, end: string) => {
     try {
-      return await getNetIncomeByMonth(start, end)
+      return await getNetIncome(range, start, end)
     } catch (error) {
       console.error(error)
       return []
     }
-  })
-
-  ipcMain.handle('getNetIncome', (_, range: NetIncomeRange) => {
-    return getNetIncome(range)
   })
 }
 
