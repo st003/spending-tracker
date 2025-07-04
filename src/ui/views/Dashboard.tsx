@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 
@@ -19,9 +19,8 @@ import '../styles/Dashboard.css'
 
 import type { ExpenseCategory, IncomeExpense } from '../types'
 
-export default function Dashboard() {
+function NetIncomeByMonth(): React.JSX.Element {
 
-  // net income month chart
   const [monthData, setMonthData] = useState<IncomeExpense>({ income: [], expense: [] })
   const [monthXAxis, setMonthXAxis] = useState<string[]>([])
 
@@ -50,7 +49,18 @@ export default function Dashboard() {
     })()
   }, [])
 
-  // expenses chart
+  return (
+    <Card variant='outlined' sx={{ mb: 2 }}>
+      <CardHeader title='Net Income (By Month)' />
+      <CardContent>
+        <NetIncome data={monthData} xAxis={monthXAxis} />
+      </CardContent>
+    </Card>
+  )
+}
+
+function ExpensesByMonth(): React.JSX.Element {
+
   const today = new Date()
   today.setUTCMonth(today.getUTCMonth() - 1)
 
@@ -75,7 +85,33 @@ export default function Dashboard() {
     })()
   }, [])
 
-  // net income year chart
+  return (
+    <>
+      <Card variant='outlined'>
+        <CardHeader
+          title={`Expenses (${expenseMonthLabel})`}
+          action={
+            <IconButton onClick={() => setShowExpenseFilterSettings(true)}>
+              <MoreVertIcon />
+            </IconButton>
+          }
+        />
+        <CardContent>
+          <Expense data={expenseData} />
+        </CardContent>
+      </Card>
+      <BudgetFilterDialog
+        open={showExpenseFilterSettings}
+        setOpen={setShowExpenseFilterSettings}
+        monthSelection={monthSelection}
+        handleApply={applyExpenseFilters}
+      />
+    </>
+  )
+}
+
+function NetIncomeByYear(): React.JSX.Element {
+
   const [yearData, setYearData] = useState<IncomeExpense>({ income: [], expense: [] })
   const [yearXAxis, setYearXAxis] = useState<string[]>([])
 
@@ -105,43 +141,27 @@ export default function Dashboard() {
   }, [])
 
   return (
+    <Card variant='outlined' sx={{ mb: 2 }}>
+      <CardHeader title='Net Income (By Year)' />
+      <CardContent>
+        <NetIncome data={yearData} xAxis={yearXAxis} />
+      </CardContent>
+    </Card>
+  )
+}
+
+export default function Dashboard(): React.JSX.Element {
+
+  return (
     <div className='dashboard'>
       <h1>Dashboard</h1>
-      <Card variant='outlined' sx={{ mb: 2 }}>
-        <CardHeader title='Net Income (By Month)' />
-        <CardContent>
-          <NetIncome data={monthData} xAxis={monthXAxis} />
-        </CardContent>
-      </Card>
+      <NetIncomeByMonth />
       <Grid container spacing={2}>
         <Grid size={{ sm: 12, lg: 6 }}>
-          <Card variant='outlined'>
-            <CardHeader
-              title={`Expenses (${expenseMonthLabel})`}
-              action={
-                <IconButton onClick={() => setShowExpenseFilterSettings(true)}>
-                  <MoreVertIcon />
-                </IconButton>
-              }
-            />
-            <CardContent>
-              <Expense data={expenseData} />
-            </CardContent>
-          </Card>
-          <BudgetFilterDialog
-            open={showExpenseFilterSettings}
-            setOpen={setShowExpenseFilterSettings}
-            monthSelection={monthSelection}
-            handleApply={applyExpenseFilters}
-          />
+          <ExpensesByMonth />
         </Grid>
         <Grid size={{ sm: 12, lg: 6 }}>
-          <Card variant='outlined' sx={{ mb: 2 }}>
-            <CardHeader title='Net Income (By Year)' />
-            <CardContent>
-              <NetIncome data={yearData} xAxis={yearXAxis} />
-            </CardContent>
-          </Card>
+          <NetIncomeByYear />
         </Grid>
       </Grid>
     </div>

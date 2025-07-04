@@ -9,8 +9,8 @@ import Grid from '@mui/material/Grid'
 import IconButton from '@mui/material/IconButton'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
-import TableContainer from '@mui/material/TableContainer'
 import TableCell from '@mui/material/TableCell'
+import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
@@ -34,7 +34,7 @@ import type { Expense as ExpenseType, ExpenseProperty, OrderByDirection } from '
 
 const LABELS: ExpenseProperty[] = ['description', 'category', 'amount', 'date']
 
-export default function Budget() {
+export default function Budget(): React.JSX.Element {
 
   const today = new Date()
   today.setUTCMonth(today.getUTCMonth() - 1)
