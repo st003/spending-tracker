@@ -12,6 +12,12 @@ type ExpenseDBRow = {
   category_name: string;
 }
 
+/**
+ * Returns the all payments from a given month who's amount is negative
+ *
+ * @param month An ISO 8601 date string formatted as YYYY-MM
+ * @returns An array of Expense objects
+ */
 export function getExpensesForMonth(month: string): Promise<Expense[]> {
   return new Promise((resolve, reject) => {
 
@@ -57,6 +63,15 @@ export function getExpensesForMonth(month: string): Promise<Expense[]> {
   })
 }
 
+/**
+ * Get an array of NetIncome objects containing the income and expense for a given range.
+ * Groups data by month-year or year.
+ *
+ * @param range The string "month" or "year"
+ * @param start An ISO 8601 date string
+ * @param end An ISO 8601 date string. End date is not inclusive.
+ * @returns An array of NetIncome objects
+ */
 export function getNetIncome(range: NetIncomeRange, start: string, end: string): Promise<NetIncome[]> {
   return new Promise((resolve, reject) => {
 
@@ -73,9 +88,11 @@ export function getNetIncome(range: NetIncomeRange, start: string, end: string):
       WHERE payment_date >= ?
       AND payment_date < ?
     `
-    // TODO: <= or < for end date?
 
-    db.all(sql, [start, end], (error, rows: ExpenseDBRow[]) => {
+    const startDate = new Date(start).toISOString().slice(0, 10)
+    const endDate = new Date(end).toISOString().slice(0, 10)
+
+    db.all(sql, [startDate, endDate], (error, rows: ExpenseDBRow[]) => {
 
       if (error) {
         db.close()
