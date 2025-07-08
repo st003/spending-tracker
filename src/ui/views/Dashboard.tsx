@@ -28,7 +28,7 @@ function NetIncomeByMonth(): React.JSX.Element {
     (async () => {
       try {
         // @ts-ignore
-        const result = await window.electronAPI.getNetIncome('month', '2021-12-01', '2022-11-01')
+        const result = await window.electronAPI.getNetIncome('month', '2024-07-01', '2025-07-01')
 
         const data: IncomeExpense = { income: [], expense: [] }
         const xAxis: string[] = []
@@ -119,7 +119,7 @@ function NetIncomeByYear(): React.JSX.Element {
     (async () => {
       try {
         // @ts-ignore
-        const result = await window.electronAPI.getNetIncome('year', '2018-01-01', '2023-01-01')
+        const result = await window.electronAPI.getNetIncome('year', '2020-01-01', '2025-01-01')
 
         const data: IncomeExpense = { income: [], expense: [] }
         const xAxis: string[] = []
