@@ -2,9 +2,14 @@ import React, { useEffect, useState } from 'react'
 
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 
+import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogTitle from '@mui/material/DialogTitle'
 import Grid from '@mui/material/Grid'
 import IconButton from '@mui/material/IconButton'
 
@@ -21,40 +26,124 @@ import type { ExpenseCategory, IncomeExpense } from '../types'
 
 function NetIncomeByMonth(): React.JSX.Element {
 
+  // default for end month
+  const today = new Date()
+  today.setUTCMonth(today.getUTCMonth() - 1)
+  const endMonthDefault = today.toISOString().slice(0, 7)
+
+  // default for start month
+  today.setUTCMonth(today.getUTCMonth() + 1)
+  today.setUTCFullYear(today.getUTCFullYear() - 1)
+  const startMonthDefault = today.toISOString().slice(0, 7)
+
+  const [open, setOpen] = useState(false)
+  const [startMonthInput, setStartMonthInput] = useState(startMonthDefault)
+  const [endMonthInput, setEndMonthInput] = useState(endMonthDefault)
+
+  const [startMonthInputCopy, setStartMonthInputCopy] = useState(startMonthDefault)
+  const [endMonthInputCopy, setEndMonthInputCopy] = useState(endMonthDefault)
+
   const [monthData, setMonthData] = useState<IncomeExpense>({ income: [], expense: [] })
   const [monthXAxis, setMonthXAxis] = useState<string[]>([])
 
-  useEffect(() => {
-    (async () => {
-      try {
-        // @ts-ignore
-        const result = await window.electronAPI.getNetIncome('month', '2024-07-01', '2025-07-01')
+  const getNetIncome = async (startMonth: string, endMonth: string) => {
+    try {
 
-        const data: IncomeExpense = { income: [], expense: [] }
-        const xAxis: string[] = []
+      const startDate = new Date(startMonth).toISOString().slice(0, 10)
 
-        for (const month of result) {
-          data.income.push(month.income)
-          data.expense.push(month.expense)
-          xAxis.push(month.range)
-        }
+      const temp = new Date(endMonth)
+      temp.setUTCMonth(temp.getUTCMonth() + 1)
+      const endDate = temp.toISOString().slice(0, 10)
 
-        setMonthData(data)
-        setMonthXAxis(xAxis)
+      // @ts-ignore
+      const result = await window.electronAPI.getNetIncome('month', startDate, endDate)
 
-      } catch (error) {
-        // TODO: improve error handling
-        console.error(error)
+      const data: IncomeExpense = { income: [], expense: [] }
+      const xAxis: string[] = []
+
+      for (const month of result) {
+        data.income.push(month.income)
+        data.expense.push(month.expense)
+        xAxis.push(month.range)
       }
-    })()
+
+      setMonthData(data)
+      setMonthXAxis(xAxis)
+
+    } catch (error) {
+      console.error(error)
+      setMonthData({ income: [], expense: [] })
+      setMonthXAxis([])
+    }
+  }
+
+  const handleStartMonthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setStartMonthInput(event.target.value)
+  }
+
+  const handleEndMonthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEndMonthInput(event.target.value)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+    setStartMonthInput(startMonthInputCopy)
+    setEndMonthInput(endMonthInputCopy)
+  }
+
+  const handleApply = async (startMonth: string, endMonth: string) => {
+    await getNetIncome(startMonth, endMonth)
+    setOpen(false)
+    setStartMonthInputCopy(startMonth)
+    setEndMonthInputCopy(endMonth)
+  }
+
+  useEffect(() => {
+    (async () => await getNetIncome(startMonthInput, endMonthInput))()
   }, [])
 
   return (
     <Card variant='outlined' sx={{ mb: 2 }}>
-      <CardHeader title='Net Income (By Month)' />
+      <CardHeader
+       title='Net Income (By Month)'
+       action={
+        <IconButton onClick={() => setOpen(true)}>
+          <MoreVertIcon />
+        </IconButton>
+       }
+      />
       <CardContent>
         <NetIncome data={monthData} xAxis={monthXAxis} />
       </CardContent>
+      <Dialog
+        fullWidth
+        maxWidth='sm'
+        open={open}
+      >
+        <DialogTitle>Filter Settings</DialogTitle>
+        <DialogContent className='NetIncomeFilters'>
+          <label>Start Month</label>
+          <div className='inputContainer'>
+            <input
+              type='month'
+              value={startMonthInput}
+              onChange={handleStartMonthChange}
+            />
+          </div>
+          <label>End Month</label>
+          <div className='inputContainer'>
+            <input
+              type='month'
+              value={endMonthInput}
+              onChange={handleEndMonthChange}
+            />
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleApply(startMonthInput, endMonthInput)}>Apply</Button>
+          <Button onClick={handleClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
     </Card>
   )
 }
