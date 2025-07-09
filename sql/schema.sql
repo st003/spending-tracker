@@ -1,6 +1,6 @@
 CREATE TABLE "Categories" (
     "id" INTEGER NOT NULL,
-    "name" TEXT NOT NULL,
+    "name" TEXT NOT NULL, -- add unique index?
     "created_date" TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY("id" AUTOINCREMENT)
 );

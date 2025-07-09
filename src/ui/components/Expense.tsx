@@ -20,5 +20,5 @@ export default function Expense({ data }: ExpenseProps) {
     }
   ]
 
-  return <PieChart series={expenseSeries} height={300} />
+  return <PieChart series={expenseSeries} height={300} hideLegend />
 }
