@@ -3,6 +3,7 @@ import path from 'path'
 import { app, BrowserWindow, ipcMain } from 'electron'
 
 import { getExpensesForMonth, getNetIncome } from './data.js'
+import { initMenu } from './menu.js'
 import { getPreloadScriptPath } from './utils.js'
 
 import type { NetIncomeRange } from './types.js'
@@ -43,6 +44,9 @@ function createWindow() {
       return []
     }
   })
+
+  // TODO: complete main menu
+  // initMenu(mainWindow)
 }
 
 // app main statup logic

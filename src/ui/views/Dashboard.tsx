@@ -55,6 +55,7 @@ function NetIncomeByMonth(): React.JSX.Element {
       temp.setUTCMonth(temp.getUTCMonth() + 1)
       const endDate = temp.toISOString().slice(0, 10)
 
+      // TODO: fix type safety
       // @ts-ignore
       const result = await window.electronAPI.getNetIncome('month', startDate, endDate)
 
@@ -168,6 +169,7 @@ function ExpensesByMonth(): React.JSX.Element {
 
   useEffect(() => {
     (async () => {
+      // TODO: fix type safety
       // @ts-ignore
       const categories = await getExpensesCategoriesForMonth(window, monthSelection)
       setExpenseData(categories)
@@ -225,6 +227,7 @@ function NetIncomeByYear(): React.JSX.Element {
       temp.setUTCFullYear(temp.getUTCFullYear() + 1)
       const endDate = temp.toISOString().slice(0, 10)
 
+      // TODO: fix type safety
       // @ts-ignore
       const result = await window.electronAPI.getNetIncome('year', startDate, endDate)
 
