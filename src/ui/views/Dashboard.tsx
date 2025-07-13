@@ -201,40 +201,119 @@ function ExpensesByMonth(): React.JSX.Element {
 
 function NetIncomeByYear(): React.JSX.Element {
 
+  // default for start and end year
+  const today = new Date()
+  const startYearDefault = today.getUTCFullYear() - 5
+  const endYearDefault = today.getUTCFullYear() - 1
+
+  const [open, setOpen] = useState(false)
+  const [startYearInput, setStartYearInput] = useState(startYearDefault)
+  const [endYearInput, setEndYearInput] = useState(endYearDefault)
+
+  const [startYearInputCopy, setStartYearInputCopy] = useState(startYearDefault)
+  const [endYearInputCopy, setEndYearInputCopy] = useState(endYearDefault)
+
   const [yearData, setYearData] = useState<IncomeExpense>({ income: [], expense: [] })
   const [yearXAxis, setYearXAxis] = useState<string[]>([])
 
-  useEffect(() => {
-    (async () => {
-      try {
-        // @ts-ignore
-        const result = await window.electronAPI.getNetIncome('year', '2020-01-01', '2025-01-01')
+  const getNetIncome = async (startYear: number, endYear: number) => {
+    try {
 
-        const data: IncomeExpense = { income: [], expense: [] }
-        const xAxis: string[] = []
+      const startDate = new Date(startYear.toString()).toISOString().slice(0, 10)
 
-        for (const month of result) {
-          data.income.push(month.income)
-          data.expense.push(month.expense)
-          xAxis.push(month.range)
-        }
+      const temp = new Date(endYear.toString())
+      temp.setUTCFullYear(temp.getUTCFullYear() + 1)
+      const endDate = temp.toISOString().slice(0, 10)
 
-        setYearData(data)
-        setYearXAxis(xAxis)
+      // @ts-ignore
+      const result = await window.electronAPI.getNetIncome('year', startDate, endDate)
 
-      } catch (error) {
-        // TODO: improve error handling
-        console.error(error)
+      const data: IncomeExpense = { income: [], expense: [] }
+      const xAxis: string[] = []
+
+      for (const month of result) {
+        data.income.push(month.income)
+        data.expense.push(month.expense)
+        xAxis.push(month.range)
       }
-    })()
+
+      setYearData(data)
+      setYearXAxis(xAxis)
+
+    } catch (error) {
+      console.error(error)
+      setYearData({ income: [], expense: [] })
+      setYearXAxis([])
+    }
+  }
+
+  const handleStartYearChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setStartYearInput(Number(event.target.value))
+  }
+
+  const handleEndYearChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEndYearInput(Number(event.target.value))
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+    setStartYearInput(startYearInputCopy)
+    setEndYearInput(endYearInputCopy)
+  }
+
+  const handleApply = async (startYear: number, endYear: number) => {
+    await getNetIncome(startYear, endYear)
+    setOpen(false)
+    setStartYearInputCopy(startYear)
+    setEndYearInputCopy(endYear)
+  }
+
+  useEffect(() => {
+    (async () => await getNetIncome(startYearInput, endYearInput))()
   }, [])
 
   return (
     <Card variant='outlined' sx={{ mb: 2 }}>
-      <CardHeader title='Net Income (By Year)' />
+      <CardHeader
+        title='Net Income (By Year)'
+        action={
+          <IconButton onClick={() => setOpen(true)}>
+            <MoreVertIcon />
+          </IconButton>
+       }
+      />
       <CardContent>
         <NetIncome data={yearData} xAxis={yearXAxis} />
       </CardContent>
+      <Dialog
+        fullWidth
+        maxWidth='sm'
+        open={open}
+      >
+        <DialogTitle>Filter Settings</DialogTitle>
+        <DialogContent className='NetIncomeFilters'>
+          <label>Start Year</label>
+          <div className='inputContainer'>
+            <input
+              type='number'
+              value={startYearInput}
+              onChange={handleStartYearChange}
+            />
+          </div>
+          <label>End Year</label>
+          <div className='inputContainer'>
+            <input
+              type='number'
+              value={endYearInput}
+              onChange={handleEndYearChange}
+            />
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleApply(startYearInput, endYearInput)}>Apply</Button>
+          <Button onClick={handleClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
     </Card>
   )
 }
