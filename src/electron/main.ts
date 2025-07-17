@@ -1,18 +1,19 @@
 import path from 'path'
 
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, screen } from 'electron'
 
 import { getExpensesForMonth, getNetIncome } from './data.js'
-import { initMenu } from './menu.js'
+// import { initMenu } from './menu.js'
 import { getPreloadScriptPath } from './utils.js'
 
 import type { NetIncomeRange } from './types.js'
 
 function createWindow() {
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize
+
   const mainWindow = new BrowserWindow({
-    // TODO: make this fill the screen on open
-    width: 1280,
-    height: 720,
+    width: width,
+    height: height,
     webPreferences: {
       preload: getPreloadScriptPath()
     }
