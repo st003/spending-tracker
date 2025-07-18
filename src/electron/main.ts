@@ -3,14 +3,19 @@ import path from 'path'
 import { app, BrowserWindow, ipcMain, screen } from 'electron'
 
 import { getExpensesForMonth, getNetIncome } from './data.js'
-import { getPreloadScriptPath } from './setup.js'
+import { getPreloadScriptPath, initDatabase } from './setup.js'
 
 import type { NetIncomeRange } from './types.js'
 
 function createWindow() {
 
-  const { width, height } = screen.getPrimaryDisplay().workAreaSize
+  // database
 
+  initDatabase()
+
+  // window
+
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize
   const mainWindow = new BrowserWindow({
     width: width,
     height: height,
@@ -27,8 +32,6 @@ function createWindow() {
     // app.getAppPath() allows the electro app to find its files no matter where it exists on the file system
     mainWindow.loadFile(path.join(app.getAppPath(), '/dist-ui/index.html'))
   }
-
-
 
   // TODO: complete main menu
   // initMenu(mainWindow)

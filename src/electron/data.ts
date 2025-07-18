@@ -1,5 +1,7 @@
 import sqlite3 from 'sqlite3'
 
+import { DB } from './setup.js'
+
 import type { Expense, NetIncome, NetIncomeBucket, NetIncomeRange } from './types.js'
 
 /**
@@ -163,7 +165,7 @@ type ExpenseDBRow = {
 export function getExpensesForMonth(month: string): Promise<Expense[]> {
   return new Promise((resolve, reject) => {
 
-    const db = new sqlite3.Database('data.db', error => {
+    const db = new sqlite3.Database(DB, error => {
       if (error) reject(error)
     })
 
@@ -217,7 +219,7 @@ export function getExpensesForMonth(month: string): Promise<Expense[]> {
 export function getNetIncome(range: NetIncomeRange, start: string, end: string): Promise<NetIncome[]> {
   return new Promise((resolve, reject) => {
 
-    const db = new sqlite3.Database('data.db', error => {
+    const db = new sqlite3.Database(DB, error => {
       if (error) reject(error)
     })
 

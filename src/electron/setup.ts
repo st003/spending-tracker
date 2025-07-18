@@ -1,6 +1,8 @@
 import path from 'path'
 
-import { app, BrowserWindow, Menu } from 'electron'
+import { app } from 'electron'
+
+export var DB: string
 
 /**
  * Because preload scripts are injected into the frontend they will reside
@@ -15,6 +17,18 @@ export function getPreloadScriptPath(): string {
     (process.env.NODE_ENV === 'development') ? '.' : '..',
     '/dist-electron/preload.cjs'
   )
+}
+
+/**
+ * Initiates the database path
+ */
+export function initDatabase() {
+  if (process.env.NODE_ENV === 'development') {
+    DB = 'data.db'
+  } else {
+    const userDataDir = app.getPath('userData')
+    DB = `${userDataDir}/data.db`
+  }
 }
 
 // TODO: add hot-key support

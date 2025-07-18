@@ -6,7 +6,7 @@ Data Import / Export
 
 Customize main menu
 Create Icon
-JSDoc comments
+Error logs in production
 Tests
 Data export
 Darkmode

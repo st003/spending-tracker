@@ -1,3 +1,5 @@
+// DATA
+
 export type Expense = {
   id: number
   description?: string
