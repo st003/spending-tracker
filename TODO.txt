@@ -1,12 +1,12 @@
-Tutorial video:
-https://www.youtube.com/watch?v=fP-371MN0Ck&list=WL&index=2&t=1050s
-
-DB Selection
-Data Import / Export
-
+1.0.0
+-----
 Customize main menu
+New database initialization
+DB versioning
+Data Import
 Create Icon
 Error logs in production
+
 Tests
 Data export
 Darkmode
