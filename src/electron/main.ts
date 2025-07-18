@@ -3,12 +3,12 @@ import path from 'path'
 import { app, BrowserWindow, ipcMain, screen } from 'electron'
 
 import { getExpensesForMonth, getNetIncome } from './data.js'
-// import { initMenu } from './menu.js'
-import { getPreloadScriptPath } from './utils.js'
+import { getPreloadScriptPath } from './setup.js'
 
 import type { NetIncomeRange } from './types.js'
 
 function createWindow() {
+
   const { width, height } = screen.getPrimaryDisplay().workAreaSize
 
   const mainWindow = new BrowserWindow({
@@ -28,6 +28,13 @@ function createWindow() {
     mainWindow.loadFile(path.join(app.getAppPath(), '/dist-ui/index.html'))
   }
 
+
+
+  // TODO: complete main menu
+  // initMenu(mainWindow)
+
+  // events
+
   ipcMain.handle('getExpensesForMonth', async (_, isoYYYYMM: string) => {
     try {
       return await getExpensesForMonth(isoYYYYMM)
@@ -45,9 +52,6 @@ function createWindow() {
       return []
     }
   })
-
-  // TODO: complete main menu
-  // initMenu(mainWindow)
 }
 
 // app main statup logic
