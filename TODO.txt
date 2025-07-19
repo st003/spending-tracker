@@ -1,7 +1,7 @@
 1.0.0
 -----
-Customize main menu
 New database initialization
+Customize main menu
 DB versioning
 Data Import
 Create Icon
