@@ -1,6 +1,6 @@
 import sqlite3 from 'sqlite3'
 
-import { DB } from './db.js'
+import { DB } from './db/index.js'
 
 import type { Expense, NetIncome, NetIncomeBucket, NetIncomeRange } from './types.js'
 

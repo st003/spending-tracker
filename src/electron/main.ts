@@ -3,7 +3,7 @@ import path from 'path'
 import { app, BrowserWindow, ipcMain, screen } from 'electron'
 
 import { getExpensesForMonth, getNetIncome } from './data.js'
-import { initDatabase } from './db.js'
+import { initDatabase } from './db/index.js'
 import { getPreloadScriptPath } from './setup.js'
 
 import type { NetIncomeRange } from './types.js'
