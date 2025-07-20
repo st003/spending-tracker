@@ -8,11 +8,11 @@ import { getPreloadScriptPath } from './setup.js'
 
 import type { NetIncomeRange } from './types.js'
 
-function createWindow() {
+async function createWindow() {
 
   // database
 
-  initDatabase()
+  await initDatabase()
 
   // window
 
@@ -59,13 +59,13 @@ function createWindow() {
 }
 
 // app main statup logic
-app.whenReady().then(() => {
-  createWindow()
+app.whenReady().then(async () => {
+  await createWindow()
 
   // MacOS specific behavior for opening a window if non are open
-  app.on('activate', () => {
+  app.on('activate', async () => {
     if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow()
+      await createWindow()
     }
   })
 })
