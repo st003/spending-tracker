@@ -1,11 +1,15 @@
 1.0.0
 -----
-New database initialization
-Customize main menu
-DB versioning
 Data Import
-Create Icon
+- Customize main menu
+- import page w/ help
+- file selection
+- CSV validation
+- data insertion
+App Icon
+DB versioning
 Error logs in production
+-----
 
 Tests
 Data export
