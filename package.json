@@ -1,7 +1,9 @@
 {
   "name": "spending-tracker",
+  "description": "A spending and budget tracking application",
+  "author": "st003",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.5.0",
   "type": "module",
   "main": "dist-electron/main.js",
   "homepage": "./",
