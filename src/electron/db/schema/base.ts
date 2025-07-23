@@ -37,9 +37,12 @@ export default function createNewDatabase(dbPath: string): Promise<void> {
     })
 
     db.serialize(() => {
-      // TODO: improve error handling here
-      db.run(CREATE_TABLE_CATEGORIES)
-      db.run(CREATE_TABLE_PAYMENTS)
+      try {
+        db.run(CREATE_TABLE_CATEGORIES)
+        db.run(CREATE_TABLE_PAYMENTS)
+      } catch (error) {
+        reject(error)
+      }
     })
 
     db.close()
