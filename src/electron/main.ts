@@ -4,7 +4,7 @@ import { app, BrowserWindow, ipcMain, screen } from 'electron'
 
 import { getExpensesForMonth, getNetIncome } from './data.js'
 import { initDatabase } from './db/index.js'
-import { getPreloadScriptPath } from './setup.js'
+import { getPreloadScriptPath, initMenu } from './setup.js'
 
 import type { NetIncomeRange } from './types.js'
 
@@ -34,8 +34,7 @@ async function createWindow() {
     mainWindow.loadFile(path.join(app.getAppPath(), '/dist-ui/index.html'))
   }
 
-  // TODO: complete main menu
-  // initMenu(mainWindow)
+  initMenu()
 
   // events
 

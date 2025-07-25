@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { app } from 'electron'
+import { app, Menu } from 'electron'
 
 /**
  * Because preload scripts are injected into the frontend they will reside
@@ -17,37 +17,43 @@ export function getPreloadScriptPath(): string {
   )
 }
 
-// TODO: add hot-key support
-/*
-export function initMenu(mainWindow: BrowserWindow) {
+export function initMenu() {
   Menu.setApplicationMenu(
     Menu.buildFromTemplate([
-      {
-        label: 'Spending Tracker',
-        type: 'submenu',
-        submenu: [
-          {
-            label: 'Open Developer Tools',
-            click: () => mainWindow.webContents.openDevTools(),
-            visible: process.env.NODE_ENV === 'development'
-          },
-          {
-            label: 'Quit Spending Tracker',
-            click: app.quit
-          }
-        ]
-      },
+      { role: 'appMenu' },
       {
         label: 'File',
         type: 'submenu',
         submenu: [
           {
-            label: 'Import Data'
             // TODO: add data import functionality
-          }
+            label: 'Import Data'
+          },
+          { type: 'separator' },
+          { role: 'close' }
         ]
-      }
+      },
+      // TODO: add edit menu?
+      {
+        label: 'View',
+        type: 'submenu',
+        submenu: [
+          { role: 'reload' },
+          { role: 'forceReload' },
+          {
+            role: 'toggleDevTools',
+            visible: process.env.NODE_ENV === 'development'
+          },
+          { type: 'separator' },
+          { role: 'resetZoom' },
+          { role: 'zoomIn' },
+          { role: 'zoomOut' },
+          { type: 'separator' },
+          { role: 'togglefullscreen' }
+        ]
+      },
+      { role: 'windowMenu' }
+      // TODO: add help menu
     ])
   )
 }
-*/

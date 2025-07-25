@@ -1,8 +1,7 @@
 1.0.0
 -----
 Data Import
-- Customize main menu
-- import page w/ help
+- import modal
 - file selection
 - CSV validation
 - data insertion
