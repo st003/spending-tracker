@@ -1,5 +1,6 @@
 {
   "name": "spending-tracker",
+  "productName": "Spending Tracker",
   "description": "A spending and budget tracking application",
   "author": "st003",
   "private": true,

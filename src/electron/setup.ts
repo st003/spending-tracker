@@ -17,6 +17,9 @@ export function getPreloadScriptPath(): string {
   )
 }
 
+/**
+ * Configures the application main menu
+ */
 export function initMenu() {
   Menu.setApplicationMenu(
     Menu.buildFromTemplate([
