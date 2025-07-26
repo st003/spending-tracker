@@ -1,7 +1,6 @@
 1.0.0
 -----
 Data Import
-- import modal
 - file selection
 - CSV validation
 - data insertion
