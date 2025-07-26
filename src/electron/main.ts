@@ -34,7 +34,7 @@ async function createWindow() {
     mainWindow.loadFile(path.join(app.getAppPath(), '/dist-ui/index.html'))
   }
 
-  initMenu()
+  initMenu(mainWindow)
 
   // events
 

@@ -4,12 +4,19 @@
  * and is instead injected as a frontend script when electron runs. As a result this file cannot import from
  * other files in the electron directory.
  *
- * Also, electron does not fully support ESM for preload scripts, so we must use CommonJS here.
+ * Also, electron does not fully support ESM for preload scripts, so we must use CommonJS here (except for types).
  */
 
 const { contextBridge, ipcRenderer } = require('electron')
 
+import type { IpcRendererEvent } from 'electron'
+
 contextBridge.exposeInMainWorld('electronAPI', {
+  // menu actions
+  openImporter: (callback: (value: true) => void) => {
+    return ipcRenderer.on('openImporter', (_: IpcRendererEvent, value: true) => callback(value))
+  },
+  // chart data
   getExpensesForMonth: (isoYYYYMM: string) => ipcRenderer.invoke('getExpensesForMonth', isoYYYYMM),
   getNetIncome: (range: 'month'|'year', start: string, end: string) => ipcRenderer.invoke('getNetIncome', range, start, end)
 })

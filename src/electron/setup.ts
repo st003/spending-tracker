@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { app, Menu } from 'electron'
+import { app, BrowserWindow, Menu } from 'electron'
 
 /**
  * Because preload scripts are injected into the frontend they will reside
@@ -20,7 +20,7 @@ export function getPreloadScriptPath(): string {
 /**
  * Configures the application main menu
  */
-export function initMenu() {
+export function initMenu(mainWindow: BrowserWindow) {
   Menu.setApplicationMenu(
     Menu.buildFromTemplate([
       { role: 'appMenu' },
@@ -29,8 +29,8 @@ export function initMenu() {
         type: 'submenu',
         submenu: [
           {
-            // TODO: add data import functionality
-            label: 'Import Data'
+            label: 'Import Data',
+            click: () => mainWindow.webContents.send('openImporter', true)
           },
           { type: 'separator' },
           { role: 'close' }
