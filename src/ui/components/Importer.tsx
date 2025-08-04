@@ -22,14 +22,12 @@ export default function Importer() {
 
   // file select
 
-  const [fileInput, setFileInput] = useState('')
-
-  const importBtnDisabled = fileInput === ''
+  const [file, setFile] = useState<File|null>(null)
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.files) // debug
-    // const file = event.target.files[0] || ''
-    // setFileInput(file)
+    if (event.target.files !== null && event.target.files.length > 0) {
+      setFile(event.target.files[0])
+    }
   }
 
   return (
@@ -46,13 +44,12 @@ export default function Importer() {
             <input
               type='file'
               accept='.csv'
-              value={fileInput}
               onChange={handleFileChange}
             />
           </div>
         </DialogContent>
         <DialogActions>
-          <Button disabled={importBtnDisabled}>Import</Button>
+          <Button disabled={!file}>Import</Button>
           <Button onClick={handleClose}>Close</Button>
         </DialogActions>
       </Dialog>
