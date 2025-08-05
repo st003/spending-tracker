@@ -6,7 +6,7 @@ import { BrowserWindow, dialog } from 'electron'
  *
  * @param mainWindow The main application window
  */
-export async function openImportFileSelectionWindow(mainWindow: BrowserWindow) {
+export async function selectImportFile(mainWindow: BrowserWindow) {
 
   const fileSelectionResonse = await dialog.showOpenDialog(mainWindow, {
     buttonLabel: 'Select',

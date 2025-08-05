@@ -4,7 +4,7 @@ import { app, BrowserWindow, ipcMain, screen } from 'electron'
 
 import { getExpensesForMonth, getNetIncome } from './data.js'
 import { initDatabase } from './db/index.js'
-import { openImportFileSelectionWindow } from './import.js'
+import { selectImportFile } from './import.js'
 import { getPreloadScriptPath, initMenu } from './setup.js'
 
 import type { NetIncomeRange } from './types.js'
@@ -58,9 +58,9 @@ async function createWindow() {
   })
 
   ipcMain.handle('selectImportFile', async () => {
-    const filePath = await openImportFileSelectionWindow(mainWindow)
-    console.log(filePath) // TODO: temp
-    // TODO: send the file name to the frontend
+    const filePath = await selectImportFile(mainWindow)
+    // TODO: parse path to get just the file name
+    mainWindow.webContents.send('sendSelectedFile', filePath)
   })
 }
 
