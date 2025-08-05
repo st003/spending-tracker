@@ -30,7 +30,7 @@ export function initMenu(mainWindow: BrowserWindow) {
         submenu: [
           {
             label: 'Import Data',
-            accelerator: process.platform === 'darwin' ? 'Cmd+I' : 'Ctl+I',
+            accelerator:  'CmdOrCtrl+I',
             click: () => mainWindow.webContents.send('openImporter', true)
           },
           { type: 'separator' },

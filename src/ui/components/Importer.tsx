@@ -12,6 +12,12 @@ export default function Importer() {
 
   const [open, setOpen] = useState(false)
 
+  const handleChooseFile = () => {
+    // TODO: fix type safety
+    // @ts-ignore
+    window.electronAPI.selectImportFile()
+  }
+
   const handleClose = () => {
     setOpen(false)
   }
@@ -19,16 +25,6 @@ export default function Importer() {
   // TODO: fix type safety
   // @ts-ignore
   window.electronAPI.openImporter((value: true) => setOpen(value))
-
-  // file select
-
-  const [file, setFile] = useState<File|null>(null)
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files !== null && event.target.files.length > 0) {
-      setFile(event.target.files[0])
-    }
-  }
 
   return (
     <>
@@ -40,16 +36,10 @@ export default function Importer() {
         <DialogTitle>Import Data</DialogTitle>
         <DialogContent>
           <p>Select CSV file for import. File must be formatted to importer requirements.</p>
-          <div>
-            <input
-              type='file'
-              accept='.csv'
-              onChange={handleFileChange}
-            />
-          </div>
+          <Button onClick={handleChooseFile}>Choose File</Button>
         </DialogContent>
         <DialogActions>
-          <Button disabled={!file}>Import</Button>
+          <Button disabled={true}>Import</Button>
           <Button onClick={handleClose}>Close</Button>
         </DialogActions>
       </Dialog>

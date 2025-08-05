@@ -4,6 +4,7 @@ import { app, BrowserWindow, ipcMain, screen } from 'electron'
 
 import { getExpensesForMonth, getNetIncome } from './data.js'
 import { initDatabase } from './db/index.js'
+import { openImportFileSelectionWindow } from './import.js'
 import { getPreloadScriptPath, initMenu } from './setup.js'
 
 import type { NetIncomeRange } from './types.js'
@@ -36,7 +37,7 @@ async function createWindow() {
 
   initMenu(mainWindow)
 
-  // events
+  // register events
 
   ipcMain.handle('getExpensesForMonth', async (_, isoYYYYMM: string) => {
     try {
@@ -54,6 +55,12 @@ async function createWindow() {
       console.error(error)
       return []
     }
+  })
+
+  ipcMain.handle('selectImportFile', async () => {
+    const filePath = await openImportFileSelectionWindow(mainWindow)
+    console.log(filePath) // TODO: temp
+    // TODO: send the file name to the frontend
   })
 }
 
