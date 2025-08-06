@@ -29,13 +29,21 @@ export default function Importer() {
     setOpen(false)
   }
 
-  const handleImport = () => {
+  const handleImport = async () => {
     setLoading(true)
 
-    // TODO: temp to test import button behavior
-    setTimeout(() => {
-      handleClose()
-    }, 5000)
+    // TODO: fix type safety
+    // @ts-ignore
+    const res = await window.electronAPI.import()
+
+    if (res.error) {
+      console.error(res.message)
+    } else {
+      // TODO: display success message
+      console.info('Import Success')
+    }
+
+    handleClose()
   }
 
   // TODO: fix type safety

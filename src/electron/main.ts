@@ -65,6 +65,12 @@ async function createWindow() {
     if (filePath) importFile = filePath
     return path.basename(filePath)
   })
+
+  ipcMain.handle('import', async () => {
+    // TODO: create import logic
+    importFile = ''
+    return { error: false, message: '' }
+  })
 }
 
 // app main statup logic
