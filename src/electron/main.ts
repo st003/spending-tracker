@@ -58,9 +58,7 @@ async function createWindow() {
   })
 
   ipcMain.handle('selectImportFile', async () => {
-    const filePath = await selectImportFile(mainWindow)
-    // TODO: parse path to get just the file name
-    mainWindow.webContents.send('sendSelectedFile', filePath)
+    return await selectImportFile(mainWindow)
   })
 }
 

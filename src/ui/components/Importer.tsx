@@ -15,10 +15,11 @@ export default function Importer() {
   const [open, setOpen] = useState(false)
   const [fileName, setFileName] = useState<string|null>(null)
 
-  const handleChooseFile = () => {
+  const handleChooseFile = async () => {
     // TODO: fix type safety
     // @ts-ignore
-    window.electronAPI.selectImportFile()
+    const fileName = await window.electronAPI.selectImportFile()
+    setFileName(fileName)
   }
 
   const handleClose = () => {
@@ -29,19 +30,6 @@ export default function Importer() {
   // TODO: fix type safety
   // @ts-ignore
   window.electronAPI.openImporter((value: true) => setOpen(value))
-
-  // subscribe to listen for file selection
-  useEffect(() => {
-
-    // TODO: fix type safety
-    // @ts-ignore
-    window.electronAPI.sendSelectedFile((fileName) => {
-      setFileName(fileName)
-    })
-
-    // TODO: should we be destroying the event listener on
-    // component unmount?
-  }, [])
 
   const selectedFile = (fileName) ? fileName : 'No file selected'
   const importBtnDisabled = fileName === null
