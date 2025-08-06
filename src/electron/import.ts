@@ -1,3 +1,5 @@
+import path from 'path'
+
 import { BrowserWindow, dialog } from 'electron'
 
 /**
@@ -21,5 +23,6 @@ export async function selectImportFile(mainWindow: BrowserWindow) {
 
   if (fileSelectionResonse.canceled) return ''
 
-  return fileSelectionResonse.filePaths[0]
+  const fileName = path.basename(fileSelectionResonse.filePaths[0])
+  return fileName
 }
