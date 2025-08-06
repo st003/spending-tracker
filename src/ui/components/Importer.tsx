@@ -14,6 +14,7 @@ export default function Importer() {
 
   const [open, setOpen] = useState(false)
   const [fileName, setFileName] = useState<string|null>(null)
+  const [loading, setLoading] = useState(false)
 
   const handleChooseFile = async () => {
     // TODO: fix type safety
@@ -24,7 +25,17 @@ export default function Importer() {
 
   const handleClose = () => {
     setFileName(null)
+    setLoading(false)
     setOpen(false)
+  }
+
+  const handleImport = () => {
+    setLoading(true)
+
+    // TODO: temp to test import button behavior
+    setTimeout(() => {
+      handleClose()
+    }, 5000)
   }
 
   // TODO: fix type safety
@@ -44,12 +55,12 @@ export default function Importer() {
         <DialogTitle>Import Data</DialogTitle>
         <DialogContent>
           <p>Select CSV file for import. File must be formatted to importer requirements.</p>
-          <Button onClick={handleChooseFile}>Choose File</Button>
+          <Button onClick={handleChooseFile} disabled={loading}>Choose File</Button>
           <span className='SelectedFile'>{selectedFile}</span>
         </DialogContent>
         <DialogActions>
-          <Button disabled={importBtnDisabled} onClick={handleClose}>Import</Button>
-          <Button onClick={handleClose}>Close</Button>
+          <Button onClick={handleImport} disabled={importBtnDisabled} loading={loading}>Import</Button>
+          <Button onClick={handleClose} disabled={loading}>Close</Button>
         </DialogActions>
       </Dialog>
     </>
