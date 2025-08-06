@@ -1,5 +1,3 @@
-import path from 'path'
-
 import { BrowserWindow, dialog } from 'electron'
 
 /**
@@ -7,6 +5,7 @@ import { BrowserWindow, dialog } from 'electron'
  * See https://www.electronjs.org/docs/latest/api/dialog#dialogshowopendialogwindow-options
  *
  * @param mainWindow The main application window
+ * @return The full path to the file
  */
 export async function selectImportFile(mainWindow: BrowserWindow) {
 
@@ -23,6 +22,5 @@ export async function selectImportFile(mainWindow: BrowserWindow) {
 
   if (fileSelectionResonse.canceled) return ''
 
-  const fileName = path.basename(fileSelectionResonse.filePaths[0])
-  return fileName
+  return fileSelectionResonse.filePaths[0]
 }

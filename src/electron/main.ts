@@ -9,6 +9,9 @@ import { getPreloadScriptPath, initMenu } from './setup.js'
 
 import type { NetIncomeRange } from './types.js'
 
+// in-memory storage for import file path
+var importFile = ''
+
 async function createWindow() {
 
   // database
@@ -58,7 +61,9 @@ async function createWindow() {
   })
 
   ipcMain.handle('selectImportFile', async () => {
-    return await selectImportFile(mainWindow)
+    const filePath = await selectImportFile(mainWindow)
+    if (filePath) importFile = filePath
+    return path.basename(filePath)
   })
 }
 
