@@ -8,7 +8,11 @@ import DialogTitle from '@mui/material/DialogTitle'
 
 import '../styles/Importer.css'
 
-export default function Importer() {
+interface ImporterProps {
+  displayFeedback: (error: boolean, message: string) => void;
+}
+
+export default function Importer({ displayFeedback }: ImporterProps) {
 
   // dialog modal
 
@@ -38,9 +42,9 @@ export default function Importer() {
 
     if (res.error) {
       console.error(res.message)
+      displayFeedback(true, res.message)
     } else {
-      // TODO: display success message
-      console.info('Import Success')
+      displayFeedback(false, 'Import was successful')
     }
 
     handleClose()

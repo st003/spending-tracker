@@ -1,7 +1,6 @@
 0.9.0
 -----
 Data Import
-- file selection
 - CSV validation
 - data insertion
 App Icon
