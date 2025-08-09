@@ -4,7 +4,7 @@ import { app, BrowserWindow, ipcMain, screen } from 'electron'
 
 import { getExpensesForMonth, getNetIncome } from './data.js'
 import { initDatabase } from './db/index.js'
-import { selectImportFile } from './import.js'
+import { importData, selectImportFile } from './import.js'
 import { getPreloadScriptPath, initMenu } from './setup.js'
 
 import type { NetIncomeRange } from './types.js'
@@ -67,9 +67,21 @@ async function createWindow() {
   })
 
   ipcMain.handle('import', async () => {
-    // TODO: create import logic
-    importFile = ''
-    return { error: false, message: '' }
+    try {
+      await importData(importFile)
+      importFile = ''
+      return { error: false, message: '' }
+
+    } catch (error) {
+
+      if (error instanceof Error) {
+        console.error(error) // TODO: how to have file-based logging?
+        return { error: true, message: error.message }
+      } else {
+         console.error(error)
+         return { error: true, message: 'An unknown error occured' }
+      }
+    }
   })
 }
 

@@ -1,3 +1,5 @@
+import path from 'path'
+
 import { BrowserWindow, dialog } from 'electron'
 
 /**
@@ -23,4 +25,25 @@ export async function selectImportFile(mainWindow: BrowserWindow) {
   if (fileSelectionResonse.canceled) return ''
 
   return fileSelectionResonse.filePaths[0]
+}
+
+/**
+ * Opens the import CSV, parses and validates the data, then inserts
+ * the data into the database.
+ *
+ * @param filePath 
+ */
+export async function importData(filePath: string) {
+
+  const fileExtention = path.extname(filePath)
+  if (fileExtention.toLowerCase() !== '.csv') {
+    throw new Error(`Selected file must have the extention '.csv'`)
+  }
+
+  // TODOs
+  // open & parse csv (https://www.npmjs.com/package/csv-parse)
+  // validate data structure
+  // import data
+
+  return
 }
