@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
@@ -6,13 +6,13 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 
+import { GlobalContext } from '../contexts'
+
 import '../styles/Importer.css'
 
-interface ImporterProps {
-  displayFeedback: (error: boolean, message: string) => void;
-}
+export default function Importer() {
 
-export default function Importer({ displayFeedback }: ImporterProps) {
+  const gCtx = useContext(GlobalContext)
 
   // dialog modal
 
@@ -42,9 +42,9 @@ export default function Importer({ displayFeedback }: ImporterProps) {
 
     if (res.error) {
       console.error(res.message)
-      displayFeedback(true, res.message)
+      gCtx.displayFeedback(true, res.message)
     } else {
-      displayFeedback(false, 'Import was successful')
+      gCtx.displayFeedback(false, 'Import was successful')
     }
 
     handleClose()

@@ -9,12 +9,12 @@ import PieChartIcon from '@mui/icons-material/PieChart'
 
 import Feedback from './Feedback'
 import Importer from './Importer'
+import { GlobalContext } from '../contexts'
 
 export default function RootLayout() {
 
   const navigate = useNavigate()
 
-  // TODO: move these to a context for easy reuse
   const [openFeedback, setOpenFeedback] = useState(false)
   const [isFeedbackError, setIsFeedbackError] = useState(false)
   const [feedbackMessage, setFeedbackMessage] = useState('')
@@ -31,8 +31,12 @@ export default function RootLayout() {
     setFeedbackMessage('')
   }
 
+  const globalContextValue = {
+    displayFeedback: handleFeedbackOpen
+  }
+
   return (
-    <>
+    <GlobalContext.Provider value={globalContextValue}>
       <div className='rootLayout'>
         <main>
           <Outlet />
@@ -50,13 +54,13 @@ export default function RootLayout() {
           </BottomNavigation>
         </footer>
       </div>
-      <Importer displayFeedback={handleFeedbackOpen} />
+      <Importer />
       <Feedback
         open={openFeedback}
         handleClose={handleFeedbackClose}
         error={isFeedbackError}
         message={feedbackMessage}
       />
-    </>
+    </GlobalContext.Provider>
   )
 }
