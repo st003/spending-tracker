@@ -1,10 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
-import { parse } from 'csv-parse'
-
 import { BrowserWindow, dialog } from 'electron'
-import { LargeNumberLike } from 'crypto'
+import { parse } from 'csv-parse'
 
 /**
  * Opens the file selection dialog for choosing a CSV file.
