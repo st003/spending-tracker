@@ -21,8 +21,6 @@ export default function Importer() {
   const [loading, setLoading] = useState(false)
 
   const handleChooseFile = async () => {
-    // TODO: fix type safety
-    // @ts-ignore
     const fileName = await window.electronAPI.selectImportFile()
     setFileName(fileName)
   }

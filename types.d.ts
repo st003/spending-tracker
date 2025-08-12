@@ -15,6 +15,7 @@ type NetIncome = {
 interface Window {
   electronAPI: {
     openImporter: (callback: (value: true) => void) => void,
+    selectImportFile: () => Promise<string>,
     getExpensesForMonth: (isoYYYYMM: string) => Promise<Expense[]>,
     getNetIncome: (range: 'month'|'year', start: string, end: string) => Promise<NetIncome[]>
   }
