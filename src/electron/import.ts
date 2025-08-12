@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import { BrowserWindow, dialog } from 'electron'
-import { parse } from 'csv-parse'
+import { CastingContext, parse } from 'csv-parse'
 
 /**
  * Opens the file selection dialog for choosing a CSV file.
@@ -29,10 +29,32 @@ export async function selectImportFile(mainWindow: BrowserWindow) {
   return fileSelectionResonse.filePaths[0]
 }
 
+// TODO: add tests for this function
 /**
- * Parses a CSV file into an array of object. The only constraint placed upon the
- * CSV file is the first row contains column headings. Otherwise this function sets
- * no restrictions as to the number of columns or their contents.
+ * Verifies value is an ISO 3601 date string formatted as YYYY-MM-DD
+ * and then converts it to a Date object.
+ *
+ * @param value An ISO 3601 date string formatted as YYYY-MM-DD
+ * @param ctx An instance of csv-parse CastingContext
+ */
+function castToDate(value: string, ctx: CastingContext): Date {
+  const parts = value.split('-')
+
+  if ((parts.length !== 3) &&
+      (parts[0].length !== 4) &&
+      (parts[1].length !== 2) &&
+      (parts[2].length !== 2)
+  ) {
+    throw new Error(`Cannot parse "${value}" into date at column: ${ctx.index} row: ${ctx.lines}`)
+  }
+
+  return new Date(value)
+}
+
+/**
+ * Parses an import CSV file into an array of objects.
+ *
+ * Uses 'csv-parse' library. See https://csv.js.org/parse/
  *
  * @param filePath The full path to the CSV file to import data from
  * @returns A Promise with an array of objects
@@ -42,9 +64,18 @@ function parseCSV(filePath: string): Promise<object[]> {
     const rows: object[] = []
     fs.createReadStream(filePath)
       .pipe(parse({
-        columns: true, // import csv requires column headers
+        columns: true,
         skip_empty_lines: true,
         trim: true,
+        cast: (value: string, context: CastingContext) => {
+          if (context.header) {
+            return value
+          } else if (context.index === 0) {
+            return castToDate(value, context)
+          } else {
+            return value
+          }
+        }
       }))
       .on('data', (row: object) => rows.push(row))
       .on('end', () => resolve(rows))
@@ -69,9 +100,7 @@ export async function importData(filePath: string) {
     const rows = await parseCSV(filePath)
     console.log(rows)
 
-    // TODOs
-    // validate data structure
-    // import data into database
+    // TODO: import data into database
 
   } catch (error) {
     throw error
