@@ -34,8 +34,6 @@ export default function Importer() {
   const handleImport = async () => {
     setLoading(true)
 
-    // TODO: fix type safety
-    // @ts-ignore
     const res = await window.electronAPI.import()
 
     if (res.error) {
