@@ -50,8 +50,6 @@ export default function Importer() {
     handleClose()
   }
 
-  // TODO: fix type safety
-  // @ts-ignore
   window.electronAPI.openImporter((value: true) => setOpen(value))
 
   const selectedFile = (fileName) ? fileName : 'No file selected'
