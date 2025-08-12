@@ -11,6 +11,7 @@ const { contextBridge, ipcRenderer } = require('electron')
 
 import type { IpcRendererEvent } from 'electron'
 
+// TODO: add type safety here
 contextBridge.exposeInMainWorld('electronAPI', {
   // menu actions
   openImporter: (callback: (value: true) => void) => {
