@@ -1,5 +1,5 @@
-import { createContext } from 'react';
+import { createContext } from 'react'
 
 export const GlobalContext = createContext({
-  displayFeedback: (error: boolean, message: string) => {}
+  displayFeedback: (_error: boolean, _message: string) => {}
 })

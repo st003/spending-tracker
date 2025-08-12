@@ -1,4 +1,4 @@
-import type { Categories, Expense, ExpenseCategory, ExpenseProperty } from './types'
+import type { Categories, ExpenseCategory, ExpenseProperty } from './types'
 
 /**
  * Takes a word and capitalizes the first letter
