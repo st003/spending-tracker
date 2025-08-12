@@ -30,7 +30,7 @@ import {
 
 import '../styles/Budget.css'
 
-import type { Expense as ExpenseType, ExpenseProperty, OrderByDirection } from '../types'
+import type { ExpenseProperty, OrderByDirection } from '../types'
 
 const LABELS: ExpenseProperty[] = ['description', 'category', 'amount', 'date']
 
@@ -42,14 +42,12 @@ export default function Budget(): React.JSX.Element {
   const [monthSelection, setMonthSelection] = useState(today.toISOString().slice(0, 7))
   const [expenseMonthLabel, setExpenseMonthLabel] = useState(formatMonthLabel(today))
   const [showExpenseFilterSettings, setShowExpenseFilterSettings] = useState(false)
-  const [expenses, setExpenses] = useState<ExpenseType[]>([])
+  const [expenses, setExpenses] = useState<Expense[]>([])
   const [orderByProperty, setOrderByProperty] = useState<ExpenseProperty>('date')
   const [orderByDirection, setOrderByDirection] = useState<OrderByDirection>('desc')
 
   const applyExpenseFilters = async (newMonthSelection: string) => {
     try {
-      // TODO: add type safety here
-      // @ts-ignore
       const expenses: Expense[] = await window.electronAPI.getExpensesForMonth(newMonthSelection)
       setExpenses(expenses)
     } catch (error) {
@@ -66,8 +64,6 @@ export default function Budget(): React.JSX.Element {
   useEffect(() => {
     (async () => {
       try {
-        // TODO: add type safety here
-        // @ts-ignore
         const expenses: Expense[] = await window.electronAPI.getExpensesForMonth(monthSelection)
         setExpenses(expenses)
       } catch (error) {
