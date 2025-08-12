@@ -2,14 +2,6 @@ export type Categories = {
   [key: string]: number
 }
 
-export type Expense = {
-  id: number;
-  description: string;
-  category: string;
-  amount: number;
-  date: Date;
-}
-
 export type ExpenseCategory = {
   label: string;
   value: number;

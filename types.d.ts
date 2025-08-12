@@ -1,3 +1,11 @@
+type Expense = {
+  id: number;
+  description: string;
+  category: string;
+  amount: number;
+  date: Date;
+}
+
 type NetIncome = {
   income: number;
   expense: number;
@@ -6,6 +14,7 @@ type NetIncome = {
 
 interface Window {
   electronAPI: {
+    getExpensesForMonth: (isoYYYYMM: string) => Promise<Expense[]>,
     getNetIncome: (range: 'month'|'year', start: string, end: string) => Promise<NetIncome[]>
   }
 }
