@@ -92,10 +92,11 @@ function parseCSV(filePath: string): Promise<object[]> {
             return castToDate(value, context)
           } else if (context.index === 1) {
             return castToInt(value, context)
+          } else if (context.index > 3) {
+            throw new Error('Import file contains too many columns')
           } else {
             return value
           }
-          // TODO: add index > 3 check
         }
       }))
       .on('data', (row: object) => rows.push(row))
