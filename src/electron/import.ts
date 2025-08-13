@@ -40,15 +40,32 @@ export async function selectImportFile(mainWindow: BrowserWindow) {
 function castToDate(value: string, ctx: CastingContext): Date {
   const parts = value.split('-')
 
-  if ((parts.length !== 3) &&
-      (parts[0].length !== 4) &&
-      (parts[1].length !== 2) &&
-      (parts[2].length !== 2)
+  if ((parts.length !== 3)
+      || (parts[0].length !== 4)
+      || (parts[1].length !== 2)
+      || (parts[2].length !== 2)
   ) {
     throw new Error(`Cannot parse "${value}" into date at column: ${ctx.index} row: ${ctx.lines}`)
   }
 
   return new Date(value)
+}
+
+// TODO: add tests for this function
+/**
+ * Verifies value can be cast to an integer.
+ *
+ * @param value An ISO 3601 date string formatted as YYYY-MM-DD
+ * @param ctx An instance of csv-parse CastingContext
+ */
+function castToInt(value: string, ctx: CastingContext): Number {
+  const result = parseInt(value)
+
+  if (Number.isNaN(result) || !Number.isInteger(result)) {
+    throw new Error(`Cannot parse "${value}" into integer at column: ${ctx.index} row: ${ctx.lines}`)
+  }
+
+  return result
 }
 
 /**
@@ -69,12 +86,16 @@ function parseCSV(filePath: string): Promise<object[]> {
         trim: true,
         cast: (value: string, context: CastingContext) => {
           if (context.header) {
+            // TODO: add header name and order check
             return value
           } else if (context.index === 0) {
             return castToDate(value, context)
+          } else if (context.index === 1) {
+            return castToInt(value, context)
           } else {
             return value
           }
+          // TODO: add index > 3 check
         }
       }))
       .on('data', (row: object) => rows.push(row))
