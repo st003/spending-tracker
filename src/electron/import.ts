@@ -31,6 +31,33 @@ export async function selectImportFile(mainWindow: BrowserWindow) {
 
 // TODO: add tests for this function
 /**
+ * Checks if the given header name is valid and is in the correct
+ * column. Required header names and order are:
+ *
+ * |paymentDate|amount|description|category|
+ *
+ * @param header A column header name
+ * @param ctx An instance of csv-parse CastingContext
+ */
+function validateHeader(header: string, ctx: CastingContext): string {
+
+  if (!['paymentDate', 'amount', 'description', 'category'].includes(header)) {
+    throw new Error(`Invalid header '${header}' at column ${ctx.index}`);
+  }
+
+  if ((header === 'paymentDate' && ctx.index !== 0)
+      || (header === 'amount' && ctx.index !== 1)
+      || (header === 'description' && ctx.index !== 2)
+      || (header === 'category' && ctx.index !== 3))
+  {
+    throw new Error(`Column '${header}' cannot be in position ${ctx.index}`);
+  }
+
+  return header;
+}
+
+// TODO: add tests for this function
+/**
  * Verifies value is an ISO 3601 date string formatted as YYYY-MM-DD
  * and then converts it to a Date object.
  *
@@ -45,7 +72,7 @@ function castToDate(value: string, ctx: CastingContext): Date {
       || (parts[1].length !== 2)
       || (parts[2].length !== 2)
   ) {
-    throw new Error(`Cannot parse "${value}" into date at column: ${ctx.index} row: ${ctx.lines}`)
+    throw new Error(`Cannot parse '${value}' into date at column: ${ctx.index} row: ${ctx.lines}`)
   }
 
   return new Date(value)
@@ -62,7 +89,7 @@ function castToInt(value: string, ctx: CastingContext): Number {
   const result = parseInt(value)
 
   if (Number.isNaN(result) || !Number.isInteger(result)) {
-    throw new Error(`Cannot parse "${value}" into integer at column: ${ctx.index} row: ${ctx.lines}`)
+    throw new Error(`Cannot parse '${value}' into integer at column: ${ctx.index} row: ${ctx.lines}`)
   }
 
   return result
@@ -86,14 +113,12 @@ function parseCSV(filePath: string): Promise<object[]> {
         trim: true,
         cast: (value: string, context: CastingContext) => {
           if (context.header) {
-            // TODO: add header name and order check
-            return value
+            return validateHeader(value, context)
           } else if (context.index === 0) {
             return castToDate(value, context)
           } else if (context.index === 1) {
+            // TODO: convert this from a float to an int * 100
             return castToInt(value, context)
-          } else if (context.index > 3) {
-            throw new Error('Import file contains too many columns')
           } else {
             return value
           }
