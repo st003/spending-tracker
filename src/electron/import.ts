@@ -80,19 +80,20 @@ function castToDate(value: string, ctx: CastingContext): Date {
 
 // TODO: add tests for this function
 /**
- * Verifies value can be cast to an integer.
+ * Verifies the given value can be converted into a number,
+ * then converts dollars into cents,
  *
- * @param value An ISO 3601 date string formatted as YYYY-MM-DD
+ * @param value 
  * @param ctx An instance of csv-parse CastingContext
  */
-function castToInt(value: string, ctx: CastingContext): Number {
-  const result = parseInt(value)
+function castToCents(value: string, ctx: CastingContext): Number {
+  const num = Number(value)
 
-  if (Number.isNaN(result) || !Number.isInteger(result)) {
-    throw new Error(`Cannot parse '${value}' into integer at column: ${ctx.index} row: ${ctx.lines}`)
+  if (Number.isNaN(num)) {
+    throw new Error(`Cannot parse '${value}' into number at column: ${ctx.index} row: ${ctx.lines}`)
   }
 
-  return result
+  return Math.trunc(num * 100)
 }
 
 /**
@@ -117,8 +118,7 @@ function parseCSV(filePath: string): Promise<object[]> {
           } else if (context.index === 0) {
             return castToDate(value, context)
           } else if (context.index === 1) {
-            // TODO: convert this from a float to an int * 100
-            return castToInt(value, context)
+            return castToCents(value, context)
           } else {
             return value
           }
