@@ -2,7 +2,7 @@ import sqlite3 from 'sqlite3'
 
 import { DB } from './db/index.js'
 
-import type { Expense, NetIncome, NetIncomeBucket, NetIncomeRange } from './types.js'
+import type { Expense, NetIncome, NetIncomeBucket, NetIncomeRange, PaymentImport } from './types.js'
 
 /**
  * Takes an ISO 8601 string formatted as YYYY-MM and returns an array with two
@@ -258,4 +258,30 @@ export function getNetIncome(range: NetIncomeRange, start: string, end: string):
       }
     })
   })
+}
+
+/**
+ * Writes the data from an import CSV into the database. Locates
+ * existing categories by name and creates new categories when
+ * a new categeoryName is provided.
+ *
+ * @param rows The parsed and validated import data
+ */
+export async function writeToDatabase(importRows: PaymentImport[]): Promise<void> {
+
+  const categoryNames = new Set(importRows.map(row => row.categoryName))
+
+  // TODO:
+  // - get all existing categories name:id
+  // - determine which categories are new
+  // - create those cateogries and get their ids
+  // - update the local category name:id map
+  // - Update the array of import rows with the correct catgeory id
+  // - write payments to database
+
+  // TODO: debug
+  console.log(importRows)
+  console.log(categoryNames)
+
+  return
 }

@@ -4,7 +4,7 @@ import path from 'path'
 import { BrowserWindow, dialog } from 'electron'
 import { CastingContext, parse } from 'csv-parse'
 
-// import { writeToDatabase } from './data.js'
+import { writeToDatabase } from './data.js'
 
 import type { PaymentImport } from './types.js'
 
@@ -149,8 +149,7 @@ export async function importData(filePath: string) {
 
   try {
     const rows = await parseCSV(filePath)
-    console.log(rows)
-    // await writeToDatabase(rows)
+    await writeToDatabase(rows)
 
   } catch (error) {
     throw error
