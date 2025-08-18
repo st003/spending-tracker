@@ -1,4 +1,4 @@
-// DATA
+// DATABASE
 
 export type Expense = {
   id: number
@@ -19,3 +19,12 @@ export type NetIncomeBucket = {
 }
 
 export type NetIncomeRange = 'month'|'year'
+
+// IMPORT DATA
+
+export type PaymentImport = {
+  paymentDate: Date;
+  amount: number;
+  description: string;
+  categoryName: string;
+}

@@ -4,6 +4,10 @@ import path from 'path'
 import { BrowserWindow, dialog } from 'electron'
 import { CastingContext, parse } from 'csv-parse'
 
+// import { writeToDatabase } from './data.js'
+
+import type { PaymentImport } from './types.js'
+
 /**
  * Opens the file selection dialog for choosing a CSV file.
  * See https://www.electronjs.org/docs/latest/api/dialog#dialogshowopendialogwindow-options
@@ -41,14 +45,14 @@ export async function selectImportFile(mainWindow: BrowserWindow) {
  */
 function validateHeader(header: string, ctx: CastingContext): string {
 
-  if (!['paymentDate', 'amount', 'description', 'category'].includes(header)) {
+  if (!['paymentDate', 'amount', 'description', 'categoryName'].includes(header)) {
     throw new Error(`Invalid header '${header}' at column ${ctx.index}`);
   }
 
   if ((header === 'paymentDate' && ctx.index !== 0)
       || (header === 'amount' && ctx.index !== 1)
       || (header === 'description' && ctx.index !== 2)
-      || (header === 'category' && ctx.index !== 3))
+      || (header === 'categoryName' && ctx.index !== 3))
   {
     throw new Error(`Column '${header}' cannot be in position ${ctx.index}`);
   }
@@ -102,11 +106,11 @@ function castToCents(value: string, ctx: CastingContext): Number {
  * Uses 'csv-parse' library. See https://csv.js.org/parse/
  *
  * @param filePath The full path to the CSV file to import data from
- * @returns A Promise with an array of objects
+ * @returns A Promise with an array of the csv rows
  */
-function parseCSV(filePath: string): Promise<object[]> {
+function parseCSV(filePath: string): Promise<PaymentImport[]> {
   return new Promise((resolve, reject) => {
-    const rows: object[] = []
+    const rows: PaymentImport[] = []
     fs.createReadStream(filePath)
       .pipe(parse({
         columns: true,
@@ -124,7 +128,7 @@ function parseCSV(filePath: string): Promise<object[]> {
           }
         }
       }))
-      .on('data', (row: object) => rows.push(row))
+      .on('data', (row: PaymentImport) => rows.push(row))
       .on('end', () => resolve(rows))
       .on('error', error => reject(error))
     })
@@ -146,8 +150,7 @@ export async function importData(filePath: string) {
   try {
     const rows = await parseCSV(filePath)
     console.log(rows)
-
-    // TODO: import data into database
+    // await writeToDatabase(rows)
 
   } catch (error) {
     throw error
