@@ -260,6 +260,51 @@ export function getNetIncome(range: NetIncomeRange, start: string, end: string):
   })
 }
 
+// IMPORTER
+
+type CategoryMap = {
+  [categoryName: string]: number;
+}
+
+type CategoryRow = {
+  id: number;
+  name: string;
+}
+
+/**
+ * Queries all categories from the database and returns a mapping of a cateogory's
+ * name to its id.
+ *
+ * @returns An object where the key-value pairs are a category's name to its id
+ */
+async function getCategoryMap(): Promise<CategoryMap> {
+  return new Promise((resolve, reject) => {
+
+    const db = new sqlite3.Database(DB, error => {
+      if (error) reject(error)
+    })
+
+    const sql = `SELECT id, name FROM Categories`
+
+    db.all(sql, (error, rows: CategoryRow[]) => {
+
+      if (error) {
+        db.close()
+        reject(error)
+
+      } else {
+        const categoryMap: CategoryMap = {}
+        for (const row of rows) {
+          categoryMap[row.name] = row.id
+        }
+
+        db.close()
+        resolve(categoryMap)
+      }
+    })
+  })
+}
+
 /**
  * Writes the data from an import CSV into the database. Locates
  * existing categories by name and creates new categories when
@@ -270,18 +315,21 @@ export function getNetIncome(range: NetIncomeRange, start: string, end: string):
 export async function writeToDatabase(importRows: PaymentImport[]): Promise<void> {
 
   const categoryNames = new Set(importRows.map(row => row.categoryName))
+  let existingCategories = await getCategoryMap()
 
   // TODO:
-  // - get all existing categories name:id
   // - determine which categories are new
   // - create those cateogries and get their ids
   // - update the local category name:id map
   // - Update the array of import rows with the correct catgeory id
   // - write payments to database
+  // how should we do error handling here? Should we catch specific errors here
+  // and raise more general error messages?
 
   // TODO: debug
-  console.log(importRows)
-  console.log(categoryNames)
+  console.log('importRows\n', importRows)
+  console.log('categoryNames\n', categoryNames)
+  console.log('existingCategories\n', existingCategories)
 
   return
 }
