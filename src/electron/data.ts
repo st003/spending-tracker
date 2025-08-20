@@ -314,11 +314,19 @@ async function getCategoryMap(): Promise<CategoryMap> {
  */
 export async function writeToDatabase(importRows: PaymentImport[]): Promise<void> {
 
-  const categoryNames = new Set(importRows.map(row => row.categoryName))
+  const importCategoryNames = importRows.map(row => row.categoryName)
+  const uniqueImportCategoryNames = new Set(importCategoryNames)
   let existingCategories = await getCategoryMap()
 
+  // determine which categories are new
+  const newCategories: string[] = []
+  for (const category of uniqueImportCategoryNames) {
+    if (!(category in existingCategories)) {
+      newCategories.push(category)
+    }
+  }
+
   // TODO:
-  // - determine which categories are new
   // - create those cateogries and get their ids
   // - update the local category name:id map
   // - Update the array of import rows with the correct catgeory id
@@ -328,8 +336,9 @@ export async function writeToDatabase(importRows: PaymentImport[]): Promise<void
 
   // TODO: debug
   console.log('importRows\n', importRows)
-  console.log('categoryNames\n', categoryNames)
-  console.log('existingCategories\n', existingCategories)
+  console.log('\nuniqueImportCategoryNames\n', uniqueImportCategoryNames)
+  console.log('\nexistingCategories\n', existingCategories)
+  console.log('\nnewCategories\n', newCategories)
 
   return
 }
