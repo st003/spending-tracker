@@ -48,6 +48,7 @@ export default function createNewDatabase(dbPath: string): Promise<void> {
       }
     })
 
+    // TODO: move close to a finally?
     db.close()
     resolve()
   })

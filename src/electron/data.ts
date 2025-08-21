@@ -306,6 +306,43 @@ async function getCategoryMap(): Promise<CategoryMap> {
 }
 
 /**
+ * Creates new categories in the database from the given names and
+ * and returns a mapping of category names to their database id.
+ *
+ * @param categories The names of the categories to be created
+ * @returns An object where the key-value pairs are a category's name to its id
+ */
+async function createNewCategories(categories: string[]): Promise<CategoryMap> {
+  return new Promise((resolve, reject) => {
+
+    const categoryMap: CategoryMap = {}
+
+    const db = new sqlite3.Database(DB, error => {
+      if (error) reject(error)
+    })
+
+    // TODO: remove syntax error once error handling is improved
+    const sql = 'INSERT XXXINTO Categories (name) VALUES (?)'
+
+    db.serialize(() => {
+      try {
+        for (const category of categories) {
+          db.run(sql, [category])
+        }
+        // TODO: get the row id and update the categoryMap
+      } catch (error) {
+        console.log(error)
+        reject(error)
+      } finally {
+        db.close()
+      }
+    })
+
+    resolve(categoryMap)
+  })
+}
+
+/**
  * Writes the data from an import CSV into the database. Locates
  * existing categories by name and creates new categories when
  * a new categeoryName is provided.
@@ -318,13 +355,16 @@ export async function writeToDatabase(importRows: PaymentImport[]): Promise<void
   const uniqueImportCategoryNames = new Set(importCategoryNames)
   let existingCategories = await getCategoryMap()
 
-  // determine which categories are new
+  // determine which categories need to be created
   const newCategories: string[] = []
   for (const category of uniqueImportCategoryNames) {
     if (!(category.toLowerCase() in existingCategories)) {
       newCategories.push(category)
     }
   }
+
+  // TODO: 
+  const newCategoryMap = await createNewCategories(newCategories)
 
   // TODO:
   // - create those cateogries and get their ids
@@ -339,6 +379,7 @@ export async function writeToDatabase(importRows: PaymentImport[]): Promise<void
   console.log('\nuniqueImportCategoryNames\n', uniqueImportCategoryNames)
   console.log('\nexistingCategories\n', existingCategories)
   console.log('\nnewCategories\n', newCategories)
+  console.log('\nnewCategoryMap\n', newCategoryMap)
 
   return
 }
