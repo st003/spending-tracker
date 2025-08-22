@@ -321,15 +321,13 @@ function createNewCategories(categories: string[]): Promise<CategoryMap> {
       if (error) reject(error)
     })
 
-    // TODO: remove syntax error once error handling is improved
-    const sql = 'INSERT XXXINTO Categories (name) VALUES (?)'
+    const sql = 'INSERT INTO Categories (name) VALUES (?)'
 
     db.serialize(() => {
       for (const category of categories.slice(0, 1)) {
         db.run(sql, [category], function(error) {
           if (error) {
-            db.close()
-            reject(error) // TODO: why doesn't this reject!?
+            reject(error)
           } else {
             // TODO: get the row id and update the categoryMap
             console.log(this.lastID)
@@ -338,7 +336,10 @@ function createNewCategories(categories: string[]): Promise<CategoryMap> {
       }
     })
 
-    resolve(categoryMap)
+    db.close((error) => {
+      if (error) reject(error)
+      resolve(categoryMap)
+    })
   })
 }
 
