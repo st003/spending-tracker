@@ -78,8 +78,8 @@ async function createWindow() {
         console.error(error) // TODO: how to have file-based logging?
         return { error: true, message: error.message }
       } else {
-         console.error(error)
-         return { error: true, message: 'An unknown error occured' }
+        console.error(error)
+        return { error: true, message: 'An unknown error occured' }
       }
     }
   })

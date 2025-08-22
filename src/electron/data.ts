@@ -312,7 +312,7 @@ async function getCategoryMap(): Promise<CategoryMap> {
  * @param categories The names of the categories to be created
  * @returns An object where the key-value pairs are a category's name to its id
  */
-async function createNewCategories(categories: string[]): Promise<CategoryMap> {
+function createNewCategories(categories: string[]): Promise<CategoryMap> {
   return new Promise((resolve, reject) => {
 
     const categoryMap: CategoryMap = {}
@@ -325,16 +325,16 @@ async function createNewCategories(categories: string[]): Promise<CategoryMap> {
     const sql = 'INSERT XXXINTO Categories (name) VALUES (?)'
 
     db.serialize(() => {
-      try {
-        for (const category of categories) {
-          db.run(sql, [category])
-        }
-        // TODO: get the row id and update the categoryMap
-      } catch (error) {
-        console.log(error)
-        reject(error)
-      } finally {
-        db.close()
+      for (const category of categories.slice(0, 1)) {
+        db.run(sql, [category], function(error) {
+          if (error) {
+            db.close()
+            reject(error) // TODO: why doesn't this reject!?
+          } else {
+            // TODO: get the row id and update the categoryMap
+            console.log(this.lastID)
+          }
+        })
       }
     })
 
@@ -363,7 +363,6 @@ export async function writeToDatabase(importRows: PaymentImport[]): Promise<void
     }
   }
 
-  // TODO: 
   const newCategoryMap = await createNewCategories(newCategories)
 
   // TODO:
@@ -375,10 +374,10 @@ export async function writeToDatabase(importRows: PaymentImport[]): Promise<void
   // and raise more general error messages?
 
   // TODO: debug
-  console.log('importRows\n', importRows)
-  console.log('\nuniqueImportCategoryNames\n', uniqueImportCategoryNames)
-  console.log('\nexistingCategories\n', existingCategories)
-  console.log('\nnewCategories\n', newCategories)
+  // console.log('importRows\n', importRows)
+  // console.log('\nuniqueImportCategoryNames\n', uniqueImportCategoryNames)
+  // console.log('\nexistingCategories\n', existingCategories)
+  // console.log('\nnewCategories\n', newCategories)
   console.log('\nnewCategoryMap\n', newCategoryMap)
 
   return
