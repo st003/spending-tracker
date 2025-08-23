@@ -9,9 +9,5 @@
   ],
   "mac": {
     "target": "dmg"
-  },
-  "linux": {
-    "target": "AppImage",
-    "category": "Office"
   }
 }

@@ -37,7 +37,7 @@ npm run dev
 
 ### Packaging
 
-See each target platform's section for details. Cross-compiling is unstable. It's recommended to package on the same platform as the target platform.
+See each target platform's section for details. Cross-compiling is unstable. It's recommended to package on the same platform as the target platform. This repository is configured to output for the following plaforms at this time:
 
 #### MacOS (M-Series)
 
@@ -46,22 +46,6 @@ To package the application for MacOS with M-series processors, run the command:
 ```
 npm run package:mac
 ```
-
-_Note: cross-compiling for Mac from a Linux distro is not supported by eletron-builder at this time._
-
-#### Linux
-
-Packaging for Linux is configured but unstable. To package for Linux AppImage. Run the command:
-
-```
-npm run package:linux
-```
-
-_Warning: Fedora 41 results in GTK errors._
-
-#### Windows
-
-Packaging for Windows is not configured at this time.
 
 ## Running the tests
 

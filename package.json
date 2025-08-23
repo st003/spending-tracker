@@ -15,7 +15,6 @@
     "dev:electron": "npm run transpile:electron; NODE_ENV=development electron --gtk-version=3 .",
     "lint": "eslint .",
     "preview": "vite preview",
-    "package:linux": "npm run transpile:electron && npm run build:ui && electron-builder --linux --x64",
     "package:mac": "npm run transpile:electron && npm run build:ui && electron-builder --mac --arm64",
     "transpile:electron": "tsc --project src/electron/tsconfig.json"
   },
