@@ -366,18 +366,14 @@ export async function writeToDatabase(importRows: PaymentImport[]): Promise<void
   }
 
   const newCategoryMap = await createNewCategories(newCategories)
+  existingCategories = Object.assign(existingCategories, newCategoryMap)
 
   // TODO:
-  // - update the local category name:id map
   // - Update the array of import rows with the correct catgeory id
   // - write payments to database
 
   // TODO: debug
-  // console.log('importRows\n',importRows)
-  // console.log('\nuniqueImportCategoryNames\n',uniqueImportCategoryNames)
-  // console.log('\nexistingCategories\n',existingCategories)
-  console.log('\nnewCategories\n',newCategories)
-  console.log('\nnewCategoryMap\n',newCategoryMap)
+  console.log('\nexistingCategories\n',existingCategories)
 
   return
 }

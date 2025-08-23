@@ -26,7 +26,7 @@ const CREATE_TABLE_PAYMENTS = `
 `
 
 /**
- * Creates a new Sqlite database at the given location and runs
+ * Creates a new sqlite database at the given location and runs
  * the initial create table scripts.
  *
  * @param dbPath Location to create new Sqlite database
@@ -43,6 +43,7 @@ export default function createNewDatabase(dbPath: string): Promise<void> {
       try {
         db.run(CREATE_TABLE_CATEGORIES)
         db.run(CREATE_TABLE_PAYMENTS)
+        // TODO: add default categories
       } catch (error) {
         reject(error)
       }
