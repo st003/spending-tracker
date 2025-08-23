@@ -335,6 +335,7 @@ async function createNewCategories(categories: string[]): Promise<CategoryMap> {
       const id = await insert(category)
       categoryMap[category] = id
     } catch (error) {
+      db.close()
       throw error
     }
   }
