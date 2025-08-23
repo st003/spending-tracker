@@ -312,35 +312,35 @@ async function getCategoryMap(): Promise<CategoryMap> {
  * @param categories The names of the categories to be created
  * @returns An object where the key-value pairs are a category's name to its id
  */
-function createNewCategories(categories: string[]): Promise<CategoryMap> {
-  return new Promise((resolve, reject) => {
+async function createNewCategories(categories: string[]): Promise<CategoryMap> {
 
-    const categoryMap: CategoryMap = {}
+  const categoryMap: CategoryMap = {}
 
-    const db = new sqlite3.Database(DB, error => {
-      if (error) reject(error)
-    })
-
-    const sql = 'INSERT INTO Categories (name) VALUES (?)'
-
-    db.serialize(() => {
-      for (const category of categories.slice(0, 1)) {
-        db.run(sql, [category], function(error) {
-          if (error) {
-            reject(error)
-          } else {
-            // TODO: get the row id and update the categoryMap
-            console.log(this.lastID)
-          }
-        })
-      }
-    })
-
-    db.close((error) => {
-      if (error) reject(error)
-      resolve(categoryMap)
-    })
+  const db = new sqlite3.Database(DB, error => {
+    if (error) throw error
   })
+
+  const insert = (category: string): Promise<number> => {
+    return new Promise((resolve, reject) => {
+      const sql = 'INSERT INTO Categories (name) VALUES (?)'
+      db.run(sql, [category], function(error) {
+        if (error) reject(error)
+        else resolve(this.lastID)
+      })
+    })
+  }
+
+  for (const category of categories) {
+    try {
+      const id = await insert(category)
+      categoryMap[category] = id
+    } catch (error) {
+      throw error
+    }
+  }
+
+  db.close()
+  return categoryMap
 }
 
 /**
@@ -367,19 +367,16 @@ export async function writeToDatabase(importRows: PaymentImport[]): Promise<void
   const newCategoryMap = await createNewCategories(newCategories)
 
   // TODO:
-  // - create those cateogries and get their ids
   // - update the local category name:id map
   // - Update the array of import rows with the correct catgeory id
   // - write payments to database
-  // how should we do error handling here? Should we catch specific errors here
-  // and raise more general error messages?
 
   // TODO: debug
-  // console.log('importRows\n', importRows)
-  // console.log('\nuniqueImportCategoryNames\n', uniqueImportCategoryNames)
-  // console.log('\nexistingCategories\n', existingCategories)
-  // console.log('\nnewCategories\n', newCategories)
-  console.log('\nnewCategoryMap\n', newCategoryMap)
+  // console.log('importRows\n',importRows)
+  // console.log('\nuniqueImportCategoryNames\n',uniqueImportCategoryNames)
+  // console.log('\nexistingCategories\n',existingCategories)
+  console.log('\nnewCategories\n',newCategories)
+  console.log('\nnewCategoryMap\n',newCategoryMap)
 
   return
 }
