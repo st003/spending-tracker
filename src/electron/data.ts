@@ -273,7 +273,7 @@ type CategoryRow = {
 
 /**
  * Queries all categories from the database and returns a mapping of a cateogory's
- * name to its id. All category names are converted to lowercase.
+ * name to its id
  *
  * @returns An object where the key-value pairs are a category's name to its id
  */
@@ -295,7 +295,7 @@ async function getCategoryMap(): Promise<CategoryMap> {
       } else {
         const categoryMap: CategoryMap = {}
         for (const row of rows) {
-          categoryMap[row.name.toLowerCase()] = row.id
+          categoryMap[row.name] = row.id
         }
 
         db.close()
@@ -367,7 +367,7 @@ export async function writeToDatabase(importRows: PaymentImport[]): Promise<void
   // determine which categories need to be created
   const newCategories: string[] = []
   for (const category of uniqueImportCategoryNames) {
-    if (!(category.toLowerCase() in existingCategories)) {
+    if (!(category in existingCategories)) {
       newCategories.push(category)
     }
   }
@@ -381,7 +381,7 @@ export async function writeToDatabase(importRows: PaymentImport[]): Promise<void
       paymentDate: row.paymentDate,
       amount: row.amount,
       description: row.description,
-      categoryId: existingCategories[row.categoryName.toLocaleLowerCase()]
+      categoryId: existingCategories[row.categoryName]
     }
     return payment
   })
