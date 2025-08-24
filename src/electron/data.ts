@@ -344,6 +344,13 @@ async function createNewCategories(categories: string[]): Promise<CategoryMap> {
   return categoryMap
 }
 
+type Payment = {
+  paymentDate: Date;
+  amount: number;
+  description: string;
+  categoryId: number;
+}
+
 /**
  * Writes the data from an import CSV into the database. Locates
  * existing categories by name and creates new categories when
@@ -368,12 +375,22 @@ export async function writeToDatabase(importRows: PaymentImport[]): Promise<void
   const newCategoryMap = await createNewCategories(newCategories)
   existingCategories = Object.assign(existingCategories, newCategoryMap)
 
-  // TODO:
-  // - Update the array of import rows with the correct catgeory id
-  // - write payments to database
+  // prep payment data for insert
+  const payments = importRows.map(row => {
+    const payment: Payment = {
+      paymentDate: row.paymentDate,
+      amount: row.amount,
+      description: row.description,
+      categoryId: existingCategories[row.categoryName.toLocaleLowerCase()]
+    }
+    return payment
+  })
+
+  // TODO: write payments to database
 
   // TODO: debug
-  console.log('\nexistingCategories\n',existingCategories)
+  console.log('existingCategories\n',existingCategories)
+  console.log('\payments\n',payments)
 
   return
 }
