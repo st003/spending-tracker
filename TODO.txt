@@ -12,6 +12,7 @@ DB versioning
 Tests
 Back & Forward buttons for month selection
 Category page
+Electron Security Warning (Insecure Content-Security-Policy)
 Data export
 DB: notes
 DB: modified dates

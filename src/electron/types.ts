@@ -1,5 +1,3 @@
-// DATABASE
-
 export type Expense = {
   id: number
   description?: string
@@ -8,23 +6,19 @@ export type Expense = {
   date: Date
 }
 
+// TODO: convert this to Payment in db types?
+export type ExpenseDBRow = {
+  id: number;
+  description: string;
+  amount: number;
+  payment_date: string;
+  category_name: string;
+}
+
 export type NetIncome = {
   income: number
   expense: number
   range: string
 }
 
-export type NetIncomeBucket = {
-  [key: string]: NetIncome
-}
-
 export type NetIncomeRange = 'month'|'year'
-
-// IMPORT DATA
-
-export type PaymentImport = {
-  paymentDate: string;
-  amount: number;
-  description: string;
-  categoryName: string;
-}

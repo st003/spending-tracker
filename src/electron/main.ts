@@ -2,10 +2,11 @@ import path from 'path'
 
 import { app, BrowserWindow, ipcMain, screen } from 'electron'
 
-import { getExpensesForMonth, getNetIncome } from './data.js'
-import { initDatabase } from './db/index.js'
-import { importData, selectImportFile } from './import.js'
 import { getPreloadScriptPath, initMenu } from './setup.js'
+import { initDatabase } from './db/index.js'
+import { getExpensesForMonth } from './services/expenses.js'
+import { importData, selectImportFile } from './services/importer.js'
+import { getNetIncome } from './services/netIncome.js'
 
 import type { NetIncomeRange } from './types.js'
 
