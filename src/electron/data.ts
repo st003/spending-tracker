@@ -322,7 +322,7 @@ async function createNewCategories(categories: string[]): Promise<CategoryMap> {
 
   const insert = (category: string): Promise<number> => {
     return new Promise((resolve, reject) => {
-      const sql = 'INSERT INTO Categories (name) VALUES (?)'
+      const sql = 'INSERT INTO Categories (name) VALUES (?);'
       db.run(sql, [category], function(error) {
         if (error) reject(error)
         else resolve(this.lastID)
@@ -345,10 +345,44 @@ async function createNewCategories(categories: string[]): Promise<CategoryMap> {
 }
 
 type Payment = {
-  paymentDate: Date;
+  paymentDate: string;
   amount: number;
   description: string;
   categoryId: number;
+}
+
+/**
+ * Inserts new payment data into the database
+ *
+ * @param payments An array of payment data
+ */
+async function createNewPayments(payments: Payment[]): Promise<void> {
+
+  const db = new sqlite3.Database(DB, error => {
+    if (error) throw error
+  })
+
+  const insert = (p: Payment): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const sql = 'INSERT INTO Payments (payment_date, amount, description, category_id) VALUES (?, ?, ?, ?);'
+      const params = [p.paymentDate, p.amount, p.description, p.categoryId]
+      db.run(sql, params, (error) => {
+        if (error) reject(error)
+        else resolve(undefined)
+      })
+    })
+  }
+
+  for (const payment of payments) {
+    try {
+      await insert(payment)
+    } catch (error) {
+      db.close()
+      throw error
+    }
+  }
+
+  db.close()
 }
 
 /**
@@ -362,6 +396,7 @@ export async function writeToDatabase(importRows: PaymentImport[]): Promise<void
 
   const importCategoryNames = importRows.map(row => row.categoryName)
   const uniqueImportCategoryNames = new Set(importCategoryNames)
+
   let existingCategories = await getCategoryMap()
 
   // determine which categories need to be created
@@ -373,6 +408,8 @@ export async function writeToDatabase(importRows: PaymentImport[]): Promise<void
   }
 
   const newCategoryMap = await createNewCategories(newCategories)
+
+  // update local map with new category ids
   existingCategories = Object.assign(existingCategories, newCategoryMap)
 
   // prep payment data for insert
@@ -386,11 +423,7 @@ export async function writeToDatabase(importRows: PaymentImport[]): Promise<void
     return payment
   })
 
-  // TODO: write payments to database
-
-  // TODO: debug
-  console.log('existingCategories\n',existingCategories)
-  console.log('\payments\n',payments)
+  await createNewPayments(payments)
 
   return
 }

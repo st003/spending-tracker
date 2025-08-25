@@ -68,7 +68,7 @@ function validateHeader(header: string, ctx: CastingContext): string {
  * @param value An ISO 3601 date string formatted as YYYY-MM-DD
  * @param ctx An instance of csv-parse CastingContext
  */
-function castToDate(value: string, ctx: CastingContext): Date {
+function validateDateString(value: string, ctx: CastingContext): string {
   const parts = value.split('-')
 
   if ((parts.length !== 3)
@@ -79,7 +79,7 @@ function castToDate(value: string, ctx: CastingContext): Date {
     throw new Error(`Cannot parse '${value}' into date at column: ${ctx.index} row: ${ctx.lines}`)
   }
 
-  return new Date(value)
+  return value
 }
 
 // TODO: add tests for this function
@@ -120,7 +120,7 @@ function parseCSV(filePath: string): Promise<PaymentImport[]> {
           if (context.header) {
             return validateHeader(value, context)
           } else if (context.index === 0) {
-            return castToDate(value, context)
+            return validateDateString(value, context)
           } else if (context.index === 1) {
             return castToCents(value, context)
           } else {
@@ -150,7 +150,6 @@ export async function importData(filePath: string) {
   try {
     const rows = await parseCSV(filePath)
     await writeToDatabase(rows)
-
   } catch (error) {
     throw error
   }

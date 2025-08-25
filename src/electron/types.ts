@@ -23,7 +23,7 @@ export type NetIncomeRange = 'month'|'year'
 // IMPORT DATA
 
 export type PaymentImport = {
-  paymentDate: Date;
+  paymentDate: string;
   amount: number;
   description: string;
   categoryName: string;
