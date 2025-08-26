@@ -5,7 +5,6 @@ Data Import
 - move import error messaging to import dialog?
 - Help Page
 Error logs in production
-App Icon
 DB versioning
 -----
 
