@@ -2,10 +2,12 @@ import fs from 'fs'
 import path from 'path'
 
 import { BrowserWindow, dialog } from 'electron'
-import { CastingContext, parse } from 'csv-parse'
+import { parse } from 'csv-parse'
 import sqlite3 from 'sqlite3'
 
 import { DB } from '../db/index.js'
+
+import type { CastingContext } from 'csv-parse'
 
 /**
  * Opens the file selection dialog for choosing a CSV file.
