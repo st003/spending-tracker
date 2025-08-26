@@ -1,4 +1,5 @@
 import { PieChart } from '@mui/x-charts/PieChart'
+import { blueberryTwilightPalette } from '@mui/x-charts/colorPalettes';
 
 import { formatAmount } from '../utils'
 
@@ -20,5 +21,5 @@ export default function Expense({ data }: ExpenseProps) {
     }
   ]
 
-  return <PieChart series={expenseSeries} height={300} hideLegend />
+  return <PieChart series={expenseSeries} colors={blueberryTwilightPalette} height={300} hideLegend />
 }
