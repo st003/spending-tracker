@@ -14,6 +14,7 @@ type NetIncome = {
 
 interface Window {
   electronAPI: {
+    openDocumentation: (callback: () => void) => void,
     openImporter: (callback: (value: true) => void) => void,
     selectImportFile: () => Promise<string>,
     import: () => Promise<{ error: boolean, message: string }>,

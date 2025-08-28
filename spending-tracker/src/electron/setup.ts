@@ -56,8 +56,17 @@ export function initMenu(mainWindow: BrowserWindow) {
           { role: 'togglefullscreen' }
         ]
       },
-      { role: 'windowMenu' }
-      // TODO: add help menu
+      { role: 'windowMenu' },
+      {
+        label: 'Help',
+        type: 'submenu',
+        submenu: [
+          {
+            label: 'Documentation',
+            click: () => mainWindow.webContents.send('openDocumentation')
+          }
+        ]
+      }
     ])
   )
 }

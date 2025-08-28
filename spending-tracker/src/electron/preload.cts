@@ -14,9 +14,13 @@ import type { IpcRendererEvent } from 'electron'
 // TODO: add type safety here
 contextBridge.exposeInMainWorld('electronAPI', {
   // menu actions
+  openDocumentation: (callback: () => void) => {
+    return ipcRenderer.on('openDocumentation', (_: IpcRendererEvent) => callback())
+  },
   openImporter: (callback: (value: true) => void) => {
     return ipcRenderer.on('openImporter', (_: IpcRendererEvent, value: true) => callback(value))
   },
+  // importer
   selectImportFile: () => ipcRenderer.invoke('selectImportFile'),
   import: () => ipcRenderer.invoke('import'),
   // chart data

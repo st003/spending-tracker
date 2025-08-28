@@ -35,6 +35,8 @@ export default function RootLayout() {
     displayFeedback: handleFeedbackOpen
   }
 
+  window.electronAPI.openDocumentation(() => navigate('/documentation'))
+
   return (
     <GlobalContext.Provider value={globalContextValue}>
       <div className='rootLayout'>
