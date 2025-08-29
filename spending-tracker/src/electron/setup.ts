@@ -37,7 +37,7 @@ export function initMenu(mainWindow: BrowserWindow) {
           { role: 'close' }
         ]
       },
-      // TODO: add edit menu?
+      { role: 'editMenu' },
       {
         label: 'View',
         type: 'submenu',

@@ -11,7 +11,7 @@ export default function Documentation() {
       <Card sx={{ marginBottom: '1rem' }}>
         <CardHeader title='Introduction' />
         <CardContent>
-          <p>The Spending Tracker is an application for tracking income and expenses over time. Additionally, individual payments are tracked to help visualize how expenses make up your monthly expendetures. Chart filters allow you to visualize spending over different periods of time.</p>
+          <p>The Spending Tracker is an application for tracking income and expenses over time. Additionally, individual payments are tracked to help visualize how expenses make up your monthly expenditures. Chart filters allow you to visualize spending over different periods of time.</p>
         </CardContent>
       </Card>
       <Card sx={{ marginBottom: '1rem' }}>
