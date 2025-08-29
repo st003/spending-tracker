@@ -1,0 +1,17 @@
+p {
+    margin: 0 0 1rem 0;
+    font-size: 1.15rem;
+    line-height: 1.5;
+}
+
+.importDataTable {
+    margin-bottom: 1rem;
+    border-collapse: collapse;
+}
+
+.importDataTable th, .importDataTable td {
+    padding: 0.5rem;
+    border: 1px solid black;
+    background-color: white;
+    font-size: 1.15rem;
+}
