@@ -25,6 +25,8 @@ const CREATE_TABLE_PAYMENTS = `
   );
 `
 
+const INSERT_DEFAULT_CATEGORIES = `INSERT INTO Categories (name) VALUES ('Uncategorized');`
+
 /**
  * Creates a new sqlite database at the given location and runs
  * the initial create table scripts.
@@ -43,7 +45,7 @@ export default function createNewDatabase(dbPath: string): Promise<void> {
       try {
         db.run(CREATE_TABLE_CATEGORIES)
         db.run(CREATE_TABLE_PAYMENTS)
-        // TODO: add default categories
+        db.run(INSERT_DEFAULT_CATEGORIES)
       } catch (error) {
         reject(error)
       }
