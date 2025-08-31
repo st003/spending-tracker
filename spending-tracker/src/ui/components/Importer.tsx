@@ -32,6 +32,10 @@ export default function Importer() {
     setFinished(false)
     setMessage('')
     setOpen(false)
+
+    // this works because it will execute before React
+    // changes the state
+    if (finished) window.location.reload()
   }
 
   const handleImport = async () => {
