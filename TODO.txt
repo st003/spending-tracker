@@ -2,13 +2,13 @@
 -----
 Data Import
 - data refresh upon successful import
-- move import error messaging to import dialog?
 - Help Page
 Error logs in production
 DB versioning
 -----
 
 Tests
+Fix color of error message on close (red-to-green)
 Back & Forward buttons for month selection
 Category page
 Electron Security Warning (Insecure Content-Security-Policy)

@@ -1,24 +1,24 @@
 import { useContext, useState } from 'react'
 
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 
-import { GlobalContext } from '../contexts'
-
 import '../styles/Importer.css'
 
 export default function Importer() {
-
-  const gCtx = useContext(GlobalContext)
 
   // dialog modal
 
   const [open, setOpen] = useState(false)
   const [fileName, setFileName] = useState<string|null>(null)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
+  const [finished, setFinished] = useState(false)
+  const [message, setMessage] = useState('')
 
   const handleChooseFile = async () => {
     const fileName = await window.electronAPI.selectImportFile()
@@ -28,6 +28,9 @@ export default function Importer() {
   const handleClose = () => {
     setFileName(null)
     setLoading(false)
+    setError(false)
+    setFinished(false)
+    setMessage('')
     setOpen(false)
   }
 
@@ -37,19 +40,20 @@ export default function Importer() {
     const res = await window.electronAPI.import()
 
     if (res.error) {
-      console.error(res.message)
-      gCtx.displayFeedback(true, res.message)
+      setError(true)
+      setMessage(res.message)
     } else {
-      gCtx.displayFeedback(false, 'Import was successful')
+      setFinished(true)
+      setMessage('Import was successful')
     }
-
-    handleClose()
   }
 
   window.electronAPI.openImporter((value: true) => setOpen(value))
 
+  const displayFileSelection = (!error && !finished)
   const selectedFile = (fileName) ? fileName : 'No file selected'
-  const importBtnDisabled = fileName === null
+  const importBtnDisabled = (fileName === null) || error || finished
+  const importBtnLoading = loading && !(error || finished)
 
   return (
     <>
@@ -61,12 +65,18 @@ export default function Importer() {
         <DialogTitle>Import Data</DialogTitle>
         <DialogContent>
           <p>Select CSV file for import. File must be formatted to importer requirements.</p>
-          <Button onClick={handleChooseFile} disabled={loading}>Choose File</Button>
-          <span className='SelectedFile'>{selectedFile}</span>
+          {displayFileSelection && (
+            <>
+              <Button onClick={handleChooseFile} disabled={loading}>Choose File</Button>
+              <span className='SelectedFile'>{selectedFile}</span>
+            </>
+          )}
+          {error && (<Alert severity='error'>{message}</Alert>)}
+          {finished && (<Alert severity='success'>{message}</Alert>)}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleImport} disabled={importBtnDisabled} loading={loading}>Import</Button>
-          <Button onClick={handleClose} disabled={loading}>Close</Button>
+          <Button onClick={handleImport} disabled={importBtnDisabled} loading={importBtnLoading}>Import</Button>
+          <Button onClick={handleClose} disabled={importBtnLoading}>Close</Button>
         </DialogActions>
       </Dialog>
     </>
