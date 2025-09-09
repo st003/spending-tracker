@@ -1,16 +1,18 @@
-0.9.0
+0.9.1
 -----
 Data Import
 - Help Page
+- Backups
 Error logs in production
 DB versioning
------
-
 Tests
 Fix color of error message on close (red-to-green)
-Back & Forward buttons for month selection
-Category page
 Electron Security Warning (Insecure Content-Security-Policy)
+Back & Forward buttons for month selection
+
+1.1.0
+-----
+Category page
 Data export
 DB: notes
 DB: modified dates
