@@ -7,7 +7,6 @@ Error logs in production
 DB versioning
 Tests
 Fix color of error message on close (red-to-green)
-Electron Security Warning (Insecure Content-Security-Policy)
 Back & Forward buttons for month selection
 
 1.1.0
