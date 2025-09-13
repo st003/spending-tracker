@@ -104,9 +104,9 @@ function NetIncomeByMonth(): React.JSX.Element {
   return (
     <Card variant='outlined' sx={{ mb: 2 }}>
       <CardHeader
-       title='Net Income (By Month)'
+       title='Net Income By Month'
        action={
-        <IconButton onClick={() => setOpen(true)}>
+        <IconButton onClick={() => setOpen(true)} title='Open Filter Settings'>
           <MoreVertIcon />
         </IconButton>
        }
@@ -176,9 +176,9 @@ function ExpensesByMonth(): React.JSX.Element {
     <>
       <Card variant='outlined'>
         <CardHeader
-          title={`Expenses (${expenseMonthLabel})`}
+          title={`Expenses - ${expenseMonthLabel}`}
           action={
-            <IconButton onClick={() => setShowExpenseFilterSettings(true)}>
+            <IconButton onClick={() => setShowExpenseFilterSettings(true)} title='Open Filter Settings'>
               <MoreVertIcon />
             </IconButton>
           }
@@ -272,9 +272,9 @@ function NetIncomeByYear(): React.JSX.Element {
   return (
     <Card variant='outlined' sx={{ mb: 2 }}>
       <CardHeader
-        title='Net Income (By Year)'
+        title='Net Income By Year'
         action={
-          <IconButton onClick={() => setOpen(true)}>
+          <IconButton onClick={() => setOpen(true)} title='Open Filter Settings'>
             <MoreVertIcon />
           </IconButton>
        }

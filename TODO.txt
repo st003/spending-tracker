@@ -1,7 +1,7 @@
 0.9.1
 -----
 Data Import
-- Help Page
+- Link to help page
 - Backups
 Error logs in production
 DB versioning

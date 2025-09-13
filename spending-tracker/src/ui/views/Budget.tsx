@@ -141,8 +141,12 @@ export default function Budget(): React.JSX.Element {
           <h1>Budget</h1>
         </Grid>
         <Grid size={{ xs: 6 }} sx={{ textAlign: 'right' }}>
-          <span className='budgetMonthSelectionLabel'>{expenseMonthLabel}</span>
-          <IconButton sx={{ marginLeft: '0.5rem' }} onClick={() => setShowExpenseFilterSettings(true)}>
+          <span className='BudgetMonthSelectionLabel'>{expenseMonthLabel}</span>
+          <IconButton
+            sx={{ marginLeft: '0.5rem' }}
+            onClick={() => setShowExpenseFilterSettings(true)}
+            title='Open Filter Settings'
+          >
             <MoreVertIcon />
           </IconButton>
         </Grid>
@@ -176,6 +180,7 @@ export default function Budget(): React.JSX.Element {
           </TableContainer>
           <TablePagination
             component='div'
+            className='ExpenseTablePagination'
             count={expenses.length}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}

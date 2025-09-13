@@ -1,3 +1,7 @@
-.budgetMonthSelectionLabel {
+.BudgetMonthSelectionLabel {
     vertical-align: middle;
+}
+
+.ExpenseTablePagination p {
+    margin-bottom: 0;
 }
