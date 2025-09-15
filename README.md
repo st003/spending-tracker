@@ -47,7 +47,11 @@ npm run package:mac
 
 ## Running the tests
 
-There are no tests at this time.
+To run the tests, from the "spending-tracker" directory, run the command:
+
+```
+npm run test
+```
 
 ## Built With
 
