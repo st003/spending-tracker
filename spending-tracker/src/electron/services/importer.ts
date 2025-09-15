@@ -44,7 +44,7 @@ async function selectImportFile(mainWindow: BrowserWindow) {
  * @param header A column header name
  * @param ctx An instance of csv-parse CastingContext
  */
-function validateHeader(header: string, ctx: CastingContext): string {
+export function validateHeader(header: string, ctx: CastingContext): string {
 
   if (!['paymentDate', 'amount', 'description', 'categoryName'].includes(header)) {
     throw new Error(`Invalid header '${header}' at column ${ctx.index}`);

@@ -1,9 +1,10 @@
-0.9.1
+1.0.0
 -----
 Data Import
 - Link to help page
 - Backups
-Error logs in production
+- Support for MM/DD/YYYY
+File-based logging
 DB versioning
 Tests
 Fix color of error message on close (red-to-green)
