@@ -34,7 +34,6 @@ async function selectImportFile(mainWindow: BrowserWindow) {
   return fileSelectionResonse.filePaths[0]
 }
 
-// TODO: add tests for this function
 /**
  * Checks if the given header name is valid and is in the correct
  * column. Required header names and order are:
