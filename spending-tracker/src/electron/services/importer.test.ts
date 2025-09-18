@@ -49,22 +49,17 @@ test('validateHeader - categoryName NOT in correct position', () => {
   expect(() => validateHeader('categoryName', ctx)).toThrowError()
 })
 
-test('validateDateString - valid date string', () => {
+test('validateDateString - valid ISO string', () => {
   const ctx = { index: 0, lines: 1 } as CastingContext
   expect(validateDateString('2000-01-01', ctx)).toBe('2000-01-01')
 })
 
-test('validateDateString - invalid year', () => {
+test('validateDateString - valid mm/dd/yyyy string', () => {
   const ctx = { index: 0, lines: 1 } as CastingContext
-  expect(() => validateDateString('200-01-01', ctx)).toThrowError()
+  expect(validateDateString('1/1/2000', ctx)).toBe('2000-01-01')
 })
 
-test('validateDateString - invalid month', () => {
+test('validateDateString - empty date', () => {
   const ctx = { index: 0, lines: 1 } as CastingContext
-  expect(() => validateDateString('2000-1-01', ctx)).toThrowError()
-})
-
-test('validateDateString - invalid day', () => {
-  const ctx = { index: 0, lines: 1 } as CastingContext
-  expect(() => validateDateString('2000-01-1', ctx)).toThrowError()
+  expect(() => validateDateString('', ctx)).toThrowError()
 })

@@ -3,7 +3,6 @@
 Data Import
 - Link to help page
 - Backups
-- Support for MM/DD/YYYY
 File-based logging
 DB versioning
 Tests

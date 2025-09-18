@@ -61,31 +61,20 @@ export function validateHeader(header: string, ctx: CastingContext): string {
 }
 
 /**
- * Verifies value is an ISO 3601 date string formatted as YYYY-MM-DD
- * and then converts it to a Date object.
+ * Accepts a date string and attempts to convert it to the YYYY-MM-DD format.
  *
- * @param value An ISO 3601 date string formatted as YYYY-MM-DD
+ * @param value A date string, YYYY-MM-DD and mm/dd/yyyy are supported
  * @param ctx An instance of csv-parse CastingContext
  */
 export function validateDateString(value: string, ctx: CastingContext): string {
 
-  // TODO: improve this function
-  // (1) It doesn't validate the parts are numbers
-  // (2) It doesn't validate illegal numbers like 60
-  // Use Date() to parse and validate
-  // Add mm/dd/yyyy support
+  const asDate = new Date(value);
 
-  const parts = value.split('-')
-
-  if ((parts.length !== 3)
-      || (parts[0].length !== 4)
-      || (parts[1].length !== 2)
-      || (parts[2].length !== 2)
-  ) {
+  if (Number.isNaN(asDate.valueOf())) {
     throw new Error(`Cannot parse '${value}' into date at column: ${ctx.index} row: ${ctx.lines}`)
   }
 
-  return value
+  return asDate.toISOString().slice(0, 10)
 }
 
 // TODO: add tests for this function
