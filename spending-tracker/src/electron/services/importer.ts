@@ -60,7 +60,6 @@ export function validateHeader(header: string, ctx: CastingContext): string {
   return header;
 }
 
-// TODO: add tests for this function
 /**
  * Verifies value is an ISO 3601 date string formatted as YYYY-MM-DD
  * and then converts it to a Date object.
@@ -68,7 +67,14 @@ export function validateHeader(header: string, ctx: CastingContext): string {
  * @param value An ISO 3601 date string formatted as YYYY-MM-DD
  * @param ctx An instance of csv-parse CastingContext
  */
-function validateDateString(value: string, ctx: CastingContext): string {
+export function validateDateString(value: string, ctx: CastingContext): string {
+
+  // TODO: improve this function
+  // (1) It doesn't validate the parts are numbers
+  // (2) It doesn't validate illegal numbers like 60
+  // Use Date() to parse and validate
+  // Add mm/dd/yyyy support
+
   const parts = value.split('-')
 
   if ((parts.length !== 3)
