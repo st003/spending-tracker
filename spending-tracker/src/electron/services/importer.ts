@@ -77,7 +77,6 @@ export function validateDateString(value: string, ctx: CastingContext): string {
   return asDate.toISOString().slice(0, 10)
 }
 
-// TODO: add tests for this function
 /**
  * Verifies the given value can be converted into a number,
  * then converts dollars into cents,
@@ -85,11 +84,15 @@ export function validateDateString(value: string, ctx: CastingContext): string {
  * @param value 
  * @param ctx An instance of csv-parse CastingContext
  */
-function castToCents(value: string, ctx: CastingContext): Number {
+export function castToCents(value: string, ctx: CastingContext): Number {
+  const errorMsg = `Cannot parse '${value}' into number at column: ${ctx.index} row: ${ctx.lines}`
+
+  if (!value.length) throw new Error(errorMsg)
+
   const num = Number(value)
 
   if (Number.isNaN(num)) {
-    throw new Error(`Cannot parse '${value}' into number at column: ${ctx.index} row: ${ctx.lines}`)
+    throw new Error(errorMsg)
   }
 
   return Math.trunc(num * 100)

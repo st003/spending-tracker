@@ -5,7 +5,6 @@ Data Import
 - Backups
 File-based logging
 DB versioning
-Tests
 Fix color of error message on close (red-to-green)
 Back & Forward buttons for month selection
 

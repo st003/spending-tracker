@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 
-import { validateDateString, validateHeader } from './importer.js'
+import { castToCents, validateDateString, validateHeader } from './importer.js'
 
 import type { CastingContext } from 'csv-parse'
 
@@ -62,4 +62,29 @@ test('validateDateString - valid mm/dd/yyyy string', () => {
 test('validateDateString - empty date', () => {
   const ctx = { index: 0, lines: 1 } as CastingContext
   expect(() => validateDateString('', ctx)).toThrowError()
+})
+
+test('castToCents - valid integer', () => {
+  const ctx = { index: 0, lines: 1 } as CastingContext
+  expect(castToCents('100', ctx)).toBe(10000)
+})
+
+test('castToCents - valid float', () => {
+  const ctx = { index: 0, lines: 1 } as CastingContext
+  expect(castToCents('98.72', ctx)).toBe(9872)
+})
+
+test('castToCents - valid negative', () => {
+  const ctx = { index: 0, lines: 1 } as CastingContext
+  expect(castToCents('-54.31', ctx)).toBe(-5431)
+})
+
+test('castToCents - empty string', () => {
+  const ctx = { index: 0, lines: 1 } as CastingContext
+  expect(() => castToCents('', ctx)).toThrowError()
+})
+
+test('castToCents - non-numeric chars', () => {
+  const ctx = { index: 0, lines: 1 } as CastingContext
+  expect(() => castToCents('qwert', ctx)).toThrowError()
 })
