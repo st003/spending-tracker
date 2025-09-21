@@ -1,7 +1,6 @@
 1.0.0
 -----
 Data Import
-- Link to help page
 - Backups
 File-based logging
 DB versioning

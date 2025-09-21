@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button'
@@ -11,7 +12,7 @@ import '../styles/Importer.css'
 
 export default function Importer() {
 
-  // dialog modal
+  const navigate = useNavigate()
 
   const [open, setOpen] = useState(false)
   const [fileName, setFileName] = useState<string|null>(null)
@@ -19,6 +20,11 @@ export default function Importer() {
   const [error, setError] = useState(false)
   const [finished, setFinished] = useState(false)
   const [message, setMessage] = useState('')
+
+  const handleOpenDocumentation = () => {
+    setOpen(false)
+    navigate('/documentation')
+  }
 
   const handleChooseFile = async () => {
     const fileName = await window.electronAPI.selectImportFile()
@@ -68,7 +74,7 @@ export default function Importer() {
       >
         <DialogTitle>Import Data</DialogTitle>
         <DialogContent>
-          <p>Select CSV file for import. File must be formatted to importer requirements.</p>
+          <p>Select CSV file for import. CSV must be formatted to meet importer requirements. Requirements can be found in the <a onClick={handleOpenDocumentation}>documentation</a>.</p>
           {displayFileSelection && (
             <>
               <Button onClick={handleChooseFile} disabled={loading}>Choose File</Button>

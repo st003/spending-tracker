@@ -15,6 +15,14 @@ h2 {
     font-size: 1.25rem;
 }
 
+a {
+    color: #1976D2;
+}
+
+a:hover {
+    cursor: pointer;
+}
+
 table th {
     font-weight: 700 !important;
     background-color: white;

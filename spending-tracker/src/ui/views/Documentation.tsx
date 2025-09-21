@@ -48,7 +48,7 @@ export default function Documentation() {
               <th>categoryName</th>
             </tr>
             <tr>
-              <td>A ISO 8601 date string formatted as YYYY-MM-DD</td>
+              <td>A date string formatted as YYYY-MM-DD or MM/DD/YYYY</td>
               <td>A positive or negative number in dollars. Both integers and floating point numbers are allowed</td>
               <td>The text description of the payment</td>
               <td>The text name of the payment's category</td>
