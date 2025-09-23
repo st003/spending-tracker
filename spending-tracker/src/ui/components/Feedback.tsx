@@ -15,8 +15,9 @@ export default function Feedback({ open, handleClose, error, message }: Feedback
   return (
     <Snackbar
       open={open}
-      autoHideDuration={5000}
+      autoHideDuration={6000}
       onClose={handleClose}
+      transitionDuration={0}
     >
       <SnackbarContent 
         message={message}
