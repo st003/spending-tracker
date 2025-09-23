@@ -2,7 +2,7 @@ import path from 'path'
 
 import { app, BrowserWindow, ipcMain, screen } from 'electron'
 
-import { getPreloadScriptPath, initMenu } from './setup.js'
+import { getPreloadScriptPath, initLogger, initMenu } from './setup.js'
 import { initDatabase } from './db/index.js'
 import { getExpensesForMonth } from './services/expenses.js'
 import { importData, selectImportFile } from './services/importer.js'
@@ -15,12 +15,13 @@ var importFile = ''
 
 async function createWindow() {
 
-  // database
+  // logging
+  initLogger()
 
+  // database
   await initDatabase()
 
   // window
-
   const { width, height } = screen.getPrimaryDisplay().workAreaSize
   const mainWindow = new BrowserWindow({
     width: width,
@@ -47,7 +48,7 @@ async function createWindow() {
     try {
       return await getExpensesForMonth(isoYYYYMM)
     } catch (error) {
-      console.error(error)
+      console.error(error) // TODO: use logger
       return []
     }
   })

@@ -1,6 +1,7 @@
 import path from 'path'
 
 import { app, BrowserWindow, Menu } from 'electron'
+import log from 'electron-log/main.js'
 
 /**
  * Because preload scripts are injected into the frontend they will reside
@@ -15,6 +16,18 @@ export function getPreloadScriptPath(): string {
     (process.env.NODE_ENV === 'development') ? '.' : '..',
     '/dist-electron/preload.cjs'
   )
+}
+
+/**
+ * Configures application logging
+ */
+export function initLogger() {
+  log.initialize()
+  if (process.env.NODE_ENV === 'development') {
+    log.transports.file.level = false
+  } else {
+    log.transports.console.level = false
+  }
 }
 
 /**
