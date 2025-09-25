@@ -1,6 +1,7 @@
 import path from 'path'
 
 import { app, BrowserWindow, ipcMain, screen } from 'electron'
+import log from 'electron-log/main.js'
 
 import { getPreloadScriptPath, initLogger, initMenu } from './setup.js'
 import { initDatabase } from './db/index.js'
@@ -46,9 +47,10 @@ async function createWindow() {
 
   ipcMain.handle('getExpensesForMonth', async (_, isoYYYYMM: string) => {
     try {
-      return await getExpensesForMonth(isoYYYYMM)
+      // return await getExpensesForMonth(isoYYYYMM)
+      throw new Error('Logging test')
     } catch (error) {
-      console.error(error) // TODO: use logger
+      log.error(error)
       return []
     }
   })
@@ -57,7 +59,7 @@ async function createWindow() {
     try {
       return await getNetIncome(range, start, end)
     } catch (error) {
-      console.error(error)
+      log.error(error)
       return []
     }
   })
@@ -77,11 +79,11 @@ async function createWindow() {
     } catch (error) {
 
       if (error instanceof Error) {
-        console.error(error) // TODO: how to have file-based logging?
+        log.error(error)
         return { error: true, message: error.message }
       } else {
-        console.error(error)
-        return { error: true, message: 'An unknown error occured' }
+        log.error(error)
+        return { error: true, message: 'An unknown error occured. See logs for details' }
       }
     }
   })

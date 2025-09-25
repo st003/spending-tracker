@@ -1,13 +1,15 @@
 1.0.0
 -----
+Logging
+- log format
+- frontend
 Data Import
 - Backups
-File-based logging
 DB versioning
-Back & Forward buttons for month selection
 
 1.1.0
 -----
+Back & Forward buttons for month selection
 Category page
 Data export
 DB: notes

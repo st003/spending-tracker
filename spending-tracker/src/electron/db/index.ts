@@ -1,6 +1,7 @@
 import fs from 'fs'
 
 import { app } from 'electron'
+import log from 'electron-log/main.js'
 
 import createNewDatabase from './schema/base.js'
 
@@ -22,7 +23,7 @@ export async function initDatabase() {
   }
 
   if (!fs.existsSync(DB)) {
-    console.info('Database does not exist. Creating new one...')
+    log.info('Database does not exist. Creating new one...')
     await createNewDatabase(DB)
   }
 }
