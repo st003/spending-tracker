@@ -23,10 +23,18 @@ export function getPreloadScriptPath(): string {
  */
 export function initLogger() {
   log.initialize()
+
+  // console
+  log.transports.console.format = '%c{level} - {y}-{m}-{d} {h}:{i}:{s}.{ms}%c - {text}' // use colors
+
+  // file
+  log.transports.file.format = '{level} - {y}-{m}-{d} {h}:{i}:{s}.{ms} - {text}'
+
   if (process.env.NODE_ENV === 'development') {
     log.transports.file.level = false
   } else {
     log.transports.console.level = false
+    log.transports.file.level = 'info'
   }
 }
 

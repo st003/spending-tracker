@@ -1,7 +1,6 @@
 1.0.0
 -----
 Logging
-- log format
 - frontend
 Data Import
 - Backups

@@ -47,8 +47,7 @@ async function createWindow() {
 
   ipcMain.handle('getExpensesForMonth', async (_, isoYYYYMM: string) => {
     try {
-      // return await getExpensesForMonth(isoYYYYMM)
-      throw new Error('Logging test')
+      return await getExpensesForMonth(isoYYYYMM)
     } catch (error) {
       log.error(error)
       return []
