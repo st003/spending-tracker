@@ -5,7 +5,7 @@ import { BrowserWindow, dialog } from 'electron'
 import { parse } from 'csv-parse'
 import sqlite3 from 'sqlite3'
 
-import { DB } from '../db/index.js'
+import { backupDatabase, DB } from '../db/index.js'
 
 import type { CastingContext } from 'csv-parse'
 
@@ -318,12 +318,16 @@ async function importData(filePath: string) {
     throw new Error(`Selected file must have the extention '.csv'`)
   }
 
+  // TODO: finish implementing
+  // await backupDatabase()
+
   try {
     const rows = await parseCSV(filePath)
     await writeToDatabase(rows)
   } catch (error) {
     throw error
   }
+
 }
 
 export { importData, selectImportFile }

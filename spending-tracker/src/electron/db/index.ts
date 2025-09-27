@@ -8,7 +8,7 @@ import createNewDatabase from './schema/base.js'
 /**
  * Global location of database path
  */
-export var DB: string
+export var DB: string // TODO: make this a default export
 
 /**
  * Initiates the database path
@@ -26,4 +26,26 @@ export async function initDatabase() {
     log.info('Database does not exist. Creating new one...')
     await createNewDatabase(DB)
   }
+}
+
+/**
+ * Creates a new backup of the current database
+ */
+export async function backupDatabase(): Promise<void> {
+  return new Promise((resolve, reject) => {
+
+    const userDataDir = app.getPath('userData')
+    const backupDir = `${userDataDir}/database_backups`
+
+    // TODO: move this to a seperate function and return
+    // a promise so this can be called with await
+    if (!fs.existsSync(backupDir)) {
+      fs.mkdir(backupDir, (error) => {
+        if (error) reject(error)
+        else resolve()
+      })
+    } else {
+      resolve()
+    }
+  })
 }
