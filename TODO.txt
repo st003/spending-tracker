@@ -1,7 +1,5 @@
 1.0.0
 -----
-Logging
-- frontend
 Data Import
 - Backups
 DB versioning

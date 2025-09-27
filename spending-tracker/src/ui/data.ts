@@ -1,3 +1,5 @@
+import log from 'electron-log/renderer'
+
 import { getTotalExpensesByCategory } from './utils'
 
 import type { ExpenseCategory } from './types'
@@ -7,8 +9,7 @@ export async function getExpensesCategoriesForMonth(window: Window, monthSelecti
     const result: Expense[] = await window.electronAPI.getExpensesForMonth(monthSelection)
     return getTotalExpensesByCategory(result)
   } catch (error) {
-    // TODO: can this be logged to the file system?
-    console.error(error)
+    log.error(error)
     return []
   }
 }

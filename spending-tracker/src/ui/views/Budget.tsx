@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
+import log from 'electron-log/renderer'
+
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 import Card from '@mui/material/Card'
@@ -51,7 +53,7 @@ export default function Budget(): React.JSX.Element {
       const expenses: Expense[] = await window.electronAPI.getExpensesForMonth(newMonthSelection)
       setExpenses(expenses)
     } catch (error) {
-      console.log(error)
+      log.log(error)
       setExpenses([])
     } finally {
       setMonthSelection(newMonthSelection)
@@ -67,7 +69,7 @@ export default function Budget(): React.JSX.Element {
         const expenses: Expense[] = await window.electronAPI.getExpensesForMonth(monthSelection)
         setExpenses(expenses)
       } catch (error) {
-        console.log(error)
+        log.log(error)
         setExpenses([])
       }
     })()

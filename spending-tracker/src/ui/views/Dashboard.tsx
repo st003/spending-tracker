@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
+import log from 'electron-log/renderer'
+
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 import Button from '@mui/material/Button'
@@ -70,7 +72,7 @@ function NetIncomeByMonth(): React.JSX.Element {
       setMonthXAxis(xAxis)
 
     } catch (error) {
-      console.error(error)
+      log.error(error)
       setMonthData({ income: [], expense: [] })
       setMonthXAxis([])
     }
@@ -238,7 +240,7 @@ function NetIncomeByYear(): React.JSX.Element {
       setYearXAxis(xAxis)
 
     } catch (error) {
-      console.error(error)
+      log.error(error)
       setYearData({ income: [], expense: [] })
       setYearXAxis([])
     }
