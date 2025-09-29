@@ -29,16 +29,14 @@ export async function initDatabase() {
 }
 
 /**
- * Creates a new backup of the current database
+ * Creates the database backup directory if not available
  */
-export async function backupDatabase(): Promise<void> {
+function initBackupLocation(): Promise<void> {
   return new Promise((resolve, reject) => {
 
     const userDataDir = app.getPath('userData')
     const backupDir = `${userDataDir}/database_backups`
 
-    // TODO: move this to a seperate function and return
-    // a promise so this can be called with await
     if (!fs.existsSync(backupDir)) {
       fs.mkdir(backupDir, (error) => {
         if (error) reject(error)
@@ -48,4 +46,12 @@ export async function backupDatabase(): Promise<void> {
       resolve()
     }
   })
+}
+
+/**
+ * Creates a new backup of the current database
+ */
+export async function backupDatabase(): Promise<void> {
+  // TODO: make this prod only
+  await initBackupLocation()
 }

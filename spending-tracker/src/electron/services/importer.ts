@@ -318,16 +318,15 @@ async function importData(filePath: string) {
     throw new Error(`Selected file must have the extention '.csv'`)
   }
 
-  // TODO: finish implementing
-  // await backupDatabase()
-
   try {
+    // await backupDatabase()
+
     const rows = await parseCSV(filePath)
     await writeToDatabase(rows)
+
   } catch (error) {
     throw error
   }
-
 }
 
 export { importData, selectImportFile }
