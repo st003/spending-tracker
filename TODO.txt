@@ -1,10 +1,9 @@
 1.0.0
 -----
 Data Import
-- Backups
 - Purging old backups
 Database
-- database name
+- final database name
 - Finalize v1.0.0 schema
 - Versioning
 
@@ -12,8 +11,11 @@ Database
 -----
 Back & Forward buttons for month selection
 Category page
-Data export
-DB: notes
-DB: modified dates
+Data export utility
 Darkmode
-Settings-based backup quantity
+Database
+- payment notes
+- modified dates
+Backups
+- Settings-based backup quantity
+- Restore backup from UI

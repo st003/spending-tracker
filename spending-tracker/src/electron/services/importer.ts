@@ -311,22 +311,17 @@ async function writeToDatabase(importRows: PaymentImport[]): Promise<void> {
  *
  * @param filePath The full path to the CSV file to import data from
  */
-async function importData(filePath: string) {
+async function importData(filePath: string): Promise<void> {
 
   const fileExtention = path.extname(filePath)
   if (fileExtention.toLowerCase() !== '.csv') {
     throw new Error(`Selected file must have the extention '.csv'`)
   }
 
-  try {
-    // await backupDatabase()
+  // await backupDatabase()
 
-    const rows = await parseCSV(filePath)
-    await writeToDatabase(rows)
-
-  } catch (error) {
-    throw error
-  }
+  const rows = await parseCSV(filePath)
+  await writeToDatabase(rows)
 }
 
 export { importData, selectImportFile }

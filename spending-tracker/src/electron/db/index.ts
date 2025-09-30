@@ -30,15 +30,15 @@ export async function initDatabase() {
 
 /**
  * Creates the database backup directory if not available
+ *
+ * @param backupDirPath full path (including directory name) for the location to save backups
+ * @returns 
  */
-function initBackupLocation(): Promise<void> {
+function initBackupLocation(backupDirPath: string): Promise<void> {
   return new Promise((resolve, reject) => {
 
-    const userDataDir = app.getPath('userData')
-    const backupDir = `${userDataDir}/database_backups`
-
-    if (!fs.existsSync(backupDir)) {
-      fs.mkdir(backupDir, (error) => {
+    if (!fs.existsSync(backupDirPath)) {
+      fs.mkdir(backupDirPath, (error) => {
         if (error) reject(error)
         else resolve()
       })
@@ -49,9 +49,44 @@ function initBackupLocation(): Promise<void> {
 }
 
 /**
+ * Generates a timestamped filename for a new database backup.
+ *
+ * @returns The name of the backup file to be created
+ */
+function getBackupFileName(): string {
+  const dt = new Date()
+
+  const timestamp = String(dt.getUTCFullYear())
+    + String(dt.getUTCMonth())
+    + String(dt.getUTCDay())
+    + String(dt.getUTCHours())
+    + String(dt.getUTCMinutes())
+    + String(dt.getUTCSeconds())
+    + String(dt.getUTCMilliseconds())
+
+  return `data-${timestamp}.db`
+}
+
+/**
  * Creates a new backup of the current database
  */
 export async function backupDatabase(): Promise<void> {
+
   // TODO: make this prod only
-  await initBackupLocation()
+
+  const userDataDir = app.getPath('userData')
+  const backupDir = `${userDataDir}/database_backups`
+
+  await initBackupLocation(backupDir)
+
+  if (fs.existsSync(DB)) {
+    const backupFileName = getBackupFileName()
+    const backupFilePath = `${backupDir}/${backupFileName}`
+    fs.copyFileSync(DB, backupFilePath)
+
+  } else {
+    throw new Error('Unable to locate database')
+  }
+
+  // TODO: purge oldest backup
 }
