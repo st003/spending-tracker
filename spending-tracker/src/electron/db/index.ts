@@ -8,7 +8,7 @@ import createNewDatabase from './schema/base.js'
 /**
  * Global location of database path
  */
-export var DB: string // TODO: make this a default export
+export var DB: string
 
 /**
  * Initiates the database path
