@@ -5,6 +5,9 @@ import log from 'electron-log/main.js'
 
 import createNewDatabase from './schema/base.js'
 
+// TODO: make this configurable
+const MAX_BACKUPS = 10;
+
 /**
  * Global location of database path
  */
@@ -88,5 +91,21 @@ export async function backupDatabase(): Promise<void> {
     throw new Error('Unable to locate database')
   }
 
-  // TODO: purge oldest backup
+  // purge excess backups
+  const existingBackups = fs.readdirSync(backupDir)
+  if (existingBackups.length > MAX_BACKUPS) {
+    const backupsToDelete = existingBackups
+      .map(name => {
+        const path = `${backupDir}/${name}`
+        return {
+          path,
+          modifiedDate: fs.statSync(path).mtimeMs,
+          mDate: fs.statSync(path).mtime
+        }
+      })
+      .sort((a, b) => b.modifiedDate - a.modifiedDate)
+      .slice(MAX_BACKUPS) // keep the newest
+
+      // TODO: delete all files in backupsToDelete
+  }
 }
