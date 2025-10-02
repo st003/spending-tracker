@@ -5,7 +5,8 @@ import log from 'electron-log/main.js'
 
 import createNewDatabase from './schema/base.js'
 
-// TODO: make this configurable
+// TODO: make these configurable
+const DATABASE_NAME = 'data.db'
 const MAX_BACKUPS = 10;
 
 /**
@@ -19,10 +20,10 @@ export var DB: string
 export async function initDatabase() {
 
   if (process.env.NODE_ENV === 'development') {
-    DB = 'data.db'
+    DB = DATABASE_NAME
   } else {
     const userDataDir = app.getPath('userData')
-    DB = `${userDataDir}/data.db`
+    DB = `${userDataDir}/${DATABASE_NAME}`
   }
 
   if (!fs.existsSync(DB)) {
