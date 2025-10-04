@@ -1,7 +1,5 @@
 1.0.0
 -----
-Data Import
-- Purging old backups
 Database
 - final database name
 - Finalize v1.0.0 schema

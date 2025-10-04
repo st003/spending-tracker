@@ -72,7 +72,8 @@ function getBackupFileName(): string {
 }
 
 /**
- * Creates a new backup of the current database
+ * Creates a new backup of the current database and purges
+ * old backups
  */
 export async function backupDatabase(): Promise<void> {
 
@@ -87,6 +88,7 @@ export async function backupDatabase(): Promise<void> {
     const backupFileName = getBackupFileName()
     const backupFilePath = `${backupDir}/${backupFileName}`
     fs.copyFileSync(DB, backupFilePath)
+    log.info(`Backed up database to: ${backupFilePath}`)
 
   } else {
     throw new Error('Unable to locate database')
@@ -95,18 +97,25 @@ export async function backupDatabase(): Promise<void> {
   // purge excess backups
   const existingBackups = fs.readdirSync(backupDir)
   if (existingBackups.length > MAX_BACKUPS) {
+
     const backupsToDelete = existingBackups
       .map(name => {
         const path = `${backupDir}/${name}`
         return {
           path,
-          modifiedDate: fs.statSync(path).mtimeMs,
-          mDate: fs.statSync(path).mtime
+          modifiedDate: fs.statSync(path).mtimeMs
         }
       })
       .sort((a, b) => b.modifiedDate - a.modifiedDate)
-      .slice(MAX_BACKUPS) // keep the newest
+      .slice(MAX_BACKUPS) // keep the N most recent
 
-      // TODO: delete all files in backupsToDelete
+      for (const backup of backupsToDelete) {
+        try {
+          fs.unlinkSync(backup.path)
+          log.info(`Deleted backup: ${backup.path}`)
+        } catch (error) {
+          log.error(`Unable to delete backup: ${backup.path}`, error)
+        }
+      }
   }
 }
