@@ -318,7 +318,9 @@ async function importData(filePath: string): Promise<void> {
     throw new Error(`Selected file must have the extention '.csv'`)
   }
 
-  // await backupDatabase()
+  if (process.env.NODE_ENV !== 'development') {
+    await backupDatabase()
+  }
 
   const rows = await parseCSV(filePath)
   await writeToDatabase(rows)

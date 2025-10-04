@@ -77,8 +77,6 @@ function getBackupFileName(): string {
  */
 export async function backupDatabase(): Promise<void> {
 
-  // TODO: make this prod only
-
   const userDataDir = app.getPath('userData')
   const backupDir = `${userDataDir}/database_backups`
 
