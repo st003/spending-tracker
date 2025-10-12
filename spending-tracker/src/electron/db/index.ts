@@ -6,7 +6,7 @@ import log from 'electron-log/main.js'
 import createNewDatabase from './schema/base.js'
 
 // TODO: make these configurable
-const DATABASE_NAME = 'data.db'
+const DATABASE_NAME = 'spending-tracker-data.db'
 const MAX_BACKUPS = 10;
 
 /**

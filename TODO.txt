@@ -1,7 +1,6 @@
 1.0.0
 -----
 Database
-- final database name
 - Finalize v1.0.0 schema
 - Versioning
 
