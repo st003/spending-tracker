@@ -10,18 +10,15 @@ const CREATE_TABLE_SCHEMA_VERSIONS = `
   );
 `
 
-// TODO: add unique index to name
 const CREATE_TABLE_CATEGORIES = `
   CREATE TABLE "Categories" (
     "id" INTEGER NOT NULL,
-    "name" TEXT NOT NULL,
+    "name" TEXT NOT NULL UNIQUE,
     "created_date" TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY("id" AUTOINCREMENT)
   );
 `
 
-// TODO: add index to payment_date?
-// TODO: add index to category_id?
 const CREATE_TABLE_PAYMENTS = `
   CREATE TABLE "Payments" (
     "id" INTEGER NOT NULL,
