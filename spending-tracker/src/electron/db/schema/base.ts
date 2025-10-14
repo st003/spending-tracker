@@ -1,5 +1,15 @@
 import sqlite3 from 'sqlite3'
 
+const CREATE_TABLE_SCHEMA_VERSIONS = `
+  CREATE TABLE "Schema_Versions" (
+    "id" INTEGER NOT NULL,
+    "numeric_version" INTEGER NOT NULL UNIQUE,
+    "semantic_version" TEXT NOT NULL UNIQUE,
+    "applied_date" TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY("id" AUTOINCREMENT)
+  );
+`
+
 // TODO: add unique index to name
 const CREATE_TABLE_CATEGORIES = `
   CREATE TABLE "Categories" (
@@ -25,6 +35,7 @@ const CREATE_TABLE_PAYMENTS = `
   );
 `
 
+const INSERT_SCHEMA_VERSION = `INSERT INTO Schema_Versions (numeric_version, semantic_version) VALUES (1, '1.0.0');`
 const INSERT_DEFAULT_CATEGORIES = `INSERT INTO Categories (name) VALUES ('Uncategorized');`
 
 /**
@@ -43,8 +54,12 @@ export default function createNewDatabase(dbPath: string): Promise<void> {
 
     db.serialize(() => {
       try {
+        // tables
+        db.run(CREATE_TABLE_SCHEMA_VERSIONS)
         db.run(CREATE_TABLE_CATEGORIES)
         db.run(CREATE_TABLE_PAYMENTS)
+        // data
+        db.run(INSERT_SCHEMA_VERSION)
         db.run(INSERT_DEFAULT_CATEGORIES)
       } catch (error) {
         reject(error)

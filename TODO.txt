@@ -1,8 +1,8 @@
 1.0.0
 -----
 Database
-- Finalize v1.0.0 schema
-- Versioning
+- Display schema version in about
+- Finalize v1.0.0 schema (indexes)
 
 1.1.0+
 -----
