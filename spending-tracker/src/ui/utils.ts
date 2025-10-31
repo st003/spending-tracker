@@ -21,15 +21,19 @@ export function formatDateYYYYMMDD(input: Date): string {
 }
 
 /**
- * Converts a Date to an English Month and Year. Example:
+ * Converts a YYYY-MM formatted ISO string to an English Month and Year. Example:
  * 2025-05 => 'May 2025'
  *
- * @param date The Date object to format
- * @returns String in format "month YYYY"
+ * @param date The YYYY-MM formatted ISO string
+ * @returns String in format "Month YYYY"
  */
-export function formatMonthLabel(date: Date): string {
-  const monthName = date.toLocaleString('default', { month: 'long', timeZone: 'UTC' })
-  const expenseMonthLabel = `${monthName} ${date.getUTCFullYear()}`
+export function formatMonthLabel(date: string): string {
+  const dt = new Date(date);
+  // set day to middle of the month to avoid timezone offsets
+  // at either end of the month when converting to UTC
+  dt.setUTCDate(15)
+  const monthName = dt.toLocaleString('default', { month: 'long', timeZone: 'UTC' })
+  const expenseMonthLabel = `${monthName} ${dt.getUTCFullYear()}`
   return expenseMonthLabel
 }
 
@@ -45,6 +49,21 @@ export function formatMonthLabel(date: Date): string {
 export function formatAmount(value: number): string {
   const dollars = Math.abs(value / 100)
   return `$${dollars.toFixed(2)}`
+}
+
+/**
+ * Get's the year and month for the previous month relative to
+ * today's date.
+ *
+ * @returns An ISO string formatted at YYYY-MM
+ */
+export function getLastMonth(): string {
+  const today = new Date()
+  // set day to middle of the month to avoid timezone offsets
+  // at either end of the month when converting to UTC
+  today.setUTCDate(15)
+  today.setUTCMonth(today.getUTCMonth() - 1)
+  return today.toISOString().slice(0, 7)
 }
 
 /**

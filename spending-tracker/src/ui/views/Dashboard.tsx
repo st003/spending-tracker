@@ -20,7 +20,7 @@ import Expense from '../components/Expense'
 import NetIncome from '../components/NetIncome'
 
 import { getExpensesCategoriesForMonth } from '../data'
-import { formatMonthLabel } from '../utils'
+import { formatMonthLabel, getLastMonth } from '../utils'
 
 import '../styles/Dashboard.css'
 
@@ -28,15 +28,14 @@ import type { ExpenseCategory, IncomeExpense } from '../types'
 
 function NetIncomeByMonth(): React.JSX.Element {
 
-  // default for end month
   const today = new Date()
-  today.setUTCMonth(today.getUTCMonth() - 1)
-  const endMonthDefault = today.toISOString().slice(0, 7)
-
-  // default for start month
-  today.setUTCMonth(today.getUTCMonth() + 1)
+  // set day to middle of the month to avoid timezone offsets
+  // at either end of the month when converting to UTC
+  today.setUTCDate(15)
   today.setUTCFullYear(today.getUTCFullYear() - 1)
   const startMonthDefault = today.toISOString().slice(0, 7)
+
+  const endMonthDefault = getLastMonth()
 
   const [open, setOpen] = useState(false)
   const [startMonthInput, setStartMonthInput] = useState(startMonthDefault)
@@ -151,17 +150,14 @@ function NetIncomeByMonth(): React.JSX.Element {
 
 function ExpensesByMonth(): React.JSX.Element {
 
-  const today = new Date()
-  today.setUTCMonth(today.getUTCMonth() - 1)
-
-  const [monthSelection, setMonthSelection] = useState(today.toISOString().slice(0, 7))
-  const [expenseMonthLabel, setExpenseMonthLabel] = useState(formatMonthLabel(today))
+  const [monthSelection, setMonthSelection] = useState(getLastMonth())
+  const [expenseMonthLabel, setExpenseMonthLabel] = useState(formatMonthLabel(monthSelection))
   const [expenseData, setExpenseData] = useState<ExpenseCategory[]>([])
   const [showExpenseFilterSettings, setShowExpenseFilterSettings] = useState(false)
 
   const applyExpenseFilters = async (newMonthSelection: string) => {
     setMonthSelection(newMonthSelection)
-    setExpenseMonthLabel(formatMonthLabel(new Date(newMonthSelection)))
+    setExpenseMonthLabel(formatMonthLabel(newMonthSelection))
     setShowExpenseFilterSettings(false)
     const categories = await getExpensesCategoriesForMonth(window, newMonthSelection)
     setExpenseData(categories)

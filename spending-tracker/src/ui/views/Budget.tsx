@@ -26,6 +26,7 @@ import {
   formatDateYYYYMMDD,
   formatMonthLabel,
   formatAmount,
+  getLastMonth,
   getTotalExpensesByCategory,
   sortExpenseData
 } from '../utils'
@@ -38,11 +39,8 @@ const LABELS: ExpenseProperty[] = ['description', 'category', 'amount', 'date']
 
 export default function Budget(): React.JSX.Element {
 
-  const today = new Date()
-  today.setUTCMonth(today.getUTCMonth() - 1)
-
-  const [monthSelection, setMonthSelection] = useState(today.toISOString().slice(0, 7))
-  const [expenseMonthLabel, setExpenseMonthLabel] = useState(formatMonthLabel(today))
+  const [monthSelection, setMonthSelection] = useState(getLastMonth())
+  const [expenseMonthLabel, setExpenseMonthLabel] = useState(formatMonthLabel(monthSelection))
   const [showExpenseFilterSettings, setShowExpenseFilterSettings] = useState(false)
   const [expenses, setExpenses] = useState<Expense[]>([])
   const [orderByProperty, setOrderByProperty] = useState<ExpenseProperty>('date')
@@ -57,7 +55,7 @@ export default function Budget(): React.JSX.Element {
       setExpenses([])
     } finally {
       setMonthSelection(newMonthSelection)
-      setExpenseMonthLabel(formatMonthLabel(new Date(newMonthSelection)))
+      setExpenseMonthLabel(formatMonthLabel(newMonthSelection))
       setShowExpenseFilterSettings(false)
     }
   }

@@ -1,5 +1,6 @@
 1.1.0+
 -----
+Improvements to timezone handling
 Back & Forward buttons for month selection
 Category page
 Data export utility
