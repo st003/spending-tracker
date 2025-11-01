@@ -28,10 +28,10 @@ import type { ExpenseCategory, IncomeExpense } from '../types'
 
 function NetIncomeByMonth(): React.JSX.Element {
 
+  // get YYYY-MM for 12 months ago
   const today = new Date()
-  // set day to middle of the month to avoid timezone offsets
-  // at either end of the month when converting to UTC
-  today.setUTCDate(15)
+  today.setUTCMinutes(today.getUTCMinutes() - today.getTimezoneOffset())
+  today.setUTCDate(1)
   today.setUTCFullYear(today.getUTCFullYear() - 1)
   const startMonthDefault = today.toISOString().slice(0, 7)
 
@@ -199,6 +199,7 @@ function NetIncomeByYear(): React.JSX.Element {
 
   // default for start and end year
   const today = new Date()
+  today.setUTCMinutes(today.getUTCMinutes() - today.getTimezoneOffset())
   const startYearDefault = today.getUTCFullYear() - 5
   const endYearDefault = today.getUTCFullYear() - 1
 

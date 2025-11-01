@@ -29,9 +29,6 @@ export function formatDateYYYYMMDD(input: Date): string {
  */
 export function formatMonthLabel(date: string): string {
   const dt = new Date(date);
-  // set day to middle of the month to avoid timezone offsets
-  // at either end of the month when converting to UTC
-  dt.setUTCDate(15)
   const monthName = dt.toLocaleString('default', { month: 'long', timeZone: 'UTC' })
   const expenseMonthLabel = `${monthName} ${dt.getUTCFullYear()}`
   return expenseMonthLabel
@@ -59,9 +56,8 @@ export function formatAmount(value: number): string {
  */
 export function getLastMonth(): string {
   const today = new Date()
-  // set day to middle of the month to avoid timezone offsets
-  // at either end of the month when converting to UTC
-  today.setUTCDate(15)
+  today.setUTCMinutes(today.getUTCMinutes() - today.getTimezoneOffset())
+  today.setUTCDate(1)
   today.setUTCMonth(today.getUTCMonth() - 1)
   return today.toISOString().slice(0, 7)
 }
