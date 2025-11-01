@@ -63,7 +63,7 @@ export function validateHeader(header: string, ctx: CastingContext): string {
 /**
  * Accepts a date string and attempts to convert it to the YYYY-MM-DD format.
  *
- * @param value A date string, YYYY-MM-DD and mm/dd/yyyy are supported
+ * @param value A date string, YYYY-MM-DD, mm/dd/yyyy, and mm/dd/yy are supported
  * @param ctx An instance of csv-parse CastingContext
  */
 export function validateDateString(value: string, ctx: CastingContext): string {

@@ -59,6 +59,11 @@ test('validateDateString - valid mm/dd/yyyy string', () => {
   expect(validateDateString('1/1/2000', ctx)).toBe('2000-01-01')
 })
 
+test('validateDateString - valid mm/dd/yy string', () => {
+  const ctx = { index: 0, lines: 1 } as CastingContext
+  expect(validateDateString('1/1/00', ctx)).toBe('2000-01-01')
+})
+
 test('validateDateString - empty date', () => {
   const ctx = { index: 0, lines: 1 } as CastingContext
   expect(() => validateDateString('', ctx)).toThrowError()
