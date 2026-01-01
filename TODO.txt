@@ -1,6 +1,16 @@
-1.1.0+
+1.0.0
 -----
-Back & Forward buttons for month selection
+Fix: date values on db backup
+
+1.1.0
+-----
+Add: Back & Forward buttons for month selection
+Add: Copy buttons to category labels
+Add: Header example to import modal (with copy buttons)
+Add: Optionally display income on budget page table
+
+1.2.0+
+-----
 Category page
 Data export utility
 Darkmode
