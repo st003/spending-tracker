@@ -4,7 +4,7 @@
   "description": "A spending and budget tracking application",
   "author": "st003",
   "private": true,
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0",
   "type": "module",
   "main": "dist-electron/main.js",
   "homepage": "./",
