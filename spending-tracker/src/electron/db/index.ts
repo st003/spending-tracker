@@ -57,16 +57,16 @@ function initBackupLocation(backupDirPath: string): Promise<void> {
  *
  * @returns The name of the backup file to be created
  */
-function getBackupFileName(): string {
+export function getBackupFileName(): string {
   const dt = new Date()
 
-  const timestamp = String(dt.getUTCFullYear())
-    + String(dt.getUTCMonth())
-    + String(dt.getUTCDay())
-    + String(dt.getUTCHours())
-    + String(dt.getUTCMinutes())
-    + String(dt.getUTCSeconds())
-    + String(dt.getUTCMilliseconds())
+  const timestamp = String(dt.getFullYear())
+    + String(dt.getMonth() + 1)
+    + String(dt.getDate())
+    + String(dt.getHours())
+    + String(dt.getMinutes())
+    + String(dt.getSeconds())
+    + String(dt.getMilliseconds())
 
   return `data-${timestamp}.db`
 }
