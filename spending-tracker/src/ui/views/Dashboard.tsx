@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 
 import log from 'electron-log/renderer'
 
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 import Button from '@mui/material/Button'
@@ -163,6 +165,13 @@ function ExpensesByMonth(): React.JSX.Element {
     setExpenseData(categories)
   }
 
+  const changeMonth = async (n: number) => {
+    const d = new Date(monthSelection)
+    d.setUTCMonth(d.getUTCMonth() + n)
+    const newMonth = d.toISOString().slice(0, 7)
+    await applyExpenseFilters(newMonth)
+  }
+
   useEffect(() => {
     (async () => {
       const categories = await getExpensesCategoriesForMonth(window, monthSelection)
@@ -176,9 +185,17 @@ function ExpensesByMonth(): React.JSX.Element {
         <CardHeader
           title={`Expenses - ${expenseMonthLabel}`}
           action={
-            <IconButton onClick={() => setShowExpenseFilterSettings(true)} title='Open Filter Settings'>
-              <MoreVertIcon />
-            </IconButton>
+            <>
+              <IconButton onClick={() => changeMonth(-1)} title='Back 1 Month'>
+                <ArrowBackIosNewIcon />
+              </IconButton>
+              <IconButton onClick={() => changeMonth(1)} title='Forward 1 Month'>
+                <ArrowForwardIosIcon />
+              </IconButton>
+              <IconButton onClick={() => setShowExpenseFilterSettings(true)} title='Open Filter Settings'>
+                <MoreVertIcon />
+              </IconButton>
+            </>
           }
         />
         <CardContent>

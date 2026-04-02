@@ -164,7 +164,7 @@ export default function Expenses(): React.JSX.Element {
         />
       </Card>
       <Card variant='outlined'>
-        <CardHeader title='Expenses' />
+        <CardHeader title='Items' />
         <CardContent>
           <TableContainer sx={{ marginBottom: '1rem' }}>
             <Table size='small'>

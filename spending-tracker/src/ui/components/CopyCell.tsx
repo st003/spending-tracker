@@ -10,7 +10,7 @@ interface CopyCellProps {
   style?: object;
 }
 
-export default function CopyCell({ value, style }: CopyCellProps) {
+export default function CopyCell({ value, style }: CopyCellProps): React.JSX.Element {
 
   const [toolTipOpen, setToolTipOpen] = useState(false)
 
