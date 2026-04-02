@@ -15,8 +15,8 @@ import DialogTitle from '@mui/material/DialogTitle'
 import Grid from '@mui/material/Grid'
 import IconButton from '@mui/material/IconButton'
 
-import BudgetFilterDialog from '../components/BudgetFIlterDialog'
 import Expense from '../components/Expense'
+import ExpensesFilterDialog from '../components/ExpensesFilterDialog'
 import NetIncome from '../components/NetIncome'
 
 import { getExpensesCategoriesForMonth } from '../data'
@@ -185,7 +185,7 @@ function ExpensesByMonth(): React.JSX.Element {
           <Expense data={expenseData} />
         </CardContent>
       </Card>
-      <BudgetFilterDialog
+      <ExpensesFilterDialog
         open={showExpenseFilterSettings}
         setOpen={setShowExpenseFilterSettings}
         monthSelection={monthSelection}

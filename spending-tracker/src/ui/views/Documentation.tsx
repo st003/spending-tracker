@@ -29,9 +29,9 @@ export default function Documentation() {
         </CardContent>
       </Card>
       <Card sx={{ marginBottom: '1rem' }}>
-        <CardHeader title='Budget' />
+        <CardHeader title='Expenses' />
         <CardContent>
-          <p>The Budget page displays detailed information about the expenses of a given month. By default, the page shows data for the previous month. The page is divided into 2 sections.</p>
+          <p>The Expenses page displays detailed information about the expenses of a given month. By default, the page shows data for the previous month. The page is divided into 2 sections.</p>
           <h2>Categories</h2>
           <p>Displays a donut chart of the given month's expenses. Hovering your mouse over each of the chart slices will display the name of the expense category as well as the sum of expenses in that category for the given month. Open the filter settings by pressing the icon in the upper right corner. From here you can select the month for which to display expense data.</p>
           <h2>Expenses</h2>

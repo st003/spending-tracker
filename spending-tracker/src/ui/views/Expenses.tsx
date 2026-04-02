@@ -18,7 +18,7 @@ import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
 import TableSortLabel from '@mui/material/TableSortLabel'
 
-import BudgetFilterDialog from '../components/BudgetFIlterDialog'
+import ExpenesesFilterDialog from '../components/ExpensesFilterDialog'
 import Expense from '../components/Expense'
 
 import {
@@ -31,13 +31,13 @@ import {
   sortExpenseData
 } from '../utils'
 
-import '../styles/Budget.css'
+import '../styles/Expenses.css'
 
 import type { ExpenseProperty, OrderByDirection } from '../types'
 
 const LABELS: ExpenseProperty[] = ['description', 'category', 'amount', 'date']
 
-export default function Budget(): React.JSX.Element {
+export default function Expenses(): React.JSX.Element {
 
   const [monthSelection, setMonthSelection] = useState(getLastMonth())
   const [expenseMonthLabel, setExpenseMonthLabel] = useState(formatMonthLabel(monthSelection))
@@ -138,10 +138,10 @@ export default function Budget(): React.JSX.Element {
     <>
       <Grid container>
         <Grid size={{ xs: 6 }}>
-          <h1>Budget</h1>
+          <h1>Expenses</h1>
         </Grid>
         <Grid size={{ xs: 6 }} sx={{ textAlign: 'right' }}>
-          <span className='BudgetMonthSelectionLabel'>{expenseMonthLabel}</span>
+          <span className='ExpensesMonthSelectionLabel'>{expenseMonthLabel}</span>
           <IconButton
             sx={{ marginLeft: '0.5rem' }}
             onClick={() => setShowExpenseFilterSettings(true)}
@@ -156,7 +156,7 @@ export default function Budget(): React.JSX.Element {
         <CardContent>
           <Expense data={expenseData} />
         </CardContent>
-        <BudgetFilterDialog
+        <ExpenesesFilterDialog
           open={showExpenseFilterSettings}
           setOpen={setShowExpenseFilterSettings}
           monthSelection={monthSelection}
