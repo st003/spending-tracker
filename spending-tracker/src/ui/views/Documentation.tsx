@@ -2,6 +2,8 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
 
+import CopyCell from '../components/CopyCell'
+
 import '../styles/Documention.css'
 
 export default function Documentation() {
@@ -42,10 +44,10 @@ export default function Documentation() {
           <p>The Spending Tracker has a utility for importing new payment data into the database. New payments are imported from a pre-formatted CSV file. The CSV must contain the following header names in the first row and in the order given. Populate all subsequent rows with payment data as described in the table.</p>
           <table className='importDataTable'>
             <tr>
-              <th>paymentDate</th>
-              <th>amount</th>
-              <th>description</th>
-              <th>categoryName</th>
+              <CopyCell value='paymentDate' />
+              <CopyCell value='amount' />
+              <CopyCell value='description' />
+              <CopyCell value='categoryName' />
             </tr>
             <tr>
               <td>A date string formatted as YYYY-MM-DD, MM/DD/YYYY, or MM/DD/YY</td>

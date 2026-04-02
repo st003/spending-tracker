@@ -14,10 +14,10 @@ p {
     border-collapse: collapse;
 }
 
-.importDataTable th, .importDataTable td {
+.importDataTable td {
     padding: 0.5rem;
     border: 1px solid black;
     background-color: white;
     text-align: left;
-    font-size: 1.15rem;
+    font-size: 1rem;
 }

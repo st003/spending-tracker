@@ -8,6 +8,8 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 
+import CopyCell from './CopyCell'
+
 import '../styles/Importer.css'
 
 export default function Importer() {
@@ -74,7 +76,16 @@ export default function Importer() {
       >
         <DialogTitle>Import Data</DialogTitle>
         <DialogContent>
-          <p>Select CSV file for import. CSV must be formatted to meet importer requirements. Requirements can be found in the <a onClick={handleOpenDocumentation}>documentation</a>.</p>
+          <p>Select CSV file for import. CSV must be formatted with the following column headers:</p>
+          <table className='ImportHeaders'>
+            <tr>
+              <CopyCell value='paymentDate' />
+              <CopyCell value='amount' />
+              <CopyCell value='description' />
+              <CopyCell value='categoryName' />
+            </tr>
+          </table>
+          <p>Further details on requirements can be found in the <a onClick={handleOpenDocumentation}>documentation</a>.</p>
           {displayFileSelection && (
             <>
               <Button onClick={handleChooseFile} disabled={loading}>Choose File</Button>
