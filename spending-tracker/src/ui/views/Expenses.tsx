@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react'
 
 import log from 'electron-log/renderer'
 
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 import Card from '@mui/material/Card'
@@ -58,6 +60,13 @@ export default function Expenses(): React.JSX.Element {
       setExpenseMonthLabel(formatMonthLabel(newMonthSelection))
       setShowExpenseFilterSettings(false)
     }
+  }
+
+  const changeMonth = async (n: number) => {
+    const d = new Date(monthSelection)
+    d.setUTCMonth(d.getUTCMonth() + n)
+    const newMonth = d.toISOString().slice(0, 7)
+    await applyExpenseFilters(newMonth)
   }
 
   // get initial data
@@ -136,14 +145,21 @@ export default function Expenses(): React.JSX.Element {
 
   return (
     <>
-      <Grid container>
-        <Grid size={{ xs: 6 }}>
+      <Grid container sx={{ alignItems: 'center' }}>
+        <Grid size={{ xs: 4 }}>
           <h1>Expenses</h1>
         </Grid>
-        <Grid size={{ xs: 6 }} sx={{ textAlign: 'right' }}>
-          <span className='ExpensesMonthSelectionLabel'>{expenseMonthLabel}</span>
+        <Grid size={{ xs: 4 }}>
+          <div className='ExpensesMonthSelectionLabel'>{expenseMonthLabel}</div>
+        </Grid>
+        <Grid size={{ xs: 4 }} sx={{ textAlign: 'right' }}>
+          <IconButton onClick={() => changeMonth(-1)} title='Back 1 Month'>
+            <ArrowBackIosNewIcon />
+          </IconButton>
+          <IconButton onClick={() => changeMonth(1)} title='Forward 1 Month'>
+            <ArrowForwardIosIcon />
+          </IconButton>
           <IconButton
-            sx={{ marginLeft: '0.5rem' }}
             onClick={() => setShowExpenseFilterSettings(true)}
             title='Open Filter Settings'
           >
