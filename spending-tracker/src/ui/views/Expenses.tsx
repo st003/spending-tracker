@@ -44,6 +44,7 @@ export default function Expenses(): React.JSX.Element {
   const [monthSelection, setMonthSelection] = useState(getLastMonth())
   const [expenseMonthLabel, setExpenseMonthLabel] = useState(formatMonthLabel(monthSelection))
   const [showExpenseFilterSettings, setShowExpenseFilterSettings] = useState(false)
+  const [monthInputValue, setMonthInputValue] = useState(monthSelection)
   const [expenses, setExpenses] = useState<Expense[]>([])
   const [orderByProperty, setOrderByProperty] = useState<ExpenseProperty>('date')
   const [orderByDirection, setOrderByDirection] = useState<OrderByDirection>('desc')
@@ -66,6 +67,7 @@ export default function Expenses(): React.JSX.Element {
     const d = new Date(monthSelection)
     d.setUTCMonth(d.getUTCMonth() + n)
     const newMonth = d.toISOString().slice(0, 7)
+    setMonthInputValue(newMonth)
     await applyExpenseFilters(newMonth)
   }
 
@@ -173,9 +175,11 @@ export default function Expenses(): React.JSX.Element {
           <Expense data={expenseData} />
         </CardContent>
         <ExpenesesFilterDialog
+          monthSelection={monthSelection}
           open={showExpenseFilterSettings}
           setOpen={setShowExpenseFilterSettings}
-          monthSelection={monthSelection}
+          monthInputValue={monthInputValue}
+          setMonthInputValue={setMonthInputValue}
           handleApply={applyExpenseFilters}
         />
       </Card>

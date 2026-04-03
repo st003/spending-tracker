@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
@@ -9,15 +9,15 @@ import DialogTitle from '@mui/material/DialogTitle'
 import '../styles/ExpensesFilterDialog.css'
 
 interface ExpensesFilterDialogProps {
+  monthSelection: string;
   open: boolean;
   setOpen: (value: boolean) => void;
-  monthSelection: string;
+  monthInputValue: string;
+  setMonthInputValue: React.Dispatch<React.SetStateAction<string>>;
   handleApply: (newMonthSelection: string) => void;
 }
 
-export default function ExpensesFilterDialog({ open, setOpen, monthSelection, handleApply }: ExpensesFilterDialogProps) {
-
-  const [monthInputValue, setMonthInputValue] = useState(monthSelection)
+export default function ExpensesFilterDialog({ monthSelection, open, setOpen, monthInputValue, setMonthInputValue, handleApply }: ExpensesFilterDialogProps) {
 
   const handleMonthSelectionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMonthInputValue(event.target.value)
