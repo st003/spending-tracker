@@ -7,8 +7,12 @@ import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableRow from '@mui/material/TableRow'
 
-import CopyCell from './CopyCell'
+import CopyContainer from './CopyContainer'
 
 import '../styles/Importer.css'
 
@@ -77,14 +81,24 @@ export default function Importer() {
         <DialogTitle>Import Data</DialogTitle>
         <DialogContent>
           <p>Select CSV file for import. CSV must be formatted with the following column headers:</p>
-          <table className='ImportHeaders'>
-            <tr>
-              <CopyCell value='paymentDate' />
-              <CopyCell value='amount' />
-              <CopyCell value='description' />
-              <CopyCell value='categoryName' />
-            </tr>
-          </table>
+          <Table className='ImportHeaders'>
+            <TableBody>
+              <TableRow>
+                <TableCell>
+                  <CopyContainer value='paymentDate' />
+                </TableCell>
+                <TableCell>
+                  <CopyContainer value='amount' />
+                </TableCell>
+                <TableCell>
+                  <CopyContainer value='description' />
+                </TableCell>
+                <TableCell>
+                  <CopyContainer value='categoryName' />
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
           <p>Further details on requirements can be found in the <a onClick={handleOpenDocumentation}>documentation</a>.</p>
           {displayFileSelection && (
             <>

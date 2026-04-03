@@ -1,16 +1,16 @@
 import { useState } from 'react'
 
 import ClickAwayListener from '@mui/material/ClickAwayListener'
-import Tooltip from '@mui/material/Tooltip'
+import Tooltip, { type TooltipProps } from '@mui/material/Tooltip'
 
-import '../styles/CopyCell.css'
+import '../styles/CopyContainer.css'
 
-interface CopyCellProps {
+interface CopyContainerProps {
   value: string;
-  style?: object;
+  toolTipPlacement?: TooltipProps['placement'];
 }
 
-export default function CopyCell({ value, style }: CopyCellProps): React.JSX.Element {
+export default function CopyContainer({ value, toolTipPlacement = 'top' }: CopyContainerProps): React.JSX.Element {
 
   const [toolTipOpen, setToolTipOpen] = useState(false)
 
@@ -31,14 +31,10 @@ export default function CopyCell({ value, style }: CopyCellProps): React.JSX.Ele
         disableHoverListener
         disableTouchListener
         open={toolTipOpen}
-        placement='top'
+        placement={toolTipPlacement}
         title='copied'
       >
-        <td
-          className='CopyCell'
-          style={style}
-          onClick={handleCopy}
-        >{value}</td>
+        <span className='CopyContainer' onClick={handleCopy}>{value}</span>
       </Tooltip>
     </ClickAwayListener>
   )

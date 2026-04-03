@@ -1,15 +1,20 @@
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
 
-import CopyCell from '../components/CopyCell'
+import CopyContainer from '../components/CopyContainer'
 
 import '../styles/Documention.css'
 
 export default function Documentation() {
   return (
     <>
-      <h1>Documentation</h1>
+      <h1 style={{ marginBottom: '1rem' }}>Documentation</h1>
       <Card sx={{ marginBottom: '1rem' }}>
         <CardHeader title='Introduction' />
         <CardContent>
@@ -42,20 +47,32 @@ export default function Documentation() {
         <CardHeader title='Import Data' />
         <CardContent>
           <p>The Spending Tracker has a utility for importing new payment data into the database. New payments are imported from a pre-formatted CSV file. The CSV must contain the following header names in the first row and in the order given. Populate all subsequent rows with payment data as described in the table.</p>
-          <table className='importDataTable'>
-            <tr>
-              <CopyCell value='paymentDate' />
-              <CopyCell value='amount' />
-              <CopyCell value='description' />
-              <CopyCell value='categoryName' />
-            </tr>
-            <tr>
-              <td>A date string formatted as YYYY-MM-DD, MM/DD/YYYY, or MM/DD/YY</td>
-              <td>A positive or negative number in dollars. Both integers and floating point numbers are allowed</td>
-              <td>The text description of the payment</td>
-              <td>The text name of the payment's category</td>
-            </tr>
-          </table>
+          <Table className='importDataTable'>
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  <CopyContainer value='paymentDate' toolTipPlacement='right' />
+                </TableCell>
+                <TableCell>
+                  <CopyContainer value='amount' toolTipPlacement='right' />
+                </TableCell>
+                <TableCell>
+                  <CopyContainer value='description' toolTipPlacement='right'/>
+                </TableCell>
+                <TableCell>
+                  <CopyContainer value='categoryName' toolTipPlacement='right' />
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell>A date string formatted as YYYY-MM-DD, MM/DD/YYYY, or MM/DD/YY</TableCell>
+                <TableCell>A positive or negative number in dollars. Both integers and floating point numbers are allowed</TableCell>
+                <TableCell>The text description of the payment</TableCell>
+                <TableCell>The text name of the payment's category</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
           <p>To import new data into the database, go to File &gt; Import Data and the import utility will open. Press the Choose File button to open a file section prompt. Select the CSV file from the file system. Press import. If there are any problems during import, an error message will be displayed in the import utility</p>
         </CardContent>
       </Card>

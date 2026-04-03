@@ -20,6 +20,7 @@ import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
 import TableSortLabel from '@mui/material/TableSortLabel'
 
+import CopyContainer from '../components/CopyContainer'
 import ExpenesesFilterDialog from '../components/ExpensesFilterDialog'
 import Expense from '../components/Expense'
 
@@ -139,7 +140,9 @@ export default function Expenses(): React.JSX.Element {
   const expenseRows = visibleRows.map(exp => (
     <TableRow key={exp.id}>
       <TableCell>{exp.description}</TableCell>
-      <TableCell>{exp.category}</TableCell>
+      <TableCell>
+        <CopyContainer value={exp.category} toolTipPlacement='left' />
+      </TableCell>
       <TableCell>{formatAmount(exp.amount)}</TableCell>
       <TableCell>{formatDateYYYYMMDD(exp.date)}</TableCell>
     </TableRow>
@@ -147,7 +150,7 @@ export default function Expenses(): React.JSX.Element {
 
   return (
     <>
-      <Grid container sx={{ alignItems: 'center' }}>
+      <Grid className='ExpensesPageHeader' container>
         <Grid size={{ xs: 4 }}>
           <h1>Expenses</h1>
         </Grid>
