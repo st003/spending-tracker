@@ -14,8 +14,11 @@ import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
+import FormGroup from '@mui/material/FormGroup'
+import FormControlLabel from '@mui/material/FormControlLabel'
 import Grid from '@mui/material/Grid'
 import IconButton from '@mui/material/IconButton'
+import Switch from '@mui/material/Switch'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -45,22 +48,26 @@ import type { ExpenseProperty, OrderByDirection } from '../types'
 const LABELS: ExpenseProperty[] = ['description', 'category', 'amount', 'date']
 
 interface FilterDialogProps {
-  monthSelection: string;
   open: boolean;
   setOpen: (value: boolean) => void;
-  monthInputValue: string;
-  setMonthInputValue: React.Dispatch<React.SetStateAction<string>>;
-  handleApply: (newMonthSelection: string) => void;
+  month: string;
+  monthInput: string;
+  setMonthInput: React.Dispatch<React.SetStateAction<string>>;
+  showIncome: boolean;
+  showIncomeToggle: boolean;
+  setShowIncomeToggle: React.Dispatch<React.SetStateAction<boolean>>;
+  handleApply: (newMonthSelection: string, newShowIncomeValue: boolean) => void;
 }
 
-function FilterDialog({ monthSelection, open, setOpen, monthInputValue, setMonthInputValue, handleApply }: FilterDialogProps) {
+function FilterDialog({ open, setOpen, month, monthInput, setMonthInput, showIncome, showIncomeToggle, setShowIncomeToggle, handleApply }: FilterDialogProps) {
 
   const handleMonthSelectionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMonthInputValue(event.target.value)
+    setMonthInput(event.target.value)
   }
 
   const handleClose = () => {
-    setMonthInputValue(monthSelection)
+    setMonthInput(month)
+    setShowIncomeToggle(showIncome)
     setOpen(false)
   }
 
@@ -72,17 +79,28 @@ function FilterDialog({ monthSelection, open, setOpen, monthInputValue, setMonth
     >
       <DialogTitle>Filter Settings</DialogTitle>
       <DialogContent className='ExpensesFilterDialogBody'>
-        <label>Month</label>
-        <div className='inputContainer'>
-          <input
-            type='month'
-            value={monthInputValue}
-            onChange={handleMonthSelectionChange}
+        <FormGroup>
+          <label>Month</label>
+          <div className='inputContainer'>
+            <input
+              type='month'
+              value={monthInput}
+              onChange={handleMonthSelectionChange}
+            />
+          </div>
+          <FormControlLabel
+            label='Show Income'
+            control={
+              <Switch
+                checked={showIncomeToggle}
+                onChange={() => setShowIncomeToggle(!showIncomeToggle)}
+              />
+            }
           />
-        </div>
+        </FormGroup>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => handleApply(monthInputValue)}>Apply</Button>
+        <Button onClick={() => handleApply(monthInput, showIncomeToggle)}>Apply</Button>
         <Button onClick={handleClose}>Close</Button>
       </DialogActions>
     </Dialog>
@@ -91,15 +109,20 @@ function FilterDialog({ monthSelection, open, setOpen, monthInputValue, setMonth
 
 export default function Expenses(): React.JSX.Element {
 
-  const [monthSelection, setMonthSelection] = useState(getLastMonth())
-  const [expenseMonthLabel, setExpenseMonthLabel] = useState(formatMonthLabel(monthSelection))
-  const [showExpenseFilterSettings, setShowExpenseFilterSettings] = useState(false)
-  const [monthInputValue, setMonthInputValue] = useState(monthSelection)
+  const [month, setMonth] = useState(getLastMonth())
+  const [showIncome, setShowIncome] = useState(false)
   const [expenses, setExpenses] = useState<Expense[]>([])
+
+  const [expenseMonthLabel, setExpenseMonthLabel] = useState(formatMonthLabel(month))
+  const [showExpenseFilterSettings, setShowExpenseFilterSettings] = useState(false)
+
+  const [monthInput, setMonthInput] = useState(month)
+  const [showIncomeToggle, setShowIncomeToggle] = useState(showIncome)
+
   const [orderByProperty, setOrderByProperty] = useState<ExpenseProperty>('date')
   const [orderByDirection, setOrderByDirection] = useState<OrderByDirection>('desc')
 
-  const applyExpenseFilters = async (newMonthSelection: string) => {
+  const applyExpenseFilters = async (newMonthSelection: string, newShowIncomeValue: boolean) => {
     try {
       const expenses: Expense[] = await window.electronAPI.getExpensesForMonth(newMonthSelection)
       setExpenses(expenses)
@@ -107,25 +130,26 @@ export default function Expenses(): React.JSX.Element {
       log.log(error)
       setExpenses([])
     } finally {
-      setMonthSelection(newMonthSelection)
+      setMonth(newMonthSelection)
+      setShowIncome(newShowIncomeValue)
       setExpenseMonthLabel(formatMonthLabel(newMonthSelection))
       setShowExpenseFilterSettings(false)
     }
   }
 
   const changeMonth = async (n: number) => {
-    const d = new Date(monthSelection)
+    const d = new Date(month)
     d.setUTCMonth(d.getUTCMonth() + n)
     const newMonth = d.toISOString().slice(0, 7)
-    setMonthInputValue(newMonth)
-    await applyExpenseFilters(newMonth)
+    setMonthInput(newMonth)
+    await applyExpenseFilters(newMonth, showIncomeToggle)
   }
 
   // get initial data
   useEffect(() => {
     (async () => {
       try {
-        const expenses: Expense[] = await window.electronAPI.getExpensesForMonth(monthSelection)
+        const expenses: Expense[] = await window.electronAPI.getExpensesForMonth(month)
         setExpenses(expenses)
       } catch (error) {
         log.log(error)
@@ -227,11 +251,14 @@ export default function Expenses(): React.JSX.Element {
           <Expense data={expenseData} />
         </CardContent>
         <FilterDialog
-          monthSelection={monthSelection}
           open={showExpenseFilterSettings}
           setOpen={setShowExpenseFilterSettings}
-          monthInputValue={monthInputValue}
-          setMonthInputValue={setMonthInputValue}
+          month={month}
+          monthInput={monthInput}
+          setMonthInput={setMonthInput}
+          showIncome={showIncome}
+          showIncomeToggle={showIncomeToggle}
+          setShowIncomeToggle={setShowIncomeToggle}
           handleApply={applyExpenseFilters}
         />
       </Card>
