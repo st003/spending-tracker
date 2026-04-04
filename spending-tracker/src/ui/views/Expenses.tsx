@@ -199,6 +199,7 @@ export default function Expenses(): React.JSX.Element {
     setPageNumber(0)
   };
 
+  // TODO: update to return income
   const expenseData = useMemo(() => getTotalExpensesByCategory(expenses), [expenses])
 
   // controls the data to be displayed in the table
@@ -216,7 +217,8 @@ export default function Expenses(): React.JSX.Element {
       <TableCell>
         <CopyContainer value={exp.category} toolTipPlacement='left' />
       </TableCell>
-      <TableCell>{formatAmount(exp.amount)}</TableCell>
+      {/* TODO: color code +/-. New component? */}
+      <TableCell>{formatAmount(exp.amount, showIncome)}</TableCell>
       <TableCell>{formatDateYYYYMMDD(exp.date)}</TableCell>
     </TableRow>
   ))

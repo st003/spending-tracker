@@ -41,11 +41,22 @@ export function formatMonthLabel(date: string): string {
  * 10000 => '$100.00'
  *
  * @param value The number of cents
+ * @param signed Controls display of +/- signs
  * @returns String representation of the dollar amount
  */
-export function formatAmount(value: number): string {
-  const dollars = Math.abs(value / 100)
-  return `$${dollars.toFixed(2)}`
+export function formatAmount(value: number, signed: boolean): string {
+
+  if (signed) {
+    if (value > 0) {
+      return `+ $${(value / 100).toFixed(2)}`
+    } else {
+      const abs = Math.abs(value / 100)
+      return `- $${abs.toFixed(2)}`
+    }
+  }
+
+  const abs = Math.abs(value / 100)
+  return `$${abs.toFixed(2)}`
 }
 
 /**

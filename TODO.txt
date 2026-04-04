@@ -2,7 +2,6 @@
 -----
 Add: Optionally display income on expenses page table
 - color code and +/- the amounts
-- filter options in modal
 - seperate charts for income
 
 1.2.0+
