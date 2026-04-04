@@ -18,7 +18,6 @@ import Grid from '@mui/material/Grid'
 import IconButton from '@mui/material/IconButton'
 
 import Expense from '../components/Expense'
-import ExpensesFilterDialog from '../components/ExpensesFilterDialog'
 import NetIncome from '../components/NetIncome'
 
 import { getExpensesCategoriesForMonth } from '../data'
@@ -147,6 +146,51 @@ function NetIncomeByMonth(): React.JSX.Element {
         </DialogActions>
       </Dialog>
     </Card>
+  )
+}
+
+interface ExpensesFilterDialogProps {
+  monthSelection: string;
+  open: boolean;
+  setOpen: (value: boolean) => void;
+  monthInputValue: string;
+  setMonthInputValue: React.Dispatch<React.SetStateAction<string>>;
+  handleApply: (newMonthSelection: string) => void;
+}
+
+function ExpensesFilterDialog({ monthSelection, open, setOpen, monthInputValue, setMonthInputValue, handleApply }: ExpensesFilterDialogProps) {
+
+  const handleMonthSelectionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMonthInputValue(event.target.value)
+  }
+
+  const handleClose = () => {
+    setMonthInputValue(monthSelection)
+    setOpen(false)
+  }
+
+  return (
+    <Dialog
+      fullWidth
+      maxWidth='xs'
+      open={open}
+    >
+      <DialogTitle>Filter Settings</DialogTitle>
+      <DialogContent className='ExpensesFilterDialogBody'>
+        <label>Month</label>
+        <div className='inputContainer'>
+          <input
+            type='month'
+            value={monthInputValue}
+            onChange={handleMonthSelectionChange}
+          />
+        </div>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => handleApply(monthInputValue)}>Apply</Button>
+        <Button onClick={handleClose}>Close</Button>
+      </DialogActions>
+    </Dialog>
   )
 }
 
@@ -336,7 +380,6 @@ function NetIncomeByYear(): React.JSX.Element {
 }
 
 export default function Dashboard(): React.JSX.Element {
-
   return (
     <div className='dashboard'>
       <h1 style={{ marginBottom: '1rem' }}>Dashboard</h1>

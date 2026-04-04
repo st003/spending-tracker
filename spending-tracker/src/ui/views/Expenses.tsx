@@ -6,9 +6,14 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 
+import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogTitle from '@mui/material/DialogTitle'
 import Grid from '@mui/material/Grid'
 import IconButton from '@mui/material/IconButton'
 import Table from '@mui/material/Table'
@@ -21,7 +26,6 @@ import TableRow from '@mui/material/TableRow'
 import TableSortLabel from '@mui/material/TableSortLabel'
 
 import CopyContainer from '../components/CopyContainer'
-import ExpenesesFilterDialog from '../components/ExpensesFilterDialog'
 import Expense from '../components/Expense'
 
 import {
@@ -39,6 +43,51 @@ import '../styles/Expenses.css'
 import type { ExpenseProperty, OrderByDirection } from '../types'
 
 const LABELS: ExpenseProperty[] = ['description', 'category', 'amount', 'date']
+
+interface FilterDialogProps {
+  monthSelection: string;
+  open: boolean;
+  setOpen: (value: boolean) => void;
+  monthInputValue: string;
+  setMonthInputValue: React.Dispatch<React.SetStateAction<string>>;
+  handleApply: (newMonthSelection: string) => void;
+}
+
+function FilterDialog({ monthSelection, open, setOpen, monthInputValue, setMonthInputValue, handleApply }: FilterDialogProps) {
+
+  const handleMonthSelectionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMonthInputValue(event.target.value)
+  }
+
+  const handleClose = () => {
+    setMonthInputValue(monthSelection)
+    setOpen(false)
+  }
+
+  return (
+    <Dialog
+      fullWidth
+      maxWidth='xs'
+      open={open}
+    >
+      <DialogTitle>Filter Settings</DialogTitle>
+      <DialogContent className='ExpensesFilterDialogBody'>
+        <label>Month</label>
+        <div className='inputContainer'>
+          <input
+            type='month'
+            value={monthInputValue}
+            onChange={handleMonthSelectionChange}
+          />
+        </div>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => handleApply(monthInputValue)}>Apply</Button>
+        <Button onClick={handleClose}>Close</Button>
+      </DialogActions>
+    </Dialog>
+  )
+}
 
 export default function Expenses(): React.JSX.Element {
 
@@ -177,7 +226,7 @@ export default function Expenses(): React.JSX.Element {
         <CardContent>
           <Expense data={expenseData} />
         </CardContent>
-        <ExpenesesFilterDialog
+        <FilterDialog
           monthSelection={monthSelection}
           open={showExpenseFilterSettings}
           setOpen={setShowExpenseFilterSettings}
