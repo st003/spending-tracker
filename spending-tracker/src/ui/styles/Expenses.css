@@ -27,6 +27,18 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
+.AmountCellPos, .AmountCellNeg {
+    font-weight: 700;
+}
+
+.AmountCellPos {
+    color: #a3de83;
+}
+
+.AmountCellNeg {
+    color: #ff5d6e;
+}
+
 .ExpenseTablePagination p {
     margin-bottom: 0;
 }

@@ -107,6 +107,23 @@ function FilterDialog({ open, setOpen, month, monthInput, setMonthInput, showInc
   )
 }
 
+interface AmountCellProps {
+  amount: number;
+  signed: boolean;
+}
+
+function AmountCell({ amount, signed }: AmountCellProps): React.JSX.Element {
+
+  let color = ''
+  if (signed) color = (amount > 0) ? 'AmountCellPos' : 'AmountCellNeg'
+
+  const value = formatAmount(amount, signed)
+
+  return (
+    <span className={color}>{value}</span>
+  )
+}
+
 export default function Expenses(): React.JSX.Element {
 
   const [month, setMonth] = useState(getLastMonth())
@@ -217,8 +234,9 @@ export default function Expenses(): React.JSX.Element {
       <TableCell>
         <CopyContainer value={exp.category} toolTipPlacement='left' />
       </TableCell>
-      {/* TODO: color code +/-. New component? */}
-      <TableCell>{formatAmount(exp.amount, showIncome)}</TableCell>
+      <TableCell>
+        <AmountCell amount={exp.amount} signed={showIncome} />
+      </TableCell>
       <TableCell>{formatDateYYYYMMDD(exp.date)}</TableCell>
     </TableRow>
   ))
@@ -265,7 +283,7 @@ export default function Expenses(): React.JSX.Element {
         />
       </Card>
       <Card variant='outlined'>
-        <CardHeader title='Items' />
+        <CardHeader title='Transactions' />
         <CardContent>
           <TableContainer sx={{ marginBottom: '1rem' }}>
             <Table size='small'>
