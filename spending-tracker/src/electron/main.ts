@@ -5,7 +5,7 @@ import log from 'electron-log/main.js'
 
 import { getPreloadScriptPath, initLogger, initMenu } from './setup.js'
 import { initDatabase } from './db/index.js'
-import { getExpensesForMonth } from './services/expenses.js'
+import { getExpensesForMonth, getPaymentsForMonth } from './services/payments.js'
 import { importData, selectImportFile } from './services/importer.js'
 import { getNetIncome } from './services/netIncome.js'
 
@@ -57,6 +57,15 @@ async function createWindow() {
   ipcMain.handle('getNetIncome', async (_, range: NetIncomeRange, start: string, end: string) => {
     try {
       return await getNetIncome(range, start, end)
+    } catch (error) {
+      log.error(error)
+      return []
+    }
+  })
+
+  ipcMain.handle('getPaymentsForMonth', async (_, isoYYYYMM: string) => {
+    try {
+      return await getPaymentsForMonth(isoYYYYMM)
     } catch (error) {
       log.error(error)
       return []

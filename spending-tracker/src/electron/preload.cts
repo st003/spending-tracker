@@ -25,5 +25,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   import: () => ipcRenderer.invoke('import'),
   // chart data
   getExpensesForMonth: (isoYYYYMM: string) => ipcRenderer.invoke('getExpensesForMonth', isoYYYYMM),
-  getNetIncome: (range: 'month'|'year', start: string, end: string) => ipcRenderer.invoke('getNetIncome', range, start, end)
+  getNetIncome: (range: 'month'|'year', start: string, end: string) => ipcRenderer.invoke('getNetIncome', range, start, end),
+  getPaymentsForMonth: (isoYYYYMM: string) => ipcRenderer.invoke('getPaymentsForMonth', isoYYYYMM)
 })

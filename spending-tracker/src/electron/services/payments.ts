@@ -33,7 +33,57 @@ function getMonthRange(isoYYYYMM: string): string[] {
 }
 
 /**
- * Returns the all payments from a given month who's amount is negative
+ * Returns the all payments for a given month
+ *
+ * @param month An ISO 8601 date string formatted as YYYY-MM
+ * @returns An array of Expense objects
+ */
+export function getPaymentsForMonth(month: string): Promise<Expense[]> {
+  return new Promise((resolve, reject) => {
+
+    const db = new sqlite3.Database(DB, error => {
+      if (error) reject(error)
+    })
+
+    const sql = `
+      SELECT
+        P.id,
+        P.description,
+        P.amount,
+        P.payment_date,
+        C.name AS category_name
+      FROM Payments P
+      JOIN Categories C ON C.id = P.category_id
+      WHERE P.payment_date >= ?
+      AND P.payment_date < ?
+    `
+
+    const params = getMonthRange(month)
+
+    db.all(sql, params, (error, rows: ExpenseDBRow[]) => {
+
+      if (error) {
+        db.close()
+        reject(error)
+
+      } else {
+        const expenses = rows.map(row => ({
+          id: row.id,
+          description: row.description,
+          category: row.category_name,
+          amount: row.amount,
+          date: new Date(row.payment_date)
+        }))
+
+        db.close()
+        resolve(expenses)
+      }
+    })
+  })
+}
+
+/**
+ * Returns the all payments for a given month who's amount is negative
  *
  * @param month An ISO 8601 date string formatted as YYYY-MM
  * @returns An array of Expense objects

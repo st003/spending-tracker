@@ -19,6 +19,7 @@ interface Window {
     selectImportFile: () => Promise<string>,
     import: () => Promise<{ error: boolean, message: string }>,
     getExpensesForMonth: (isoYYYYMM: string) => Promise<Expense[]>,
-    getNetIncome: (range: 'month'|'year', start: string, end: string) => Promise<NetIncome[]>
+    getNetIncome: (range: 'month'|'year', start: string, end: string) => Promise<NetIncome[]>,
+    getPaymentsForMonth: (isoYYYYMM: string) => Promise<Expense[]>
   }
 }
