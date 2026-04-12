@@ -2,7 +2,8 @@ import sqlite3 from 'sqlite3'
 
 import { DB } from '../db/index.js'
 
-import type { Expense, ExpenseDBRow, NetIncome, NetIncomeRange } from '../types.js'
+import type { NetIncomeRange } from '../types.js'
+import type { PaymentDB } from '../db/types.js'
 
 type NetIncomeBucket = {
   [key: string]: NetIncome
@@ -15,7 +16,7 @@ type NetIncomeBucket = {
  * @param expenses An array of Expenses
  * @returns An array of NetIncomes
  */
-export function getNetIncomeMonths(expenses: Expense[]): NetIncome[] {
+export function getNetIncomeMonths(expenses: Payment[]): NetIncome[] {
 
   const months: NetIncomeBucket = {}
 
@@ -82,7 +83,7 @@ function getNetIncomeRangeLabelMonth(date: Date): string {
  * @param expenses An array of Expenses
  * @returns An array of NetIncomes
  */
-export function getNetIncomesYear(expenses: Expense[]): NetIncome[] {
+export function getNetIncomesYear(expenses: Payment[]): NetIncome[] {
 
   const years: NetIncomeBucket = {}
 
@@ -153,22 +154,22 @@ export function getNetIncome(range: NetIncomeRange, start: string, end: string):
     const startDate = new Date(start).toISOString().slice(0, 10)
     const endDate = new Date(end).toISOString().slice(0, 10)
 
-    db.all(sql, [startDate, endDate], (error, rows: ExpenseDBRow[]) => {
+    db.all(sql, [startDate, endDate], (error, rows: PaymentDB[]) => {
 
       if (error) {
         db.close()
         reject(error)
 
       } else {
-        const expenses = rows.map(row => ({
+        const payments: Payment[] = rows.map(row => ({
           id: row.id,
           amount: row.amount,
           date: new Date(row.payment_date)
         }))
 
         let netIncomes: NetIncome[] = []
-        if (range === 'month') netIncomes = getNetIncomeMonths(expenses)
-        if (range === 'year') netIncomes = getNetIncomesYear(expenses)
+        if (range === 'month') netIncomes = getNetIncomeMonths(payments)
+        if (range === 'year') netIncomes = getNetIncomesYear(payments)
 
         db.close()
         resolve(netIncomes)

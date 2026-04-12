@@ -3,10 +3,10 @@ import { blueberryTwilightPalette } from '@mui/x-charts/colorPalettes';
 
 import { formatAmount } from '../utils'
 
-import type { ExpenseCategory } from '../types'
+import type { PaymentCategory } from '../types'
 
 type ExpenseProps = {
-  data: ExpenseCategory[];
+  data: PaymentCategory[];
 }
 
 export default function Expense({ data }: ExpenseProps) {

@@ -1,4 +1,4 @@
-import type { Categories, ExpenseCategory, ExpenseProperty } from './types'
+import type { Categories, PaymentCategory, PaymentProperty } from './types'
 
 /**
  * Takes a word and capitalizes the first letter
@@ -77,7 +77,7 @@ export function getLastMonth(): string {
  * @param expenses expenses to be summed by category
  * @returns An array of categories and their total expenses
  */
-export function getTotalExpensesByCategory(expenses: Expense[]): ExpenseCategory[] {
+export function getTotalExpensesByCategory(expenses: Payment[]): PaymentCategory[] {
 
   const categories: Categories = {}
 
@@ -89,7 +89,7 @@ export function getTotalExpensesByCategory(expenses: Expense[]): ExpenseCategory
     }
   }
 
-  const expenseCategories: ExpenseCategory[] = []
+  const expenseCategories: PaymentCategory[] = []
   for (const k in categories) {
     expenseCategories.push({ label: k, value: categories[k] })
   }
@@ -106,7 +106,7 @@ export function getTotalExpensesByCategory(expenses: Expense[]): ExpenseCategory
  * @param b The compare object
  * @returns -1, 0, 1
  */
-export function sortExpenseData(property: ExpenseProperty, direction: string, a: Expense, b: Expense, ): number {
+export function sortExpenseData(property: PaymentProperty, direction: string, a: Payment, b: Payment, ): number {
 
   if (direction === 'asc') {
     if (a[property] < b[property]) return -1

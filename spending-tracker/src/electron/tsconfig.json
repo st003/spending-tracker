@@ -5,5 +5,8 @@
     "module": "NodeNext",
     "outDir": "../../dist-electron",
     "skipLibCheck": true
-  }
+  },
+  "include": [
+    "../../types.d.ts"
+  ]
 }

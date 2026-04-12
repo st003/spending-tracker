@@ -1,7 +1,7 @@
-type Expense = {
+type Payment = {
   id: number;
-  description: string;
-  category: string;
+  description?: string;
+  category?: string;
   amount: number;
   date: Date;
 }
@@ -18,8 +18,8 @@ interface Window {
     openImporter: (callback: (value: true) => void) => void,
     selectImportFile: () => Promise<string>,
     import: () => Promise<{ error: boolean, message: string }>,
-    getExpensesForMonth: (isoYYYYMM: string) => Promise<Expense[]>,
+    getExpensesForMonth: (isoYYYYMM: string) => Promise<Payment[]>,
     getNetIncome: (range: 'month'|'year', start: string, end: string) => Promise<NetIncome[]>,
-    getPaymentsForMonth: (isoYYYYMM: string) => Promise<Expense[]>
+    getPaymentsForMonth: (isoYYYYMM: string) => Promise<Payment[]>
   }
 }

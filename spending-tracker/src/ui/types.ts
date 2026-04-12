@@ -2,12 +2,12 @@ export type Categories = {
   [key: string]: number
 }
 
-export type ExpenseCategory = {
+export type PaymentCategory = {
   label: string;
   value: number;
 }
 
-export type ExpenseProperty = 'id'|'description'|'category'|'amount'|'date'
+export type PaymentProperty = 'id'|'description'|'category'|'amount'|'date'
 
 export type IncomeExpense = {
   income: number[];

@@ -25,7 +25,7 @@ import { formatMonthLabel, getLastMonth } from '../utils'
 
 import '../styles/Dashboard.css'
 
-import type { ExpenseCategory, IncomeExpense } from '../types'
+import type { PaymentCategory, IncomeExpense } from '../types'
 
 function NetIncomeByMonth(): React.JSX.Element {
 
@@ -198,7 +198,7 @@ function ExpensesByMonth(): React.JSX.Element {
 
   const [monthSelection, setMonthSelection] = useState(getLastMonth())
   const [expenseMonthLabel, setExpenseMonthLabel] = useState(formatMonthLabel(monthSelection))
-  const [expenseData, setExpenseData] = useState<ExpenseCategory[]>([])
+  const [expenseData, setExpenseData] = useState<PaymentCategory[]>([])
   const [showExpenseFilterSettings, setShowExpenseFilterSettings] = useState(false)
   const [monthInputValue, setMonthInputValue] = useState(monthSelection)
 

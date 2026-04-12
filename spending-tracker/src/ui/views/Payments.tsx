@@ -43,9 +43,9 @@ import {
 
 import '../styles/Payments.css'
 
-import type { ExpenseProperty, OrderByDirection } from '../types'
+import type { PaymentProperty, OrderByDirection } from '../types'
 
-const LABELS: ExpenseProperty[] = ['description', 'category', 'amount', 'date']
+const LABELS: PaymentProperty[] = ['description', 'category', 'amount', 'date']
 
 interface FilterDialogProps {
   open: boolean;
@@ -128,7 +128,7 @@ export default function Payments(): React.JSX.Element {
 
   const [month, setMonth] = useState(getLastMonth())
   const [showIncome, setShowIncome] = useState(false)
-  const [payments, setPayments] = useState<Expense[]>([])
+  const [payments, setPayments] = useState<Payment[]>([])
 
   const [paymentsMonthLabel, setPaymentsMonthLabel] = useState(formatMonthLabel(month))
   const [showPaymentsFilterSettings, setShowPaymentsFilterSettings] = useState(false)
@@ -136,12 +136,12 @@ export default function Payments(): React.JSX.Element {
   const [monthInput, setMonthInput] = useState(month)
   const [showIncomeToggle, setShowIncomeToggle] = useState(showIncome)
 
-  const [orderByProperty, setOrderByProperty] = useState<ExpenseProperty>('date')
+  const [orderByProperty, setOrderByProperty] = useState<PaymentProperty>('date')
   const [orderByDirection, setOrderByDirection] = useState<OrderByDirection>('desc')
 
   const applyPaymentsFilters = async (newMonthSelection: string, newShowIncomeValue: boolean) => {
     try {
-      const payments: Expense[] = await window.electronAPI.getExpensesForMonth(newMonthSelection)
+      const payments: Payment[] = await window.electronAPI.getExpensesForMonth(newMonthSelection)
       setPayments(payments)
     } catch (error) {
       log.log(error)
@@ -166,7 +166,7 @@ export default function Payments(): React.JSX.Element {
   useEffect(() => {
     (async () => {
       try {
-        const payments: Expense[] = await window.electronAPI.getExpensesForMonth(month)
+        const payments: Payment[] = await window.electronAPI.getExpensesForMonth(month)
         setPayments(payments)
       } catch (error) {
         log.log(error)
@@ -177,7 +177,7 @@ export default function Payments(): React.JSX.Element {
 
   // item table headers
 
-  function handleOrderBy(_: React.MouseEvent, label: ExpenseProperty) {
+  function handleOrderBy(_: React.MouseEvent, label: PaymentProperty) {
     if (orderByProperty !== label) {
       setOrderByProperty(label)
       setOrderByDirection('desc')

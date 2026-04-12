@@ -2,7 +2,7 @@ import sqlite3 from 'sqlite3'
 
 import { DB } from '../db/index.js'
 
-import type { Expense, ExpenseDBRow } from '../types.js'
+import type { PaymentDB } from '../db/types.js'
 
 /**
  * Takes an ISO 8601 string formatted as YYYY-MM and returns an array with two
@@ -38,7 +38,7 @@ function getMonthRange(isoYYYYMM: string): string[] {
  * @param month An ISO 8601 date string formatted as YYYY-MM
  * @returns An array of Expense objects
  */
-export function getPaymentsForMonth(month: string): Promise<Expense[]> {
+export function getPaymentsForMonth(month: string): Promise<Payment[]> {
   return new Promise((resolve, reject) => {
 
     const db = new sqlite3.Database(DB, error => {
@@ -60,14 +60,14 @@ export function getPaymentsForMonth(month: string): Promise<Expense[]> {
 
     const params = getMonthRange(month)
 
-    db.all(sql, params, (error, rows: ExpenseDBRow[]) => {
+    db.all(sql, params, (error, rows: PaymentDB[]) => {
 
       if (error) {
         db.close()
         reject(error)
 
       } else {
-        const expenses = rows.map(row => ({
+        const payments: Payment[] = rows.map(row => ({
           id: row.id,
           description: row.description,
           category: row.category_name,
@@ -76,7 +76,7 @@ export function getPaymentsForMonth(month: string): Promise<Expense[]> {
         }))
 
         db.close()
-        resolve(expenses)
+        resolve(payments)
       }
     })
   })
@@ -88,7 +88,7 @@ export function getPaymentsForMonth(month: string): Promise<Expense[]> {
  * @param month An ISO 8601 date string formatted as YYYY-MM
  * @returns An array of Expense objects
  */
-export function getExpensesForMonth(month: string): Promise<Expense[]> {
+export function getExpensesForMonth(month: string): Promise<Payment[]> {
   return new Promise((resolve, reject) => {
 
     const db = new sqlite3.Database(DB, error => {
@@ -111,14 +111,14 @@ export function getExpensesForMonth(month: string): Promise<Expense[]> {
 
     const params = getMonthRange(month)
 
-    db.all(sql, params, (error, rows: ExpenseDBRow[]) => {
+    db.all(sql, params, (error, rows: PaymentDB[]) => {
 
       if (error) {
         db.close()
         reject(error)
 
       } else {
-        const expenses = rows.map(row => ({
+        const expenses: Payment[] = rows.map(row => ({
           id: row.id,
           description: row.description,
           category: row.category_name,
