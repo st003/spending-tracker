@@ -17,11 +17,10 @@ import DialogTitle from '@mui/material/DialogTitle'
 import Grid from '@mui/material/Grid'
 import IconButton from '@mui/material/IconButton'
 
-import Expense from '../components/Expense'
+import PaymentCategoryPieChartProps from '../components/PaymentCategoryPieChartProps'
 import NetIncome from '../components/NetIncome'
 
-import { getExpensesCategoriesForMonth } from '../data'
-import { formatMonthLabel, getLastMonth } from '../utils'
+import { formatMonthLabel, getLastMonth, getSumOfPaymentsByCategory } from '../utils'
 
 import '../styles/Dashboard.css'
 
@@ -198,16 +197,26 @@ function ExpensesByMonth(): React.JSX.Element {
 
   const [monthSelection, setMonthSelection] = useState(getLastMonth())
   const [expenseMonthLabel, setExpenseMonthLabel] = useState(formatMonthLabel(monthSelection))
-  const [expenseData, setExpenseData] = useState<PaymentCategory[]>([])
+  const [expenseCategoryData, setExpenseCategoryData] = useState<PaymentCategory[]>([])
   const [showExpenseFilterSettings, setShowExpenseFilterSettings] = useState(false)
   const [monthInputValue, setMonthInputValue] = useState(monthSelection)
+
+  const getExpensesCategoriesForMonth = async (window: Window, monthSelection: string): Promise<PaymentCategory[]> => {
+    try {
+      const expenses: Payment[] = await window.electronAPI.getExpensesForMonth(monthSelection)
+      return getSumOfPaymentsByCategory(expenses)
+    } catch (error) {
+      log.error(error)
+      return []
+    }
+  }
 
   const applyExpenseFilters = async (newMonthSelection: string) => {
     setMonthSelection(newMonthSelection)
     setExpenseMonthLabel(formatMonthLabel(newMonthSelection))
     setShowExpenseFilterSettings(false)
     const categories = await getExpensesCategoriesForMonth(window, newMonthSelection)
-    setExpenseData(categories)
+    setExpenseCategoryData(categories)
   }
 
   const changeMonth = async (n: number) => {
@@ -221,7 +230,7 @@ function ExpensesByMonth(): React.JSX.Element {
   useEffect(() => {
     (async () => {
       const categories = await getExpensesCategoriesForMonth(window, monthSelection)
-      setExpenseData(categories)
+      setExpenseCategoryData(categories)
     })()
   }, [])
 
@@ -245,7 +254,7 @@ function ExpensesByMonth(): React.JSX.Element {
           }
         />
         <CardContent>
-          <Expense data={expenseData} />
+          <PaymentCategoryPieChartProps data={expenseCategoryData} />
         </CardContent>
       </Card>
       <ExpensesFilterDialog

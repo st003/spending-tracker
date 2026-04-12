@@ -27,7 +27,7 @@ import TableRow from '@mui/material/TableRow'
 import TableSortLabel from '@mui/material/TableSortLabel'
 
 import CopyContainer from '../components/CopyContainer'
-import Expense from '../components/Expense'
+import PaymentCategoryPieChartProps from '../components/PaymentCategoryPieChartProps'
 
 import {
   capitalize,
@@ -35,7 +35,7 @@ import {
   formatMonthLabel,
   formatSignedAmount,
   getLastMonth,
-  getTotalExpensesByCategory,
+  getSumOfPaymentsByCategory,
   sortPaymentData
 } from '../utils'
 
@@ -46,12 +46,12 @@ import type { PaymentProperty, OrderByDirection } from '../types'
 const LABELS: PaymentProperty[] = ['description', 'category', 'amount', 'date']
 
 interface FilterDialogProps {
-  open: boolean;
-  setOpen: (value: boolean) => void;
-  month: string;
-  monthInput: string;
-  setMonthInput: React.Dispatch<React.SetStateAction<string>>;
-  handleApply: (newMonthSelection: string) => void;
+  open: boolean
+  setOpen: (value: boolean) => void
+  month: string
+  monthInput: string
+  setMonthInput: React.Dispatch<React.SetStateAction<string>>
+  handleApply: (newMonthSelection: string) => void
 }
 
 function FilterDialog({ open, setOpen, month, monthInput, setMonthInput, handleApply }: FilterDialogProps) {
@@ -93,7 +93,7 @@ function FilterDialog({ open, setOpen, month, monthInput, setMonthInput, handleA
 }
 
 interface AmountCellProps {
-  amount: number;
+  amount: number
 }
 
 function AmountCell({ amount }: AmountCellProps): React.JSX.Element {
@@ -106,18 +106,28 @@ export default function Payments(): React.JSX.Element {
 
   const [month, setMonth] = useState(getLastMonth())
   const [payments, setPayments] = useState<Payment[]>([])
-
   const [paymentsMonthLabel, setPaymentsMonthLabel] = useState(formatMonthLabel(month))
-  const [showPaymentsFilterSettings, setShowPaymentsFilterSettings] = useState(false)
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const payments: Payment[] = await window.electronAPI.getPaymentsForMonth(month)
+        setPayments(payments)
+      } catch (error) {
+        log.log(error)
+        setPayments([])
+      }
+    })()
+  }, [])
+
+  // filter dialog
+
+  const [showPaymentsFilterDialog, setShowPaymentsFilterDialog] = useState(false)
   const [monthInput, setMonthInput] = useState(month)
-
-  const [orderByProperty, setOrderByProperty] = useState<PaymentProperty>('date')
-  const [orderByDirection, setOrderByDirection] = useState<OrderByDirection>('desc')
 
   const applyPaymentsFilters = async (newMonthSelection: string) => {
     try {
-      const payments: Payment[] = await window.electronAPI.getExpensesForMonth(newMonthSelection)
+      const payments: Payment[] = await window.electronAPI.getPaymentsForMonth(newMonthSelection)
       setPayments(payments)
     } catch (error) {
       log.log(error)
@@ -125,7 +135,7 @@ export default function Payments(): React.JSX.Element {
     } finally {
       setMonth(newMonthSelection)
       setPaymentsMonthLabel(formatMonthLabel(newMonthSelection))
-      setShowPaymentsFilterSettings(false)
+      setShowPaymentsFilterDialog(false)
     }
   }
 
@@ -137,30 +147,19 @@ export default function Payments(): React.JSX.Element {
     await applyPaymentsFilters(newMonth)
   }
 
-  // get initial data
-  useEffect(() => {
-    (async () => {
-      try {
-        const payments: Payment[] = await window.electronAPI.getExpensesForMonth(month)
-        setPayments(payments)
-      } catch (error) {
-        log.log(error)
-        setPayments([])
-      }
-    })()
-  }, [])
+  // charts
 
-  // item table headers
+  const expenseData = useMemo(() => {
+    const expenses = payments.filter(p => p.amount < 0)
+    return getSumOfPaymentsByCategory(expenses)
+  }, [payments])
 
-  function handleOrderBy(_: React.MouseEvent, label: PaymentProperty) {
-    if (orderByProperty !== label) {
-      setOrderByProperty(label)
-      setOrderByDirection('desc')
-    } else {
-      const newOrderByDirection = (orderByDirection === 'desc') ? 'asc' : 'desc'
-      setOrderByDirection(newOrderByDirection)
-    }
-  }
+  // table
+
+  const [orderByProperty, setOrderByProperty] = useState<PaymentProperty>('date')
+  const [orderByDirection, setOrderByDirection] = useState<OrderByDirection>('desc')
+  const [pageNumber, setPageNumber] = useState(0)
+  const [rowsPerPage, setRowsPerPage] = useState(10)
 
   const itemTableHeaderCells = LABELS.map(label => (
     <TableCell
@@ -177,10 +176,15 @@ export default function Payments(): React.JSX.Element {
     </TableCell>
   ))
 
-  // item table rows
-
-  const [pageNumber, setPageNumber] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(10)
+  function handleOrderBy(_: React.MouseEvent, label: PaymentProperty) {
+    if (orderByProperty !== label) {
+      setOrderByProperty(label)
+      setOrderByDirection('desc')
+    } else {
+      const newOrderByDirection = (orderByDirection === 'desc') ? 'asc' : 'desc'
+      setOrderByDirection(newOrderByDirection)
+    }
+  }
 
   function handleChangePage(_: React.MouseEvent | null, newPageNumber: number) {
     setPageNumber(newPageNumber)
@@ -189,10 +193,7 @@ export default function Payments(): React.JSX.Element {
   function handleChangeRowsPerPage(event: React.ChangeEvent<HTMLInputElement>) {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPageNumber(0)
-  };
-
-  // TODO: update to return income
-  const paymentData = useMemo(() => getTotalExpensesByCategory(payments), [payments])
+  }
 
   // controls the data to be displayed in the table
   const visibleRows = useMemo(() => {
@@ -233,7 +234,7 @@ export default function Payments(): React.JSX.Element {
             <ArrowForwardIosIcon />
           </IconButton>
           <IconButton
-            onClick={() => setShowPaymentsFilterSettings(true)}
+            onClick={() => setShowPaymentsFilterDialog(true)}
             title='Open Filter Settings'
           >
             <MoreVertIcon />
@@ -241,13 +242,13 @@ export default function Payments(): React.JSX.Element {
         </Grid>
       </Grid>
       <Card variant='outlined' sx={{ mb: 2 }}>
-        <CardHeader title='Categories' />
+        <CardHeader title='Expenses' />
         <CardContent>
-          <Expense data={paymentData} />
+          <PaymentCategoryPieChartProps data={expenseData} />
         </CardContent>
         <FilterDialog
-          open={showPaymentsFilterSettings}
-          setOpen={setShowPaymentsFilterSettings}
+          open={showPaymentsFilterDialog}
+          setOpen={setShowPaymentsFilterDialog}
           month={month}
           monthInput={monthInput}
           setMonthInput={setMonthInput}

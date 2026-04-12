@@ -5,13 +5,13 @@ import { formatAmount } from '../utils'
 
 import type { PaymentCategory } from '../types'
 
-type ExpenseProps = {
+type PaymentCategoryPieChartProps = {
   data: PaymentCategory[];
 }
 
-export default function Expense({ data }: ExpenseProps) {
+export default function PaymentCategoryPieChart({ data }: PaymentCategoryPieChartProps) {
 
-  const expenseSeries = [
+  const paymentCategorySeries = [
     {
       cornerRadius: 5,
       data: data,
@@ -21,5 +21,5 @@ export default function Expense({ data }: ExpenseProps) {
     }
   ]
 
-  return <PieChart series={expenseSeries} colors={blueberryTwilightPalette} height={300} hideLegend />
+  return <PieChart series={paymentCategorySeries} colors={blueberryTwilightPalette} height={300} hideLegend />
 }

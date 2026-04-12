@@ -1,13 +1,14 @@
 1.1.0
 -----
 Add: Optionally display income on expenses page table
-- new function for getting all payment data
 - seperate charts for income
+Update: libs
 
 1.2.0+
 -----
 Global filter selection memory
 Category page
+Payment detail page
 Data export utility
 Darkmode
 Database

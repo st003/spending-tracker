@@ -78,17 +78,17 @@ export function getLastMonth(): string {
 }
 
 /**
- * Iterates an array of expenses and computes a sum of total expenses
- * by category.
+ * Iterates an array of Payments and computes a sum of total Payments
+ * by Category.
  *
- * @param expenses expenses to be summed by category
- * @returns An array of categories and their total expenses
+ * @param payments Payments to be summed by category
+ * @returns An array of categories and their total Payments
  */
-export function getTotalExpensesByCategory(expenses: Payment[]): PaymentCategory[] {
+export function getSumOfPaymentsByCategory(payments: Payment[]): PaymentCategory[] {
 
   const categories: Categories = {}
 
-  for (const exp of expenses) {
+  for (const exp of payments) {
     if (exp.category in categories) {
       categories[exp.category] += Math.abs(exp.amount)
     } else {
@@ -96,12 +96,12 @@ export function getTotalExpensesByCategory(expenses: Payment[]): PaymentCategory
     }
   }
 
-  const expenseCategories: PaymentCategory[] = []
+  const paymentCategories: PaymentCategory[] = []
   for (const k in categories) {
-    expenseCategories.push({ label: k, value: categories[k] })
+    paymentCategories.push({ label: k, value: categories[k] })
   }
 
-  return expenseCategories
+  return paymentCategories
 }
 
 /**
