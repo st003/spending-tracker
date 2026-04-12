@@ -18,7 +18,7 @@ export default function Documentation() {
       <Card sx={{ marginBottom: '1rem' }}>
         <CardHeader title='Introduction' />
         <CardContent>
-          <p>The Spending Tracker is an application for tracking income and expenses over time. Payments are tracked individually to aid in visualizing how expenses make up monthly expenditures. Chart filters allow for visualization of spending over user-defined ranges of time.</p>
+          <p>The Spending Tracker is an application for tracking income and expenses over time. Payments are tracked individually to aid in visualizing how income and expenses make up monthly expenditures. Chart filters allow for visualization of spending over user-defined ranges of time.</p>
         </CardContent>
       </Card>
       <Card sx={{ marginBottom: '1rem' }}>
@@ -34,13 +34,13 @@ export default function Documentation() {
         </CardContent>
       </Card>
       <Card sx={{ marginBottom: '1rem' }}>
-        <CardHeader title='Expenses' />
+        <CardHeader title='Payments' />
         <CardContent>
-          <p>The Expenses page displays detailed information about the expenses of a given month. By default, the page shows data for the previous month. The page is divided into 2 sections.</p>
+          <p>The Payments page displays detailed information about the income and expenses for a given month. By default, the page shows data for the previous month. The page is divided into 2 sections.</p>
           <h2>Categories</h2>
-          <p>Displays a donut chart of the given month's expenses. Hovering your mouse over each of the chart slices will display the name of the expense category as well as the sum of expenses in that category for the given month. Open the filter settings by pressing the icon in the upper right corner. From here you can select the month for which to display expense data.</p>
-          <h2>Expenses</h2>
-          <p>Displays a table of expenses for the given month. Press on the table heading labels to sort expense data. By default, expenses are sorted from most newest to oldest.</p>
+          <p>Displays a donut chart of the given month's expenses. Hovering your mouse over each of the chart slices will display the name of the payment's category as well as the sum of expenses in that category for the given month. Use the filter controls in the upper right corner of the page to change the selected month.</p>
+          <h2>Items</h2>
+          <p>Displays a table of payments for the given month. Press on the table heading labels to sort payment items. By default, payments are sorted from most newest to oldest.</p>
         </CardContent>
       </Card>
       <Card sx={{ marginBottom: '1rem' }}>

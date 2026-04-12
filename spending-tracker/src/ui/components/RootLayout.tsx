@@ -50,9 +50,9 @@ export default function RootLayout() {
               icon={<BarChartIcon />}
               onClick={() => navigate('/dashboard')} />
             <BottomNavigationAction
-              label='Expenses'
+              label='Payments'
               icon={<PieChartIcon />}
-              onClick={() => navigate('/expenses')} />
+              onClick={() => navigate('/payments')} />
           </BottomNavigation>
         </footer>
       </div>

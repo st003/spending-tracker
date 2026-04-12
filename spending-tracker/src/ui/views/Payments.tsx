@@ -41,7 +41,7 @@ import {
   sortExpenseData
 } from '../utils'
 
-import '../styles/Expenses.css'
+import '../styles/Payments.css'
 
 import type { ExpenseProperty, OrderByDirection } from '../types'
 
@@ -78,7 +78,7 @@ function FilterDialog({ open, setOpen, month, monthInput, setMonthInput, showInc
       open={open}
     >
       <DialogTitle>Filter Settings</DialogTitle>
-      <DialogContent className='ExpensesFilterDialogBody'>
+      <DialogContent className='PaymentsFilterDialogBody'>
         <FormGroup>
           <label>Month</label>
           <div className='inputContainer'>
@@ -124,14 +124,14 @@ function AmountCell({ amount, signed }: AmountCellProps): React.JSX.Element {
   )
 }
 
-export default function Expenses(): React.JSX.Element {
+export default function Payments(): React.JSX.Element {
 
   const [month, setMonth] = useState(getLastMonth())
   const [showIncome, setShowIncome] = useState(false)
-  const [expenses, setExpenses] = useState<Expense[]>([])
+  const [payments, setPayments] = useState<Expense[]>([])
 
-  const [expenseMonthLabel, setExpenseMonthLabel] = useState(formatMonthLabel(month))
-  const [showExpenseFilterSettings, setShowExpenseFilterSettings] = useState(false)
+  const [paymentsMonthLabel, setPaymentsMonthLabel] = useState(formatMonthLabel(month))
+  const [showPaymentsFilterSettings, setShowPaymentsFilterSettings] = useState(false)
 
   const [monthInput, setMonthInput] = useState(month)
   const [showIncomeToggle, setShowIncomeToggle] = useState(showIncome)
@@ -139,18 +139,18 @@ export default function Expenses(): React.JSX.Element {
   const [orderByProperty, setOrderByProperty] = useState<ExpenseProperty>('date')
   const [orderByDirection, setOrderByDirection] = useState<OrderByDirection>('desc')
 
-  const applyExpenseFilters = async (newMonthSelection: string, newShowIncomeValue: boolean) => {
+  const applyPaymentsFilters = async (newMonthSelection: string, newShowIncomeValue: boolean) => {
     try {
-      const expenses: Expense[] = await window.electronAPI.getExpensesForMonth(newMonthSelection)
-      setExpenses(expenses)
+      const payments: Expense[] = await window.electronAPI.getExpensesForMonth(newMonthSelection)
+      setPayments(payments)
     } catch (error) {
       log.log(error)
-      setExpenses([])
+      setPayments([])
     } finally {
       setMonth(newMonthSelection)
       setShowIncome(newShowIncomeValue)
-      setExpenseMonthLabel(formatMonthLabel(newMonthSelection))
-      setShowExpenseFilterSettings(false)
+      setPaymentsMonthLabel(formatMonthLabel(newMonthSelection))
+      setShowPaymentsFilterSettings(false)
     }
   }
 
@@ -159,23 +159,23 @@ export default function Expenses(): React.JSX.Element {
     d.setUTCMonth(d.getUTCMonth() + n)
     const newMonth = d.toISOString().slice(0, 7)
     setMonthInput(newMonth)
-    await applyExpenseFilters(newMonth, showIncomeToggle)
+    await applyPaymentsFilters(newMonth, showIncomeToggle)
   }
 
   // get initial data
   useEffect(() => {
     (async () => {
       try {
-        const expenses: Expense[] = await window.electronAPI.getExpensesForMonth(month)
-        setExpenses(expenses)
+        const payments: Expense[] = await window.electronAPI.getExpensesForMonth(month)
+        setPayments(payments)
       } catch (error) {
         log.log(error)
-        setExpenses([])
+        setPayments([])
       }
     })()
   }, [])
 
-  // expense headers
+  // item table headers
 
   function handleOrderBy(_: React.MouseEvent, label: ExpenseProperty) {
     if (orderByProperty !== label) {
@@ -187,7 +187,7 @@ export default function Expenses(): React.JSX.Element {
     }
   }
 
-  const expenseHeaderCells = LABELS.map(label => (
+  const itemTableHeaderCells = LABELS.map(label => (
     <TableCell
       key={label}
       sortDirection={orderByDirection}
@@ -202,7 +202,7 @@ export default function Expenses(): React.JSX.Element {
     </TableCell>
   ))
 
-  // expense rows
+  // item table rows
 
   const [pageNumber, setPageNumber] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
@@ -217,18 +217,18 @@ export default function Expenses(): React.JSX.Element {
   };
 
   // TODO: update to return income
-  const expenseData = useMemo(() => getTotalExpensesByCategory(expenses), [expenses])
+  const paymentData = useMemo(() => getTotalExpensesByCategory(payments), [payments])
 
   // controls the data to be displayed in the table
   const visibleRows = useMemo(() => {
-    return expenses
+    return payments
       .slice() // make a copy to prevent in-place sorting
       .sort((a, b) => sortExpenseData(orderByProperty, orderByDirection, a, b))
       .slice(pageNumber * rowsPerPage, (pageNumber * rowsPerPage) + rowsPerPage)
   },
-  [expenses, pageNumber, rowsPerPage, orderByProperty, orderByDirection])
+  [payments, pageNumber, rowsPerPage, orderByProperty, orderByDirection])
 
-  const expenseRows = visibleRows.map(exp => (
+  const itemRows = visibleRows.map(exp => (
     <TableRow key={exp.id}>
       <TableCell>{exp.description}</TableCell>
       <TableCell>
@@ -243,12 +243,12 @@ export default function Expenses(): React.JSX.Element {
 
   return (
     <>
-      <Grid className='ExpensesPageHeader' container>
+      <Grid className='PaymentsPageHeader' container>
         <Grid size={{ xs: 4 }}>
-          <h1>Expenses</h1>
+          <h1>Payments</h1>
         </Grid>
         <Grid size={{ xs: 4 }}>
-          <div className='ExpensesMonthSelectionLabel'>{expenseMonthLabel}</div>
+          <div className='PaymentsMonthSelectionLabel'>{paymentsMonthLabel}</div>
         </Grid>
         <Grid size={{ xs: 4 }} sx={{ textAlign: 'right' }}>
           <IconButton onClick={() => changeMonth(-1)} title='Back 1 Month'>
@@ -258,7 +258,7 @@ export default function Expenses(): React.JSX.Element {
             <ArrowForwardIosIcon />
           </IconButton>
           <IconButton
-            onClick={() => setShowExpenseFilterSettings(true)}
+            onClick={() => setShowPaymentsFilterSettings(true)}
             title='Open Filter Settings'
           >
             <MoreVertIcon />
@@ -268,39 +268,39 @@ export default function Expenses(): React.JSX.Element {
       <Card variant='outlined' sx={{ mb: 2 }}>
         <CardHeader title='Categories' />
         <CardContent>
-          <Expense data={expenseData} />
+          <Expense data={paymentData} />
         </CardContent>
         <FilterDialog
-          open={showExpenseFilterSettings}
-          setOpen={setShowExpenseFilterSettings}
+          open={showPaymentsFilterSettings}
+          setOpen={setShowPaymentsFilterSettings}
           month={month}
           monthInput={monthInput}
           setMonthInput={setMonthInput}
           showIncome={showIncome}
           showIncomeToggle={showIncomeToggle}
           setShowIncomeToggle={setShowIncomeToggle}
-          handleApply={applyExpenseFilters}
+          handleApply={applyPaymentsFilters}
         />
       </Card>
       <Card variant='outlined'>
-        <CardHeader title='Transactions' />
+        <CardHeader title='Items' />
         <CardContent>
           <TableContainer sx={{ marginBottom: '1rem' }}>
             <Table size='small'>
               <TableHead>
                 <TableRow>
-                  {expenseHeaderCells}
+                  {itemTableHeaderCells}
                 </TableRow>
               </TableHead>
               <TableBody>
-                {expenseRows}
+                {itemRows}
               </TableBody>
             </Table>
           </TableContainer>
           <TablePagination
             component='div'
-            className='ExpenseTablePagination'
-            count={expenses.length}
+            className='PaymentsTablePagination'
+            count={payments.length}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
             page={pageNumber}

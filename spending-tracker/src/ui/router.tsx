@@ -2,7 +2,7 @@ import { createHashRouter } from 'react-router-dom'
 
 import Dashboard from './views/Dashboard'
 import Documentation from './views/Documentation'
-import Expenses from './views/Expenses'
+import Payments from './views/Payments'
 import RootLayout from './components/RootLayout'
 
 // use a HashRouter. BrowserRouter doesn't work in packaged app
@@ -15,8 +15,8 @@ const router = createHashRouter([
         element: <Dashboard />
       },
       {
-        path: '/expenses',
-        element: <Expenses />
+        path: '/payments',
+        element: <Payments />
       },
       {
         path: '/dashboard',
