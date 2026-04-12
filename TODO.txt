@@ -1,7 +1,5 @@
 1.1.0
 -----
-Add: Optionally display income on expenses page table
-- seperate charts for income
 Update: libs
 
 1.2.0+

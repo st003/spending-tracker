@@ -394,10 +394,10 @@ export default function Dashboard(): React.JSX.Element {
       <h1 style={{ marginBottom: '1rem' }}>Dashboard</h1>
       <NetIncomeByMonth />
       <Grid container spacing={2}>
-        <Grid size={{ sm: 12, lg: 6 }}>
+        <Grid size={{ xs: 12, lg: 6 }}>
           <ExpensesByMonth />
         </Grid>
-        <Grid size={{ sm: 12, lg: 6 }}>
+        <Grid size={{ xs: 12, lg: 6 }}>
           <NetIncomeByYear />
         </Grid>
       </Grid>

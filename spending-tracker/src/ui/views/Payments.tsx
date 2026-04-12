@@ -41,7 +41,7 @@ import {
 
 import '../styles/Payments.css'
 
-import type { PaymentProperty, OrderByDirection } from '../types'
+import type { PaymentProperty, OrderByDirection, PaymentCategory } from '../types'
 
 const LABELS: PaymentProperty[] = ['description', 'category', 'amount', 'date']
 
@@ -92,6 +92,21 @@ function FilterDialog({ open, setOpen, month, monthInput, setMonthInput, handleA
   )
 }
 
+interface ExpensesProps {
+  expenseData: PaymentCategory[]
+}
+
+function Expenses({ expenseData }: ExpensesProps): React.JSX.Element {
+  return (
+    <Card variant='outlined'>
+      <CardHeader title='Expenses' />
+      <CardContent>
+        <PaymentCategoryPieChartProps data={expenseData} />
+      </CardContent>
+    </Card>
+  )
+}
+
 interface AmountCellProps {
   amount: number
 }
@@ -102,59 +117,11 @@ function AmountCell({ amount }: AmountCellProps): React.JSX.Element {
   return <span className={color}>{value}</span>
 }
 
-export default function Payments(): React.JSX.Element {
+interface PaymentItemsTableProps {
+  payments: Payment[]
+}
 
-  const [month, setMonth] = useState(getLastMonth())
-  const [payments, setPayments] = useState<Payment[]>([])
-  const [paymentsMonthLabel, setPaymentsMonthLabel] = useState(formatMonthLabel(month))
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const payments: Payment[] = await window.electronAPI.getPaymentsForMonth(month)
-        setPayments(payments)
-      } catch (error) {
-        log.log(error)
-        setPayments([])
-      }
-    })()
-  }, [])
-
-  // filter dialog
-
-  const [showPaymentsFilterDialog, setShowPaymentsFilterDialog] = useState(false)
-  const [monthInput, setMonthInput] = useState(month)
-
-  const applyPaymentsFilters = async (newMonthSelection: string) => {
-    try {
-      const payments: Payment[] = await window.electronAPI.getPaymentsForMonth(newMonthSelection)
-      setPayments(payments)
-    } catch (error) {
-      log.log(error)
-      setPayments([])
-    } finally {
-      setMonth(newMonthSelection)
-      setPaymentsMonthLabel(formatMonthLabel(newMonthSelection))
-      setShowPaymentsFilterDialog(false)
-    }
-  }
-
-  const changeMonth = async (n: number) => {
-    const d = new Date(month)
-    d.setUTCMonth(d.getUTCMonth() + n)
-    const newMonth = d.toISOString().slice(0, 7)
-    setMonthInput(newMonth)
-    await applyPaymentsFilters(newMonth)
-  }
-
-  // charts
-
-  const expenseData = useMemo(() => {
-    const expenses = payments.filter(p => p.amount < 0)
-    return getSumOfPaymentsByCategory(expenses)
-  }, [payments])
-
-  // table
+function PaymentItemsTable({ payments }: PaymentItemsTableProps): React.JSX.Element {
 
   const [orderByProperty, setOrderByProperty] = useState<PaymentProperty>('date')
   const [orderByDirection, setOrderByDirection] = useState<OrderByDirection>('desc')
@@ -218,6 +185,94 @@ export default function Payments(): React.JSX.Element {
   ))
 
   return (
+    <Card variant='outlined'>
+      <CardHeader title='Items' />
+      <CardContent>
+        <TableContainer sx={{ mb: '1rem' }}>
+          <Table size='small'>
+            <TableHead>
+              <TableRow>
+                {itemTableHeaderCells}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {itemRows}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          component='div'
+          className='PaymentsTablePagination'
+          count={payments.length}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          page={pageNumber}
+          rowsPerPage={rowsPerPage}
+          rowsPerPageOptions={[10, 25, 50]}
+        />
+      </CardContent>
+    </Card>
+  )
+}
+
+export default function Payments(): React.JSX.Element {
+
+  const [month, setMonth] = useState(getLastMonth())
+  const [payments, setPayments] = useState<Payment[]>([])
+  const [paymentsMonthLabel, setPaymentsMonthLabel] = useState(formatMonthLabel(month))
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const payments: Payment[] = await window.electronAPI.getPaymentsForMonth(month)
+        setPayments(payments)
+      } catch (error) {
+        log.log(error)
+        setPayments([])
+      }
+    })()
+  }, [])
+
+  // filter dialog
+
+  const [showPaymentsFilterDialog, setShowPaymentsFilterDialog] = useState(false)
+  const [monthInput, setMonthInput] = useState(month)
+
+  const applyPaymentsFilters = async (newMonthSelection: string) => {
+    try {
+      const payments: Payment[] = await window.electronAPI.getPaymentsForMonth(newMonthSelection)
+      setPayments(payments)
+    } catch (error) {
+      log.log(error)
+      setPayments([])
+    } finally {
+      setMonth(newMonthSelection)
+      setPaymentsMonthLabel(formatMonthLabel(newMonthSelection))
+      setShowPaymentsFilterDialog(false)
+    }
+  }
+
+  const changeMonth = async (n: number) => {
+    const d = new Date(month)
+    d.setUTCMonth(d.getUTCMonth() + n)
+    const newMonth = d.toISOString().slice(0, 7)
+    setMonthInput(newMonth)
+    await applyPaymentsFilters(newMonth)
+  }
+
+  // charts
+
+  const expenseData = useMemo(() => {
+    const expenses = payments.filter(p => p.amount < 0)
+    return getSumOfPaymentsByCategory(expenses)
+  }, [payments])
+
+  const incomeData = useMemo(() => {
+    const income = payments.filter(p => p.amount > 0)
+    return getSumOfPaymentsByCategory(income)
+  }, [payments])
+
+  return (
     <>
       <Grid className='PaymentsPageHeader' container>
         <Grid size={{ xs: 4 }}>
@@ -240,12 +295,6 @@ export default function Payments(): React.JSX.Element {
             <MoreVertIcon />
           </IconButton>
         </Grid>
-      </Grid>
-      <Card variant='outlined' sx={{ mb: 2 }}>
-        <CardHeader title='Expenses' />
-        <CardContent>
-          <PaymentCategoryPieChartProps data={expenseData} />
-        </CardContent>
         <FilterDialog
           open={showPaymentsFilterDialog}
           setOpen={setShowPaymentsFilterDialog}
@@ -254,34 +303,13 @@ export default function Payments(): React.JSX.Element {
           setMonthInput={setMonthInput}
           handleApply={applyPaymentsFilters}
         />
-      </Card>
-      <Card variant='outlined'>
-        <CardHeader title='Items' />
-        <CardContent>
-          <TableContainer sx={{ marginBottom: '1rem' }}>
-            <Table size='small'>
-              <TableHead>
-                <TableRow>
-                  {itemTableHeaderCells}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {itemRows}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            component='div'
-            className='PaymentsTablePagination'
-            count={payments.length}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            page={pageNumber}
-            rowsPerPage={rowsPerPage}
-            rowsPerPageOptions={[10, 25, 50]}
-          />
-        </CardContent>
-      </Card>
+      </Grid>
+      <Grid container sx={{ mb: 2 }}>
+        <Grid size={{ xs: 12 }}>
+          <Expenses expenseData={expenseData} />
+        </Grid>
+      </Grid>
+      <PaymentItemsTable payments={payments} />
     </>
   )
 }
