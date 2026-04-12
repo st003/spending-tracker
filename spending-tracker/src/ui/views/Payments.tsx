@@ -101,7 +101,22 @@ function Expenses({ expenseData }: ExpensesProps): React.JSX.Element {
     <Card variant='outlined'>
       <CardHeader title='Expenses' />
       <CardContent>
-        <PaymentCategoryPieChartProps data={expenseData} />
+        <PaymentCategoryPieChartProps data={expenseData} pos={false} />
+      </CardContent>
+    </Card>
+  )
+}
+
+interface IncomeProps {
+  incomeData: PaymentCategory[]
+}
+
+function Income({ incomeData }: IncomeProps): React.JSX.Element {
+  return (
+    <Card variant='outlined'>
+      <CardHeader title='Income' />
+      <CardContent>
+        <PaymentCategoryPieChartProps data={incomeData} pos={true} />
       </CardContent>
     </Card>
   )
@@ -304,9 +319,12 @@ export default function Payments(): React.JSX.Element {
           handleApply={applyPaymentsFilters}
         />
       </Grid>
-      <Grid container sx={{ mb: 2 }}>
-        <Grid size={{ xs: 12 }}>
+      <Grid container spacing={2} sx={{ mb: 2 }}>
+        <Grid size={{ xs: 12, lg: 6 }}>
           <Expenses expenseData={expenseData} />
+        </Grid>
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <Income incomeData={incomeData} />
         </Grid>
       </Grid>
       <PaymentItemsTable payments={payments} />

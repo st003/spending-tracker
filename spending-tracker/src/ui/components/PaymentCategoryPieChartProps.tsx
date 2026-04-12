@@ -1,15 +1,16 @@
 import { PieChart } from '@mui/x-charts/PieChart'
-import { blueberryTwilightPalette } from '@mui/x-charts/colorPalettes';
+import { greenPalette, redPalette } from '@mui/x-charts/colorPalettes';
 
 import { formatAmount } from '../utils'
 
 import type { PaymentCategory } from '../types'
 
-type PaymentCategoryPieChartProps = {
-  data: PaymentCategory[];
+interface PaymentCategoryPieChartProps {
+  data: PaymentCategory[]
+  pos: boolean
 }
 
-export default function PaymentCategoryPieChart({ data }: PaymentCategoryPieChartProps) {
+export default function PaymentCategoryPieChart({ data, pos }: PaymentCategoryPieChartProps) {
 
   const paymentCategorySeries = [
     {
@@ -21,5 +22,7 @@ export default function PaymentCategoryPieChart({ data }: PaymentCategoryPieChar
     }
   ]
 
-  return <PieChart series={paymentCategorySeries} colors={blueberryTwilightPalette} height={300} hideLegend />
+  const palette = pos ? greenPalette : redPalette
+
+  return <PieChart series={paymentCategorySeries} colors={palette} height={300} hideLegend />
 }

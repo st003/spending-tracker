@@ -254,7 +254,7 @@ function ExpensesByMonth(): React.JSX.Element {
           }
         />
         <CardContent>
-          <PaymentCategoryPieChartProps data={expenseCategoryData} />
+          <PaymentCategoryPieChartProps data={expenseCategoryData} pos={false} />
         </CardContent>
       </Card>
       <ExpensesFilterDialog
