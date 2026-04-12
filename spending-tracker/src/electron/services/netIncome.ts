@@ -9,6 +9,8 @@ type NetIncomeBucket = {
   [key: string]: NetIncome
 }
 
+type NetIncomePayment = Omit<Payment, 'description'|'category'>
+
 /**
  * Groups expenses in from the same month & year into a NetIncome object and returns
  * each month's total income and expenses.
@@ -16,7 +18,7 @@ type NetIncomeBucket = {
  * @param expenses An array of Expenses
  * @returns An array of NetIncomes
  */
-export function getNetIncomeMonths(expenses: Payment[]): NetIncome[] {
+export function getNetIncomeMonths(expenses: NetIncomePayment[]): NetIncome[] {
 
   const months: NetIncomeBucket = {}
 
@@ -83,7 +85,7 @@ function getNetIncomeRangeLabelMonth(date: Date): string {
  * @param expenses An array of Expenses
  * @returns An array of NetIncomes
  */
-export function getNetIncomesYear(expenses: Payment[]): NetIncome[] {
+export function getNetIncomesYear(expenses: NetIncomePayment[]): NetIncome[] {
 
   const years: NetIncomeBucket = {}
 
@@ -161,7 +163,7 @@ export function getNetIncome(range: NetIncomeRange, start: string, end: string):
         reject(error)
 
       } else {
-        const payments: Payment[] = rows.map(row => ({
+        const payments: NetIncomePayment[] = rows.map(row => ({
           id: row.id,
           amount: row.amount,
           date: new Date(row.payment_date)

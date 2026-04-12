@@ -38,22 +38,29 @@ export function formatMonthLabel(date: string): string {
  * Formats cents into a string representation of the
  * dollar amount. Example:
  *
- * 10000 => '$100.00'|'+$100.00'|'-$100.00'
+ * 10000 => '$100.00'
  *
  * @param value The number of cents
- * @param signed Controls display of +/- signs. Defaults to false
  * @returns String representation of the dollar amount
  */
-export function formatAmount(value: number, signed: boolean = false): string {
+export function formatAmount(value: number): string {
+  return '$' + Math.abs(value / 100).toFixed(2)
+}
 
+/**
+ * Formats cents into a string representation of the
+ * dollar amount. Example:
+ *
+ * 10000 => '+$100.00'
+ * -10000 -> '-$100.00'
+ *
+ * @param value The number of cents
+ * @returns String representation of the dollar amount
+ */
+export function formatSignedAmount(value: number): string {
   const fmt = '$' + Math.abs(value / 100).toFixed(2)
-
-  if (signed) {
-    if (value > 0) return ('+' + fmt)
-    return ('-' + fmt)
-  }
-
-  return fmt
+  if (value > 0) return ('+' + fmt)
+  return ('-' + fmt)
 }
 
 /**
@@ -106,7 +113,7 @@ export function getTotalExpensesByCategory(expenses: Payment[]): PaymentCategory
  * @param b The compare object
  * @returns -1, 0, 1
  */
-export function sortExpenseData(property: PaymentProperty, direction: string, a: Payment, b: Payment, ): number {
+export function sortPaymentData(property: PaymentProperty, direction: string, a: Payment, b: Payment, ): number {
 
   if (direction === 'asc') {
     if (a[property] < b[property]) return -1

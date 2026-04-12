@@ -15,10 +15,8 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import FormGroup from '@mui/material/FormGroup'
-import FormControlLabel from '@mui/material/FormControlLabel'
 import Grid from '@mui/material/Grid'
 import IconButton from '@mui/material/IconButton'
-import Switch from '@mui/material/Switch'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -35,10 +33,10 @@ import {
   capitalize,
   formatDateYYYYMMDD,
   formatMonthLabel,
-  formatAmount,
+  formatSignedAmount,
   getLastMonth,
   getTotalExpensesByCategory,
-  sortExpenseData
+  sortPaymentData
 } from '../utils'
 
 import '../styles/Payments.css'
@@ -53,13 +51,10 @@ interface FilterDialogProps {
   month: string;
   monthInput: string;
   setMonthInput: React.Dispatch<React.SetStateAction<string>>;
-  showIncome: boolean;
-  showIncomeToggle: boolean;
-  setShowIncomeToggle: React.Dispatch<React.SetStateAction<boolean>>;
-  handleApply: (newMonthSelection: string, newShowIncomeValue: boolean) => void;
+  handleApply: (newMonthSelection: string) => void;
 }
 
-function FilterDialog({ open, setOpen, month, monthInput, setMonthInput, showIncome, showIncomeToggle, setShowIncomeToggle, handleApply }: FilterDialogProps) {
+function FilterDialog({ open, setOpen, month, monthInput, setMonthInput, handleApply }: FilterDialogProps) {
 
   const handleMonthSelectionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMonthInput(event.target.value)
@@ -67,7 +62,6 @@ function FilterDialog({ open, setOpen, month, monthInput, setMonthInput, showInc
 
   const handleClose = () => {
     setMonthInput(month)
-    setShowIncomeToggle(showIncome)
     setOpen(false)
   }
 
@@ -88,19 +82,10 @@ function FilterDialog({ open, setOpen, month, monthInput, setMonthInput, showInc
               onChange={handleMonthSelectionChange}
             />
           </div>
-          <FormControlLabel
-            label='Show Income'
-            control={
-              <Switch
-                checked={showIncomeToggle}
-                onChange={() => setShowIncomeToggle(!showIncomeToggle)}
-              />
-            }
-          />
         </FormGroup>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => handleApply(monthInput, showIncomeToggle)}>Apply</Button>
+        <Button onClick={() => handleApply(monthInput)}>Apply</Button>
         <Button onClick={handleClose}>Close</Button>
       </DialogActions>
     </Dialog>
@@ -109,37 +94,28 @@ function FilterDialog({ open, setOpen, month, monthInput, setMonthInput, showInc
 
 interface AmountCellProps {
   amount: number;
-  signed: boolean;
 }
 
-function AmountCell({ amount, signed }: AmountCellProps): React.JSX.Element {
-
-  let color = ''
-  if (signed) color = (amount > 0) ? 'AmountCellPos' : 'AmountCellNeg'
-
-  const value = formatAmount(amount, signed)
-
-  return (
-    <span className={color}>{value}</span>
-  )
+function AmountCell({ amount }: AmountCellProps): React.JSX.Element {
+  const color = (amount > 0) ? 'AmountCellPos' : 'AmountCellNeg'
+  const value = formatSignedAmount(amount)
+  return <span className={color}>{value}</span>
 }
 
 export default function Payments(): React.JSX.Element {
 
   const [month, setMonth] = useState(getLastMonth())
-  const [showIncome, setShowIncome] = useState(false)
   const [payments, setPayments] = useState<Payment[]>([])
 
   const [paymentsMonthLabel, setPaymentsMonthLabel] = useState(formatMonthLabel(month))
   const [showPaymentsFilterSettings, setShowPaymentsFilterSettings] = useState(false)
 
   const [monthInput, setMonthInput] = useState(month)
-  const [showIncomeToggle, setShowIncomeToggle] = useState(showIncome)
 
   const [orderByProperty, setOrderByProperty] = useState<PaymentProperty>('date')
   const [orderByDirection, setOrderByDirection] = useState<OrderByDirection>('desc')
 
-  const applyPaymentsFilters = async (newMonthSelection: string, newShowIncomeValue: boolean) => {
+  const applyPaymentsFilters = async (newMonthSelection: string) => {
     try {
       const payments: Payment[] = await window.electronAPI.getExpensesForMonth(newMonthSelection)
       setPayments(payments)
@@ -148,7 +124,6 @@ export default function Payments(): React.JSX.Element {
       setPayments([])
     } finally {
       setMonth(newMonthSelection)
-      setShowIncome(newShowIncomeValue)
       setPaymentsMonthLabel(formatMonthLabel(newMonthSelection))
       setShowPaymentsFilterSettings(false)
     }
@@ -159,7 +134,7 @@ export default function Payments(): React.JSX.Element {
     d.setUTCMonth(d.getUTCMonth() + n)
     const newMonth = d.toISOString().slice(0, 7)
     setMonthInput(newMonth)
-    await applyPaymentsFilters(newMonth, showIncomeToggle)
+    await applyPaymentsFilters(newMonth)
   }
 
   // get initial data
@@ -223,7 +198,7 @@ export default function Payments(): React.JSX.Element {
   const visibleRows = useMemo(() => {
     return payments
       .slice() // make a copy to prevent in-place sorting
-      .sort((a, b) => sortExpenseData(orderByProperty, orderByDirection, a, b))
+      .sort((a, b) => sortPaymentData(orderByProperty, orderByDirection, a, b))
       .slice(pageNumber * rowsPerPage, (pageNumber * rowsPerPage) + rowsPerPage)
   },
   [payments, pageNumber, rowsPerPage, orderByProperty, orderByDirection])
@@ -235,7 +210,7 @@ export default function Payments(): React.JSX.Element {
         <CopyContainer value={exp.category} toolTipPlacement='left' />
       </TableCell>
       <TableCell>
-        <AmountCell amount={exp.amount} signed={showIncome} />
+        <AmountCell amount={exp.amount} />
       </TableCell>
       <TableCell>{formatDateYYYYMMDD(exp.date)}</TableCell>
     </TableRow>
@@ -276,9 +251,6 @@ export default function Payments(): React.JSX.Element {
           month={month}
           monthInput={monthInput}
           setMonthInput={setMonthInput}
-          showIncome={showIncome}
-          showIncomeToggle={showIncomeToggle}
-          setShowIncomeToggle={setShowIncomeToggle}
           handleApply={applyPaymentsFilters}
         />
       </Card>
