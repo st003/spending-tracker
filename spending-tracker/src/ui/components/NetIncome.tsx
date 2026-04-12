@@ -19,7 +19,7 @@ export default function NetIncome({ data, xAxis }: NetIncomeProps) {
 
   const series: any[] = [
     {
-      color: '#a3de83',
+      color: 'rgb(143, 216, 181)',
       data: data.income,
       label: 'Income',
       stack: 'diverging',
@@ -27,7 +27,7 @@ export default function NetIncome({ data, xAxis }: NetIncomeProps) {
       valueFormatter: (val: number) => formatAmount(val)
     },
     {
-      color: '#ff5d6e',
+      color: 'rgb(243, 162, 160)',
       data: data.expense,
       label: 'Expense',
       stack: 'diverging',

@@ -32,11 +32,11 @@
 }
 
 .AmountCellPos {
-    color: #a3de83;
+    color: rgb(84, 198, 144);
 }
 
 .AmountCellNeg {
-    color: #ff5d6e;
+    color: rgb(239, 83, 80);
 }
 
 .PaymentsTablePagination p {
