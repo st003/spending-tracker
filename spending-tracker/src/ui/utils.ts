@@ -113,7 +113,7 @@ export function getSumOfPaymentsByCategory(payments: Payment[]): PaymentCategory
  * @param b The compare object
  * @returns -1, 0, 1
  */
-export function sortPaymentData(property: PaymentProperty, direction: string, a: Payment, b: Payment, ): number {
+export function sortPaymentData(property: PaymentProperty, direction: string, a: Payment, b: Payment): number {
 
   if (direction === 'asc') {
     if (a[property] < b[property]) return -1
