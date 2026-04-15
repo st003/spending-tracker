@@ -113,7 +113,7 @@ export type PaymentImport = {
  * @param filePath The full path to the CSV file to import data from
  * @returns A Promise with an array of the csv rows
  */
-function parseCSV(filePath: string): Promise<PaymentImport[]> {
+export function parseCSV(filePath: string): Promise<PaymentImport[]> {
   return new Promise((resolve, reject) => {
     const rows: PaymentImport[] = []
     fs.createReadStream(filePath)

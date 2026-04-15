@@ -1,6 +1,11 @@
 import { expect, test } from 'vitest'
 
-import { castToCents, validateDateString, validateHeader } from '../../../src/electron/services/importer.js'
+import {
+  castToCents,
+  parseCSV,
+  validateDateString,
+  validateHeader
+} from '../../../src/electron/services/importer.js'
 
 import type { CastingContext } from 'csv-parse'
 
@@ -92,4 +97,27 @@ test('castToCents - empty string', () => {
 test('castToCents - non-numeric chars', () => {
   const ctx = { index: 0, lines: 1 } as CastingContext
   expect(() => castToCents('qwert', ctx)).toThrowError()
+})
+
+test('parseCSV - valid output', async () => {
+
+  const filePath = `${process.cwd()}/tests/electron/services/import-test.csv`
+  const result = await parseCSV(filePath)
+
+  expect(result.length).toBe(3)
+
+  expect(result[0].paymentDate).toBe('2026-01-01')
+  expect(result[0].amount).toBe(1000)
+  expect(result[0].description).toBe('Test 1')
+  expect(result[0].categoryName).toBe('Shopping')
+
+  expect(result[1].paymentDate).toBe('2026-02-15')
+  expect(result[1].amount).toBe(-2000)
+  expect(result[1].description).toBe('Test 2')
+  expect(result[1].categoryName).toBe('Groceries')
+
+  expect(result[2].paymentDate).toBe('2026-03-31')
+  expect(result[2].amount).toBe(3500)
+  expect(result[2].description).toBe('Test 3')
+  expect(result[2].categoryName).toBe('Entertainment')
 })

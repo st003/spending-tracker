@@ -1,0 +1,4 @@
+paymentDate,amount,description,categoryName
+2026-01-01,10.00,Test 1,Shopping
+2026-02-15,-20.00,Test 2,Groceries
+2026-03-31,35.00,Test 3,Entertainment
