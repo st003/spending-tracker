@@ -16,7 +16,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "package:mac": "npm run test && npm run transpile:electron && npm run build:ui && electron-builder --mac --arm64",
-    "test": "vitest -r src --run",
+    "test": "vitest -r tests --run",
     "transpile:electron": "tsc --project src/electron/tsconfig.json"
   },
   "dependencies": {

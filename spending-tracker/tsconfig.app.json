@@ -25,5 +25,5 @@
 
     "types": ["./types.d.ts"]
   },
-  "include": ["src"]
+  "include": ["src", "tests/ui/utils.test.ts"]
 }

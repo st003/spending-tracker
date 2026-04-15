@@ -8,7 +8,7 @@ import {
   getLastMonth,
   getSumOfPaymentsByCategory,
   sortPaymentData
-} from './utils'
+} from '../../src/ui/utils'
 
 test('capitalize - verify format', () => {
   expect(capitalize('test')).toBe('Test')

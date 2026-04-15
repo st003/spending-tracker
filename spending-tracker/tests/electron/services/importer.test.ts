@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 
-import { castToCents, validateDateString, validateHeader } from './importer.js'
+import { castToCents, validateDateString, validateHeader } from '../../../src/electron/services/importer.js'
 
 import type { CastingContext } from 'csv-parse'
 
