@@ -7,7 +7,7 @@ import sqlite3 from 'sqlite3'
 
 import { backupDatabase, DB } from '../db/index.js'
 
-import type { CastingContext } from 'csv-parse'
+import type { InfoField } from 'csv-parse'
 
 /**
  * Opens the file selection dialog for choosing a CSV file.
@@ -41,9 +41,9 @@ async function selectImportFile(mainWindow: BrowserWindow) {
  * |paymentDate|amount|description|category|
  *
  * @param header A column header name
- * @param ctx An instance of csv-parse CastingContext
+ * @param ctx An instance of csv-parse InfoField
  */
-export function validateHeader(header: string, ctx: CastingContext): string {
+export function validateHeader(header: string, ctx: InfoField): string {
 
   if (!['paymentDate', 'amount', 'description', 'categoryName'].includes(header)) {
     throw new Error(`Invalid header '${header}' at column ${ctx.index}`);
@@ -64,9 +64,9 @@ export function validateHeader(header: string, ctx: CastingContext): string {
  * Accepts a date string and attempts to convert it to the YYYY-MM-DD format.
  *
  * @param value A date string, YYYY-MM-DD, mm/dd/yyyy, and mm/dd/yy are supported
- * @param ctx An instance of csv-parse CastingContext
+ * @param ctx An instance of csv-parse InfoField
  */
-export function validateDateString(value: string, ctx: CastingContext): string {
+export function validateDateString(value: string, ctx: InfoField): string {
 
   const asDate = new Date(value);
 
@@ -82,9 +82,9 @@ export function validateDateString(value: string, ctx: CastingContext): string {
  * then converts dollars into cents,
  *
  * @param value 
- * @param ctx An instance of csv-parse CastingContext
+ * @param ctx An instance of csv-parse InfoField
  */
-export function castToCents(value: string, ctx: CastingContext): Number {
+export function castToCents(value: string, ctx: InfoField): Number {
   const errorMsg = `Cannot parse '${value}' into number at column: ${ctx.index} row: ${ctx.lines}`
 
   if (!value.length) throw new Error(errorMsg)
@@ -121,7 +121,7 @@ export function parseCSV(filePath: string): Promise<PaymentImport[]> {
         columns: true,
         skip_empty_lines: true,
         trim: true,
-        cast: (value: string, context: CastingContext) => {
+        cast: (value: string, context: InfoField) => {
           if (context.header) {
             return validateHeader(value, context)
           } else if (context.index === 0) {
