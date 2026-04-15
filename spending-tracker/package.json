@@ -25,7 +25,7 @@
     "@mui/icons-material": "^7.3.10",
     "@mui/material": "^7.3.10",
     "@mui/x-charts": "^8.28.2",
-    "csv-parse": "^6.1.0",
+    "csv-parse": "^6.2.1",
     "electron-log": "^5.4.3",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
