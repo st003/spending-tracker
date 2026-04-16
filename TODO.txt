@@ -1,9 +1,6 @@
-1.1.0
------
-Update: libs
-
 1.2.0+
 -----
+Lib major versions
 Global filter selection memory
 Category page
 Payment detail page
